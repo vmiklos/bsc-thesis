@@ -19,17 +19,15 @@
 \usepackage{times}
 \usepackage{fullpage}
 %\usepackage{showkeys} % \label{} kiírása \ref{}hez
+\usepackage{setspace}
  
 \let\stdsection\section
 \renewcommand\section{\clearpage\stdsection}
 \begin{document}
+\singlespacing
+\include{preliminaries}
+\onehalfspacing
 \begin{center}
-\vspace{2em}
-\large{\bf{}BUDAPESTI M\H{U}SZAKI \'ES GAZDAS\'AGTUDOM\'ANYI EGYETEM}
-\vspace{.5em}
-
-\includegraphics[width=88mm]{BME1782nagy.eps}
-\vspace{.5em}
 
 \large{\bf{}VILLAMOSM\'ERN\"OKI \'ES INFORMATIKAI KAR\\
 M\'ERN\"OK INFORMATIKUS SZAK}
@@ -76,6 +74,10 @@ IR\'ANY\'IT\'ASTECHNIKA \'ES INFORMATIKA TANSZ\'EK
 
 \subsection{Donec malesuada eu} 
 
+Ez itt egy hosszú magyar szöveg, és megéri elválasztani, mert a tex tud
+olyat, és ez elviselhetetlenül nagyon-nagyon jó. Ha meg hosszabb a sor,
+akkor még könyebb kipróbálni.
+
 Quisque rhoncus odio vitae lacus sagittis a rutrum ipsum porttitor. Phasellus
 sit amet justo sed orci lacinia blandit quis vulputate eros.
 
@@ -89,12 +91,12 @@ Maecenas lacinia massa et libero molestie eget imperdiet massa tristique.
 Quisque at enim et tellus auctor suscipit ut non enim. Suspendisse id tincidunt
 mi.
 
-\begin{figure}[hb]
-\begin{center}
-\includegraphics[width=88mm]{BME1782nagy.eps}
-\end{center}
-\caption{BME log\'o}
-\end{figure}
+%\begin{figure}[hb]
+%\begin{center}
+%\includegraphics[width=88mm]{BME1782nagy.eps}
+%\end{center}
+%\caption{BME log\'o}
+%\end{figure}
 
 \section{Munkanapl\'o}
 

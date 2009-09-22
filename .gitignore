@@ -1,0 +1,11 @@
+*.aux
+*.dvi
+*.d
+*.make
+*.doc
+*.ps
+*.toc
+*.log
+*.fls
+*.temp
+*.pdf

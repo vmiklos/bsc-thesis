@@ -3,7 +3,7 @@
 %\documentclass[12pt,a4paper,oneside]{book} % part, *chapter, *section, *paragraph
 
 %\def\magyarOptions{footnote=starplain} % *, ** típusú lábjegyzet
-\usepackage[magyar]{babel}
+\usepackage[magyar, english]{babel}
 \ifx\magyarOptions\relax\else 
   \PackageError{magyar.ldf}{http://www.math.bme.hu/latex/}{}        
   \csname @@end\endcsname \fi
@@ -27,69 +27,35 @@
 \singlespacing
 \include{preliminaries}
 \onehalfspacing
-\begin{center}
-
-\large{\bf{}VILLAMOSM\'ERN\"OKI \'ES INFORMATIKAI KAR\\
-M\'ERN\"OK INFORMATIKUS SZAK}
-
-\vspace{1.5em}
-
-\Large{Informatikai Technol\'ogi\'ak szakir\'any\\
-Rendszerfejleszt\'es \'agazat}
-
-\vspace{1.5em}
-
-\Large{\bf{}\"On\'all\'o labor (BMEVIIIA337)}
-
-\vspace{1.5em}
-
-\LARGE{\bf{}Lorem Ipsum Dolar Sit}
-
-\vspace{2em}
-
-\Large{K\'esz\'itette:\\
-{\bf{}Gipsz Jakab (ABUSER)}}
-
-\vspace{6em}
-
-\Large{Konzulens:\\
-{\bf{}dr. Lapos Elem\'er}}
-
-\vspace{3em}
-
-IR\'ANY\'IT\'ASTECHNIKA \'ES INFORMATIKA TANSZ\'EK
-
-{\bf{}2009.}
-\end{center}
-\thispagestyle{empty}
-\newpage
-
+\include{abstract}
 \tableofcontents
 \newpage
+
+\section{Bevezetés}
 
 %\begin{abstract}
 %\end{abstract}
 
-\section{Aliquam dapibus tristique} 
+%\section{Aliquam dapibus tristique} 
 
-\subsection{Donec malesuada eu} 
+%\subsection{Donec malesuada eu} 
 
 Ez itt egy hosszú magyar szöveg, és megéri elválasztani, mert a tex tud
 olyat, és ez elviselhetetlenül nagyon-nagyon jó. Ha meg hosszabb a sor,
 akkor még könyebb kipróbálni.
 
-Quisque rhoncus odio vitae lacus sagittis a rutrum ipsum porttitor. Phasellus
-sit amet justo sed orci lacinia blandit quis vulputate eros.
+%Quisque rhoncus odio vitae lacus sagittis a rutrum ipsum porttitor. Phasellus
+%sit amet justo sed orci lacinia blandit quis vulputate eros.
 
-Mauris et est metus, a\cite{Erdos01} dignissim nibh. Praesent consectetur feugiat sagittis.
-Vestibulum tincidunt libero nulla, et luctus nisl. Etiam mauris massa,
-consequat et semper quis, vestibulum in ligula. Maecenas non dui massa.
-Maecenas lacinia massa et libero molestie eget imperdiet massa tristique.
+%Mauris et est metus, a\cite{Erdos01} dignissim nibh. Praesent consectetur feugiat sagittis.
+%Vestibulum tincidunt libero nulla, et luctus nisl. Etiam mauris massa,
+%consequat et semper quis, vestibulum in ligula. Maecenas non dui massa.
+%Maecenas lacinia massa et libero molestie eget imperdiet massa tristique.
 
-\subsection{Malesuada donec odio} 
+%\subsection{Malesuada donec odio} 
 
-Quisque at enim et tellus auctor suscipit ut non enim. Suspendisse id tincidunt
-mi.
+%Quisque at enim et tellus auctor suscipit ut non enim. Suspendisse id tincidunt
+%mi.
 
 %\begin{figure}[hb]
 %\begin{center}
@@ -98,38 +64,38 @@ mi.
 %\caption{BME log\'o}
 %\end{figure}
 
-\section{Munkanapl\'o}
+%\section{Munkanapl\'o}
 
-\subsection{Els\H{o} h\'et}
+%\subsection{Els\H{o} h\'et}
 
-\subsection{M\'asodik h\'et}
+%\subsection{M\'asodik h\'et}
 
-\begin{thebibliography}{4}
-\addcontentsline{toc}{section}{Hivatkoz\'asok}
+%\begin{thebibliography}{4}
+%\addcontentsline{toc}{section}{Hivatkoz\'asok}
 
-\bibitem{Erdos01} P. Erd\H os, \emph{A selection of problems and
-results in combinatorics}, Recent trends in combinatorics (Matrahaza,
-1995), Cambridge Univ. Press, Cambridge, 2001, pp. 1--6.
+%\bibitem{Erdos01} P. Erd\H os, \emph{A selection of problems and
+%results in combinatorics}, Recent trends in combinatorics (Matrahaza,
+%1995), Cambridge Univ. Press, Cambridge, 2001, pp. 1--6.
 
-\bibitem{Knuth92} D.E. Knuth, \emph{Two notes on notation}, Amer.
-Math. Monthly \textbf{99} (1992), 403--422.
+%\bibitem{Knuth92} D.E. Knuth, \emph{Two notes on notation}, Amer.
+%Math. Monthly \textbf{99} (1992), 403--422.
 
-\bibitem{Simpson} H. Simpson, \emph{Proof of the Riemann
-Hypothesis},  preprint (2003), available at 
-\url{http://www.math.drofnats.edu/riemann.ps}.
+%\bibitem{Simpson} H. Simpson, \emph{Proof of the Riemann
+%Hypothesis},  preprint (2003), available at 
+%\url{http://www.math.drofnats.edu/riemann.ps}.
 
 
-\end{thebibliography}
-\section*{Mell\'eklet}
-\addcontentsline{toc}{section}{Mell\'eklet}
+%\end{thebibliography}
+%\section*{Mell\'eklet}
+%\addcontentsline{toc}{section}{Mell\'eklet}
+%
+%\subsection*{aasda}
+%\addcontentsline{toc}{subsection}{aasda}
+%
+%Csak akkor, ha kell.
 
-\subsection*{aasda}
-\addcontentsline{toc}{subsection}{aasda}
-
-Csak akkor, ha kell.
-
-\subsection*{bsaasd}
-\addcontentsline{toc}{subsection}{bsaasd}
+%\subsection*{bsaasd}
+%\addcontentsline{toc}{subsection}{bsaasd}
 
 
 
@@ -138,19 +104,19 @@ Csak akkor, ha kell.
 \end{document}
 
 % === TÁBLÁZAT PÉLDA
-\begin{tabular}{r|l|l}
-Menny. & Típus & Megjegyzés \\
-\hline
-1 & SN7404 & 6 inverter (3 kihaszn\'alatlan) \\
-\end{tabular}
+%\begin{tabular}{r|l|l}
+%Menny. & Típus & Megjegyzés \\
+%\hline
+%1 & SN7404 & 6 inverter (3 kihaszn\'alatlan) \\
+%\end{tabular}
 %lásd még http://en.wikibooks.org/wiki/LaTeX/Tables arrays csomag
 
 % === FORRÁSKÓD PÉLDA %\usepackage{listings} 
-\lstset{numbers=left, numberstyle=\tiny, columns=fixed, stepnumber=5, numbersep=5pt, language=c, basicstyle=\footnotesize, showstringspaces=false}
-\lstinputlisting{all.c}
+%\lstset{numbers=left, numberstyle=\tiny, columns=fixed, stepnumber=5, numbersep=5pt, language=c, basicstyle=\footnotesize, showstringspaces=false}
+%\lstinputlisting{all.c}
 
 % === KÉP PÉLDA %graphicx
-\includegraphics[width=120mm]{hf1_teszter.png}
+%\includegraphics[width=120mm]{hf1_teszter.png}
 
 % === SZÍNES SZÖVEG %\usepackage{color}
-{\color{red}Piros} szöveg $a^{\color{blue}2}+2b$.
+%{\color{red}Piros} szöveg $a^{\color{blue}2}+2b$.

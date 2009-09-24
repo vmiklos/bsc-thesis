@@ -37,9 +37,9 @@ Az egészségügyi és a szociális ellátás területén kiemelendõ az
 idõskorúak, továbbá a fogyatékkal élõk, a betegségbõl felépülõk és a
 rehabilitációra szorulók ellátásának, gondozásának, felügyeletének,
 ápolásának, önálló életvitelének segítése infokommunikációs eszközök
-alkalmazásával, rendszerbe állításával; a távdiagnosztikai és
-távgyógyászati rendszerek elterjedésének elõsegítése, az otthonápolás
-támogatása stb\cite{evita}.
+alkalmazásával, rendszerbe állításával; a táv-diagnosztikai és
+távgyógyászati rendszerek elterjedésének elõsegítése, valamint az
+otthonápolás támogatása\cite{evita}.
 
 Ahhoz, hogy infokommunikációs eszközeink valóban kiszolgáljanak - és ne
 kiszolgáltatottá tegyenek - bennünket, egymással együttmûködni képes és
@@ -53,7 +53,7 @@ elsõsorban abban különböznek a hagyományos társaiktól, hogy az azokat
 használó ember felé minimális elvárásokat támasztanak. Egy vérnyomásmérõ
 esetén a legjobb, ha maga az eszköz tudja, hogy mikor kell a mérést
 elvégezni, és erre figyelmeztetni az illetõt. Mikor a mérés elkészült,
-hogy akkor nem szerencsés ha a mérési eremdényt a betegnek kell kézzel
+hogy akkor nem szerencsés ha a mérési eredményt a betegnek kell kézzel
 rögzítenie, helyette maga a mûszer rendelkezzen saját memóriával, melyet
 vagy azonnal vagy késõbb valamilyen adatbázisba küld.
 
@@ -64,7 +64,7 @@ kelljen erre kézzel utasítani.
 
 Az ezzel szemben álló technikai probléma viszont, hogy az eszközök
 tipikusan kevés információt árulnak el magukról, így az automatikus
-beállítás abban az esetben ha az eszköz még korábba nem volt a rendszer
+beállítás abban az esetben ha az eszköz még korábban nem volt a rendszer
 része, igencsak nehézkes. Ezen segíthetünk ha megengedjük, hogy ne
 közvetlenül az eszközökkel kommunikáljon a rendszer, hanem az egyes
 mûszerekhez készítünk illesztõket, és azt a célt tûzzük ki, hogy minden
@@ -73,12 +73,55 @@ készítve a mi rendszerünkben való mûködésre.
 
 Ezzel elérhetõvé válhat az a használati eset, mikor a vásárló meglátja a
 boltban egy eszközön egy rendszer emblémáját, hazaviszi a terméket, és
-az azonnal használható, minenféle beállítás nélül (vagy minimális
+az azonnal használható, mindenféle beállítás nélkül (vagy minimális
 beállítással). Ez a példa kissé elrugaszkodottnak tûnik, azonban ha
 figyelembe vesszük az idõsebb emberek igényeit, az elõbbi funkcióra
 igenis igény lenne, ha lenne ilyen rendszer.
 
-\section{A Tunkstall életviteli rendszer és az OSGI keretrendszer}
+Mielõtt azonban új rendszer tervezésébe kezdenénk, érdemes megvizsgálni,
+hogy jelenleg milyen megoldások, vagy megoldás-kezdemények érhetõek el a
+piacon. A problémát alapvetõen két részre lehet bontani. Egyrészt
+bármilyen életviteli rendszerhez készítésekor érdemes felhasználni
+valamilyen kommunikációs keretrendszert, tehát az ilyen irányú elérhetõ
+alternatívákat érdemes mérlegelni, figyelembe véve, hogy milyen igényeink
+vannak, és milyen funkcionalitást nyújtanak az egyes jelenleg elérhetõ
+implementációk. Másrészt érdemes azt is tanulmányozni, hogy ezekre a
+keretrendszerekre milyen jelenleg is mûködõ és elérhetõ életviteli
+rendszerek készültek el.
+
+Arra sajnos már elõre fel kell készülni, hogy jelenleg még nem érhetõ el
+nyílt szabvány életviteli rendszerekkel kapcsolatban, illetve
+esetlegesen jövõbeli ilyen rendszerhez készítendõ mûszerekhez, így a
+jelenleg rendelkezésre álló rendszerek sem használhatnak ilyet,
+következésképp kevés információt tudhatunk meg róluk. Ennek ellenére
+célunk felfedni ezen rendszerek elõnyeit és hátrányait, hogy egy új
+rendszer tervezésekor a korábbiak példájából tanulva, ne kövessük el
+ugyanazon hibákat újfent.
+
+A jelenleg használt életviteli rendszerekben használt keretrendszerek
+tanulmányozásával nem célunk tanulni azok hibáiból, hiszen a jelenlegi
+munka kezdetén már eldöntésre került, hogy az új rendszer alapja az
+Erlang nyelv és környezet lesz. Ennek ellenére hasznos összehasonlítani
+az Erlang által nyújtott funkcionalitást más keretrendszerekkel, ezáltal
+is könnyebben rátapinthatunk annak elõnyeire és gyengeségeire.
+
+A korábban már említett zárt beállítottság miatt az elkészült
+rendszerekben is inkább a felhasználó oldaláról érzékelhetõ
+különbségeket, a rendszer tapasztalható elõnyeit és hátrányait
+igyekszünk megmutatni, majd ezen elemzés figyelembevételével nekikezdeni
+a saját, Erlang alapú rendszer tervezésének.
+
+A számunkra szükséges funkcionalitást nyújtó keretrendszerre jó példa az
+OSGi\cite{osgi}.
+
+A végfelhasználó számára tényleges segítséget nyújtó életviteli
+rendszert valósított meg az angol Tunstall\cite{tunstall} cég.
+
+Hasonló módon kulcsrakész életviteli rendszert hozott létre a finn Oy
+Exrei Ab\cite{exrei} cég is, az Everon\cite{everon} márkajelzésû
+termékeivel.
+
+\section{A FIXME életviteli rendszer és a FIXME keretrendszer}
 
 \section{Az Erlang életviteli rendszer terve}
 
@@ -91,6 +134,16 @@ igenis igény lenne, ha lenne ilyen rendszer.
 
 \bibitem{evita} eVITA program: életviteli technológiák és alkalmazásokeVITA
 program: életviteli technológiák és alkalmazások, http://de.njszt.hu/node/87
+
+\bibitem{osgi} OSGi Szövetség (korábbi néven Open Services Gateway
+initiative, mára elavult név): Hivatalos honlap, http://www.osgi.org/
+
+\bibitem{tunstall} Tunstall: Hivatalos honlap,
+http://www.tunstall.co.uk/
+
+\bibitem{exrei} Oy Exrei Ab: Hivatalos honlap, http://exrei.fi/
+
+\bibitem{everon} Everon: Always there for you, http://www.everon.fi/eng/
 
 \end{thebibliography}
 \end{document}

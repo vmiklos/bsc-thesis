@@ -53,7 +53,7 @@ elsõsorban abban különböznek a hagyományos társaiktól, hogy az azokat
 használó ember felé minimális elvárásokat támasztanak. Egy vérnyomásmérõ
 esetén a legjobb, ha maga az eszköz tudja, hogy mikor kell a mérést
 elvégezni, és erre figyelmeztetni az illetõt. Mikor a mérés elkészült,
-hogy akkor nem szerencsés ha a mérési eredményt a betegnek kell kézzel
+hogy akkor nem szerencsés, ha a mérési eredményt a betegnek kell kézzel
 rögzítenie, helyette maga a mûszer rendelkezzen saját memóriával, melyet
 vagy azonnal vagy késõbb valamilyen adatbázisba küld.
 
@@ -64,8 +64,8 @@ kelljen erre kézzel utasítani.
 
 Az ezzel szemben álló technikai probléma viszont, hogy az eszközök
 tipikusan kevés információt árulnak el magukról, így az automatikus
-beállítás abban az esetben ha az eszköz még korábban nem volt a rendszer
-része, igencsak nehézkes. Ezen segíthetünk ha megengedjük, hogy ne
+beállítás abban az esetben, ha az eszköz még korábban nem volt a rendszer
+része, igencsak nehézkes. Ezen segíthetünk, ha megengedjük, hogy ne
 közvetlenül az eszközökkel kommunikáljon a rendszer, hanem az egyes
 mûszerekhez készítünk illesztõket, és azt a célt tûzzük ki, hogy minden
 (de csak olyan) eszközökkel akarunk együttmûködni, melyek fel vannak
@@ -111,8 +111,24 @@ különbségeket, a rendszer tapasztalható elõnyeit és hátrányait
 igyekszünk megmutatni, majd ezen elemzés figyelembevételével nekikezdeni
 a saját, Erlang alapú rendszer tervezésének.
 
+Fontos leszögezni, hogy a jelen munka tárgya elsõsorban az életviteli
+rendszer megalkotásához szükséges köztes réteg (middleware) megalkotása
+Erlang környezetben. Terjedelmi okokból egy teljes életviteli rendszer
+megvalósítására nem térünk ki, bár megvizsgálunk néhány jelenleg is
+elérhetõ megoldást.
+
 A számunkra szükséges funkcionalitást nyújtó keretrendszerre jó példa az
-OSGi\cite{osgi}.
+OSGi\cite{osgi}, mely Java nyelven készült és sok olyan problémára nyújt
+megoldást, amely a Java alatt dolgozó JVM esetén különös nehézséget
+jelent, míg ezek jelentõs hányadára Erlang Beam virtuális gépe nyelvi
+szinten nyújt megoldást. Példaként említhetnénk itt a futási idõben
+betölthetõ, újratölthetõ és törölhetõ modulokat, automatikus
+felugyeletét az egyes monitorozandó csomópontoknak, vagy
+rendszerjavítási célból futási idõben kiértékelt parancsok
+végrehajtását. A jelen bevezetõnek azonban nem célje részletesen
+specifikálni ezeket a feladatokat, csak rá akar mutatni a szemmel
+látható szimmetriára az Erlang környezet által nyújtott szolgáltatások
+és az életviteli rendszerek által igényelt funkcionalitás között.
 
 A végfelhasználó számára tényleges segítséget nyújtó életviteli
 rendszert valósított meg az angol Tunstall\cite{tunstall} cég.
@@ -120,6 +136,10 @@ rendszert valósított meg az angol Tunstall\cite{tunstall} cég.
 Hasonló módon kulcsrakész életviteli rendszert hozott létre a finn Oy
 Exrei Ab\cite{exrei} cég is, az Everon\cite{everon} márkajelzésû
 termékeivel.
+
+Magyaroszágon a Sonaris Kft\cite{sonaris} mûködik együtt a finn IST
+International Security Technology Oy\cite{ist} céggel, mely a nívódíjas
+Vivago aktív személyfelügyeleti rendszer megalkotója.
 
 \section{A FIXME életviteli rendszer és a FIXME keretrendszer}
 
@@ -144,6 +164,10 @@ http://www.tunstall.co.uk/
 \bibitem{exrei} Oy Exrei Ab: Hivatalos honlap, http://exrei.fi/
 
 \bibitem{everon} Everon: Always there for you, http://www.everon.fi/eng/
+
+\bibitem{sonaris} Sonaris Kft, http://www.sonaris.com/ceg.htm
+
+\bibitem{ist}IST International Security Technology Oy, http://www.istsec.fi/en.php
 
 \end{thebibliography}
 \end{document}

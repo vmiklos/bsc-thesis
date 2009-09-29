@@ -225,6 +225,85 @@ Természetesen egy rendszer tervezése szempontjából egy ugyanúgy csak egy
 
 \subsection{Keretrendszerek}
 
+Egy életviteli rendszer számos csomópontból és végpontból áll. A
+végpontok információt fogadhatnak ha riasztás érkezik, valamint
+döntéshozatal vagy szenzorok esetén információt küldhetnek is. A
+rendszer létrehozásakor a legtöbb probléma már itt jelentkezik: a
+végpontokat valamilyen módon a csatlakozási pontokhoz kell kötni, erre
+nem volna hátrányos valamilyen szabványos megoldást használni, valamint
+el szeretnénk kerülni a kerék feltalálását is.
+
+Ebbõl következik, hogy a rendszert mindenképpen érdemes valamilyen
+jelenleg is elérhetõ keretrendszerre építeni, és nem teljesen önálló
+egységként létrehozni.
+
+E bevezetõ alfejezet célja ismeretetni ezek közül néhány jelenleg is
+használatban lévõ megoldást, hogy ezek után legyen viszonyítási alapunk
+az Erlang környezet által nyújtott funkcionalitás megítéléséhez.
+
+Az egyik legelsõ\cite{rpc1} ilyen megoldást a Sun cég specifikálta ki
+1988-ban. A szabványt ma is aktívan használják, (e munka írásának
+pillanatában) legutolsó verzióját\cite{rpc2} 2009-ben adták ki. A
+megcélzott probléma a következõ: adott egy C függvény, és szeretnénk azt
+transzparens módon meghívni, de úgy, hogy az egy másik gépen fusson le.
+Tehát a kliens oldalon kell egy csonk (stub), mely azonos interfésszel
+rendelkezik, mint az eredeti függvény, de az implementáció magában
+foglalja a távoli kiszolálóhoz való csatlakozást, a távoli kódfuttatást,
+valamint az eredémény lekérését. A kiszolgáló oldalán szintén szükség
+van egy csonk függvényre, mely lehetõvé teszi, hogy az RPC kiszolgáló
+kérés esetén meghívja a tényleges implementációját a függvénynek. A
+távoli eljáráshíváshoz egy interfészt kell definiálni egy
+interfész-leíró nyelvvel (Interface Description Language, IDL), majd
+ebbõl a csonkok generálhatóak például az \emph{rpcgen} programmal.
+
+A módszernek manapság az egyik fontos felhasználási területe a hálózati
+fájlrendszerek (Network File System, NFS). Hátrányai közül leginkább azt
+érdemes megemlíteni, hogy heterogén környezetben, illetve nyitott
+hálózaton limitált a funkcionalitása.
+
+A DCOM\cite{dcom} (Distributed Component Object Model) technológiát a
+Microsoft alkotta meg, a szintén általuk kidolgozott COM (Component
+Object Model) kiterjesztéseként. A DCOM nem titkolt szánkéka
+versenytársként megjelenni a késõbb említésre kerülõ CORBA
+architektúrának.
+
+A DCOM mögötti gondolat az volt, hogy a népszerû COM technológiát
+továbbfejlesszék, és lehetõvé tegyék az eljáráshívást távoli
+számítógépen is. A COM legfontosabb tulajdonsága, hogy lehetõvé tette
+alkalmazások számára, hogy egy publikus interfészt definiáljanak, és az
+ebben megjelölt függvényeket a gépen futó más alkalmazások meghívják. Az
+RPC-hez képest újdonság, hogy az interfészt nem kell elõre tudniuk a
+klienseknek, hanem egy \emph{QueryInterface()} függvényen keresztül az
+lekérdezhetõ.
+
+Annak ellenére, hogy alternatív implementációk elérhetõek más
+rendszerekre is, ez a technológia igazán csak Windows rendszereken
+terjedt el.
+
+A CORBA\cite{corba} szabványt az Object Management Group (OMG) dolgozta
+ki, célja pedig, hogy több nyelv, több gépen együtt tudjon mûködni,
+tehát lehetõvé tegye közöttük a távoli eljáráshívást. Fontos újdonság
+még benne, hogy teljes mértékben hordozható.
+
+Az interfész megadása itt is IDL segítségével történik, viszont az is a
+szabvány része, hogy az IDL-t, hogyan kell leképezni számos nyelvre.
+Természetesen ezen kívül az elõre meghatározott nyelv-listán kívül is
+még több nyelvhez elérhetõ a CORBA, de ott az implementáció már nem
+szabványosított.
+
+A tényleges távoli eljáráshívás két legfontosabb komponense itt a
+objektum kérés bróker (Object Request Broker, ORB -- az alkalmazás más
+objektumokkal csak ezen keresztül léphet interakcióba), valamint az
+objektum adapter (Object Adapter), amelynek feladata kezelni az
+objektumok referencia-számlálóját, figyelni az élettartalmát, és ehhez
+hasonló feladatokat ellátni.
+
+Végezetül megemlítjük az XML-RPC\cite{xmlrpc} szabványt, mely HTTP
+protokoll felett, XML használatával oldja meg a távoli eljáráshívást. Az
+a megközelítés rendkívül népszerû napjainkban webszolgáltatások esetén,
+valamint a Microsoft által a DCOM leváltására megalkotott WCF (Windows
+Communications Framework) is belül XML-RPC-t használ.
+
 \section{Egy-egy kiválasztott rendszer részletes ismertetése}
 
 \subsection{A Tunstall életviteli rendszer}
@@ -328,7 +407,19 @@ http://www.tunstall.co.uk/
 
 \bibitem{bt21cn} BT's 21st Century Network, http://www.btplc.com/21CN/
 
-\bibitem{vivago} Vivago betegfelügyeleti rendszer, http://hun.haziapolas.hu/HaziapolasHunIndex.aspx
+\bibitem{vivago} Vivago betegfelügyeleti rendszer,
+http://hun.haziapolas.hu/HaziapolasHunIndex.aspx
+
+\bibitem{rpc1} ONC RPC Version 1, http://tools.ietf.org/html/rfc1057
+
+\bibitem{rpc2} ONC RPC Version 2, http://tools.ietf.org/html/rfc5531
+
+\bibitem{dcom} Distributed Component Object Model (DCOM) Remote Protocol
+Specification, http://msdn.microsoft.com/library/cc201989.aspx
+
+\bibitem{corba} The OMG's CORBA Website http://www.corba.org/
+
+\bibitem{xmlrpc} XML-RPC Home Page, http://www.xmlrpc.com/
 
 \end{thebibliography}
 \end{document}

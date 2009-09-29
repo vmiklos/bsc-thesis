@@ -150,14 +150,14 @@ termékeivel.
 Az Exrei cég megoldásai három területre bonthatók:
 
 \begin{itemize}
-	\item Személyi biztonság biztosítása. Egy modern vezeték-nélüli
+	\item Személyi biztonság biztosítása. Egy modern vezetéknélüli
 riasztó is monitorozó rendszert hoztak létre, mely lehetõséget ad
 korlátozott és idõsebb emberek számára, hogy továbbra is otthon
 élhessenek. A rendszernek része egy részletes öndiagnosztika, így az
 esetek többségében azt is érzékeli, ha maga a rendszer hibásodik.
 
 A rendszer gyakorlatilag egy alapállomásból (base station) épül fel,
-ehhez kapcsolódnak szenzorok, illetve vezeték-nélküli riasztható
+ehhez kapcsolódnak szenzorok, illetve vezetéknélküli riasztható
 eszközök. Értelemszerûen az alapállomások nem csak a hozzájuk kötõdõ
 eszközöket képesek riasztani, hanem megfelelõ biztonsági beállítások
 mellett egy másik helyen lévõ alapállomáshoz kötött eszközt is, például
@@ -237,7 +237,7 @@ Ebbõl következik, hogy a rendszert mindenképpen érdemes valamilyen
 jelenleg is elérhetõ keretrendszerre építeni, és nem teljesen önálló
 egységként létrehozni.
 
-E bevezetõ alfejezet célja ismeretetni ezek közül néhány jelenleg is
+E bevezetõ alfejezet célja ismertetni ezek közül néhány jelenleg is
 használatban lévõ megoldást, hogy ezek után legyen viszonyítási alapunk
 az Erlang környezet által nyújtott funkcionalitás megítéléséhez.
 
@@ -248,8 +248,8 @@ megcélzott probléma a következõ: adott egy C függvény, és szeretnénk azt
 transzparens módon meghívni, de úgy, hogy az egy másik gépen fusson le.
 Tehát a kliens oldalon kell egy csonk (stub), mely azonos interfésszel
 rendelkezik, mint az eredeti függvény, de az implementáció magában
-foglalja a távoli kiszolálóhoz való csatlakozást, a távoli kódfuttatást,
-valamint az eredémény lekérését. A kiszolgáló oldalán szintén szükség
+foglalja a távoli kiszolgálóhoz való csatlakozást, a távoli kódfuttatást,
+valamint az eredmény lekérését. A kiszolgáló oldalán szintén szükség
 van egy csonk függvényre, mely lehetõvé teszi, hogy az RPC kiszolgáló
 kérés esetén meghívja a tényleges implementációját a függvénynek. A
 távoli eljáráshíváshoz egy interfészt kell definiálni egy
@@ -263,7 +263,7 @@ hálózaton limitált a funkcionalitása.
 
 A DCOM\cite{dcom} (Distributed Component Object Model) technológiát a
 Microsoft alkotta meg, a szintén általuk kidolgozott COM (Component
-Object Model) kiterjesztéseként. A DCOM nem titkolt szánkéka
+Object Model) kiterjesztéseként. A DCOM nem titkolt szándéka
 versenytársként megjelenni a késõbb említésre kerülõ CORBA
 architektúrának.
 
@@ -313,7 +313,7 @@ elõforduló problémát igyekszik megoldani:
 
 \begin{itemize}
 	\item Elmezavar. Gyakori probléma, hogy az ilyen problémákkal
-kûzdõ emberek elhagyják otthonukat, majd indokolatlanul sok ideig nem
+küzdõ emberek elhagyják otthonukat, majd indokolatlanul sok ideig nem
 térnek vissza. A cég forgalmaz olyan szenzort, amely adott idõ
 elteltével riaszt, ha nem történt meg a hazaérkezés. Egy hasonló
 probléma, hogy az ágyból kikelve nem találják az utat a fürdõszoba felé,
@@ -386,8 +386,8 @@ nem érhetõ el részletes információ az általuk kifejlesztett, és éles
 \begin{thebibliography}{4}
 \addcontentsline{toc}{section}{Hivatkozások}
 
-\bibitem{evita} eVITA program: életviteli technológiák és alkalmazásokeVITA
-program: életviteli technológiák és alkalmazások, http://de.njszt.hu/node/87
+\bibitem{evita} eVITA program: életviteli technológiák és alkalmazások,
+http://de.njszt.hu/node/87
 
 \bibitem{osgi} OSGi Szövetség (korábbi néven Open Services Gateway
 initiative, mára elavult név): Hivatalos honlap, http://www.osgi.org/
@@ -414,7 +414,7 @@ http://hun.haziapolas.hu/HaziapolasHunIndex.aspx
 
 \bibitem{rpc2} ONC RPC Version 2, http://tools.ietf.org/html/rfc5531
 
-\bibitem{dcom} Distributed Component Object Model (DCOM) Remote Protocol
+\bibitem{dcom} Microsoft Distributed Component Object Model (DCOM) Remote Protocol
 Specification, http://msdn.microsoft.com/library/cc201989.aspx
 
 \bibitem{corba} The OMG's CORBA Website http://www.corba.org/

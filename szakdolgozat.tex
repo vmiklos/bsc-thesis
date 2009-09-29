@@ -21,7 +21,7 @@
 \tableofcontents
 \newpage
 
-\section{Életviteli rendszerek}
+\section{Bevezetõ}
 
 Felmérések támasztják alá, hogy az idõsödõ emberek a lehetõ legtovább
 szeretnék megõrizni függetlenségüket, otthonukban maradni és a
@@ -114,8 +114,9 @@ a saját, Erlang alapú rendszer tervezésének.
 Fontos leszögezni, hogy a jelen munka tárgya elsõsorban az életviteli
 rendszer megalkotásához szükséges köztes réteg (middleware) megalkotása
 Erlang környezetben. Terjedelmi okokból egy teljes életviteli rendszer
-megvalósítására nem térünk ki, bár megvizsgálunk néhány jelenleg is
-elérhetõ megoldást.
+megvalósítására sajnos nem térhetünk ki, de megvizsgálunk néhány
+jelenleg is elérhetõ megoldást, így reális képet kaphatunk arról, hogy a
+tervezett rendszer milyen is lenne teljesen megvalósított állapotában.
 
 A számunkra szükséges funkcionalitást nyújtó keretrendszerre jó példa az
 OSGi\cite{osgi}, mely Java nyelven készült és sok olyan problémára nyújt
@@ -125,13 +126,22 @@ szinten nyújt megoldást. Példaként említhetnénk itt a futási idõben
 betölthetõ, újratölthetõ és törölhetõ modulokat, automatikus
 felügyeletét az egyes monitorozandó csomópontoknak, vagy
 rendszerjavítási célból futási idõben kiértékelt parancsok
-végrehajtását. A jelen bevezetõnek azonban nem célje részletesen
+végrehajtását. A jelen bevezetõnek azonban nem célja részletesen
 specifikálni ezeket a feladatokat, csak rá akar mutatni a szemmel
 látható szimmetriára az Erlang környezet által nyújtott szolgáltatások
 és az életviteli rendszerek által igényelt funkcionalitás között.
 
+\subsection{Életviteli rendszerek}
+
 A végfelhasználó számára tényleges segítséget nyújtó életviteli
-rendszert valósított meg az angol Tunstall\cite{tunstall} cég.
+rendszert valósított meg az angol Tunstall\cite{tunstall} cég. Céljuk
+telekommunikációs megoldásokat felhasználni az egészséggondozás
+problémakörében, ezzel biztosítva idõsebb emberek számára, hogy hosszabb
+távon önellátó módon élhessenek, és hatékonyan gondoskodhassanak saját
+egészségükrõl, jó közérzetükrõl.
+
+Az általuk kiemelt fõbb problémakörökre a következõ fejezetben
+részletesen kitérünk.
 
 Hasonló módon kulcsrakész életviteli rendszert hozott létre a finn Oy
 Exrei Ab\cite{exrei} cég is, az Everon\cite{everon} márkajelzésû
@@ -141,7 +151,80 @@ Magyaroszágon a Sonaris Kft\cite{sonaris} mûködik együtt a finn IST
 International Security Technology Oy\cite{ist} céggel, mely a nívódíjas
 Vivago aktív személyfelügyeleti rendszer megalkotója.
 
-\section{A FIXME életviteli rendszer és a FIXME keretrendszer}
+\subsection{Keretrendszerek}
+
+\section{Egy-egy kiválasztott rendszer részletes ismertetése}
+
+\subsection{A Tunstall életviteli rendszer}
+
+A cég által létrehozott életviteli rendszer számos, a napi életben
+elõforduló problémát igyekszik megoldani:
+
+\begin{itemize}
+	\item Elmezavar. Gyakori probléma, hogy az ilyen problémákkal
+kûzdõ emberek elhagyják otthonukat, majd indokolatlanul sok ideig nem
+térnek vissza. A cég forgalmaz olyan szenzort, amely adott idõ
+elteltével riaszt, ha nem történt meg a hazaérkezés. Egy hasonló
+probléma, hogy az ágyból kikelve nem találják az utat a fürdõszoba felé,
+vagy vissza, ehhez is létrehoztak egy megoldást, mely érzékeli, hogy
+mikor kelt ki az ágyból az ember, és ekkor kapcsolja be a világítást az
+útvonal könnyebb megtalálásához. Végül az ilyen emberek sokszor
+képtelenek felmérni, hogyha veszélybe keveredtek, és nem teszik meg a
+szükséges óvintézkedéseket. A cél füst-, széndioxid- és
+földgáz-érzékelõket is forgalmaz, melyek egy központban riasztanak, ha
+segítségre van szükség.
+	\item Esések. Naponta 8000 idõsebb vagy gyenge ember esik el.
+Ezek 70 százaléka éjszaka történik. Minden ötödik ember, aki eltöri a
+csípõjét 6 hónapon belül hal meg. Ebbõl következik, hogy ha egy embernek
+félnie kell az eleséstõl, az magával vonja azt az érzést, hogy már nem
+képes függetlenül mozogni, valamint hogy már nem él teljes életet. A cég
+így két problémakört céloz meg: egyrészt minimálisra csökkenteni az
+esések hatását, másrészt növelni az indokolatlanul kis mértékû
+önbizalmat. A cég olyan szenzort forgalmaz, mely érzékeli, ha az ember
+elhagyta az ágyát, és nem tért vissza meghatározott idõn belül, ami
+vélhetõleg arra utal, hogy az illetõ elesett. Az esés-érzékelõ egy
+derékszíjon viselt szenzor, mely egyrészt automatikusan érzékelni képes
+az esést, valamint egyszerû megoldást ad az elesett ember számára is az
+esés jelzésére, így a gyors segítség nyújtása könnyebbé válik. A
+harmadik mûszer pedig egy mozgás-érzékelõ, mely akkor riaszt, ha az
+ember hosszabb ideje nem mozgott még lakáson belül, mely nagy
+valószínûséggel elesést jelent. Ezek az eszközök segítenek megelõzni
+olyan eseteket, mikor például egy idõs ember a fürdõszobából visszatérve
+elesik a küszöbön, majd az egész éjszakát ott kell töltse, mivel nem tud
+segítséget kérni.
+	\item Átmeneti biztosítás. Ennek célja, hogy olyan emberek akik
+kis segítséggel már otthon gyógyulhatnának, sokszor a kórházban
+maradnak, és ott lassabban gyógyulnak, csupán néhány könnyen
+kiküszöbölhetõ probléma miatt. Ilyen például az elõzõ pontban említett
+esés-érzékelõ, e nélkül egy lábadozó beteget hazaengedni felelõtlenség
+lenne.
+	\item Tanulási nehézségek. Hetente 200 ember születik tanulási
+nehézségekkel. Ez azt jelenti, hogy új vagy összetett információkat,
+önállóságot az átlagos embernél nehezebben tanulnak. A cég célja, hogy
+ezeknek az embereknek a tanulási nehézségein segítve ne kerüljenek távol
+a családjuktól, vagy valamilyen közösség részeként önállóbb életet
+tudjanak élni. Példaként lehetne említeni az elõzõ pontokban is
+részletezett szenzort, mely az ágy elhagyásakor és adott idõn belül való
+vissza nem téréskor jelez, így értesítve a családtagokat, ha probléma
+merült fel, míg az esetek nagy részében a rokonok nyugodtan alhatnak,
+hiszen a szenzor jelzésére biztosan felébrednek.
+\end{itemize}
+
+A technikai részletekrõl kevesebbet lehet tudni, de akadnak kivételek. A
+British Telecom\cite{bt} angol telefontársasággal együttmûködve számos
+IP-alapú szolgáltatást tettek elérhetõvé. A BT 21 CN\cite{bt21cn} (21st
+Century Network) néven elindított programjuk technikai szempontból
+leginkább a hagyományos telefonhálózat (PSTN) lecserélése VoIP
+megoldásokra. Ez lehetõvé teszi, hogy az egyes végpontokon ne csak
+beszédet, hanem sokféle adatforgalmat is lebonyolítsanak az ügyfelek. Ez
+a megoldás kiválóan használható a szenzorok által gyûjtött adatok
+továbbítására, valamint szükség esetén riasztásra. A Tunstall egy listát
+vezet azokról a szenzorokról, melyek a 21CN hálózat felett használt,
+általuk bevezetett protokollt támogatni tudják. Sajnálatos módon azonban
+nem érhetõ el részletes információ az általuk kifejlesztett, és éles
+üzemben is használt protokoll részleteirõl.
+
+\subsection{Az OSGi keretrendszer}
 
 \section{Az Erlang életviteli rendszer terve}
 
@@ -168,6 +251,10 @@ http://www.tunstall.co.uk/
 \bibitem{sonaris} Sonaris Kft, http://www.sonaris.com/ceg.htm
 
 \bibitem{ist}IST International Security Technology Oy, http://www.istsec.fi/en.php
+
+\bibitem{bt} BT Group plc, http://www.bt.com/
+
+\bibitem{bt21cn} BT's 21st Century Network, http://www.btplc.com/21CN/
 
 \end{thebibliography}
 \end{document}

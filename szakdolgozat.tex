@@ -377,6 +377,80 @@ nem érhetõ el részletes információ az általuk kifejlesztett, és éles
 
 \subsection{Az OSGi keretrendszer}
 
+Az OSGI Szövetég (régebbi nevén Open Services Gateway initiative) egy
+nyílt szabványügyi szervezet. A szövetség tagjai egy Java-alapú
+szolgáltatás-platformot definiáltak, mely távolról kezelhetõ.
+
+A szabvány mögött olyan neves cégek állnak, mint a Nokia, Motorola vagy
+az IBM. Leginkább mobil eszközökben használják, de például a népszerû
+Eclipse IDE is ezt használja a beépülõ moduljainak kezelésére.  A
+szabvány szót itt a hagyományos értelemben használhatjuk, mivel csak a
+nyílt forrású implementációkat számolva is többesszámról beszélhetünk.
+
+Elõször 2000-ben jelent meg, a jelenleg aktuális 4-es verzióját pedig
+2009 szeptemberében adták ki, így méltán tekinthetünk rá, mint aktívan
+fejlesztett és karbantartott megoldásra.
+
+A keretrendszer legfontosabb elemei:
+
+\begin{itemize}
+	\item Alkalmazások életciklusának kezelési modellje: az
+alkamazásokat csomagok (bundle) formájában lehet terjeszteni, majd a JVM
+leállítása nélkül telepíteni, elindítani, frissíteni vagy eltávolítani.
+	\item Szolgáltatás adatbázis: ez az adatbázis lehetõvé teszi az
+alkalmazások számára, hogy értesüljenek he új szolgáltatások érhetõek el
+vagy egy szolgáltatás megszûnt, és így alkalmazkodhatnak az új
+környezethez.
+	\item Végrehajtási környezet: A végrehajtási környezet azt
+definiálja, hogy egy környezetben milyen osztályok és metódusok érhetõek
+el. A Java Platform, Standard Edition is egy elfogadott OSGi
+végrehajtási környezet, de a CDC keretrendszer (amit például a legtöbb
+mai mobiltelefon is támogat) is támogatott, valamint van saját, általuk
+definiált környezet is. Minden egyes OSGi implementáció maga döntheti
+el, hogy milyen végrehajtási környezetet támogat, az elõbbieket a
+legtöbb támogatja.
+	\item Modulok: Azt is szabványosították, hogy az egyes csomagok
+milyen módon tudják az egymás közt fennálló függõségeket, valamint a
+kívülrõl elérhetõ API-kat definiálni, lehetõvé téve ezáltal, hogy
+egységes módon lehessen az egyes egységekbõl és egységekbe
+metódus-hívásokat végezni.
+\end{itemize}
+
+Az egyes csomagok olyan Java könyvtárak (JAR fájlok), amik
+OSGi-specifikus fejléccel rendelkeznek a JAR MANIFEST.MF fájljában.
+
+Az egyes alkalmazásoknak a következõ állapotai lehetnek:
+
+\begin{itemize}
+	\item Telepítve: Ekkor még elképzelhetõ, hogy egy csomag
+függõségei nem állnak rendelkezésre.
+	\item Feloldva: Minden függõség elérhetõ, az alkalmazást vagy
+leállították, vagy kész az indulásra.
+	\item Indul: Az alkalmazás aszinkron módon el lett indítva, de
+még nem tért vissza.
+	\item Aktív: Az alkalmazás elindult, és még nem kezdeményezték a
+leállítását.
+	\item Leáll: Az alkalmazás leállítása aszinkron módon
+elkezdõdött, de még nem fejezõdött be.
+	\item Eltávolítva: Az alkalmazás újabb telepítésig nem indítható
+el.
+\end{itemize}
+
+A szolgáltatások Java interfészeket jelentenek. Ezeket az API-kat implementálhatják a csomagok, majd ha a csomagot regisztrálták  a szolgáltatás-adatbázisban, akkor a kliensek itt megtalálhatják õket, és innentõl értesítést kérhetnek a szolgáltatás elérhetõsége és el nem érhetõsége esetén.
+
+Az OSGi szabvány is tartalmaz elõre definiált szolgáltatásokat, melyeket három csoportra oszthatunk:
+
+\begin{itemize}
+	\item OSGi System Services: ide tartoznak az olyan
+rendszerszolgáltatások, mint az eseménykezelõ, a beállításkezelõ,
+alkalmazások adminisztrációja, I/O mûveletek, felhasználókezelés.
+	\item OSGi Protocol Services: Elõre definiált protokolok
+használatát segíti -- HTTP feletti kommunikációt, UPnP-t támogató és
+mobil eszközök felé való kommunikációt.
+	\item OSGi Miscellaneous Services: Ide tartozik minden egyéb
+elõre definiált szolgáltatás, például XML értelmezõ.
+\end{itemize}
+
 \section{Az Erlang életviteli rendszer terve}
 
 \section{Megvalósítás}

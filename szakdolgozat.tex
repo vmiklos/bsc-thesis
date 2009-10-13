@@ -480,6 +480,8 @@ lesz, hogy Erlang környezetben valósítjuk meg. Ezen fejezet célja
 specifikálni a követelményrendszert, és ezen specifikációnak néhány
 jellegzetes elemét fogjuk megvalósítani a következõ fejezetben.
 
+\subsection{Elosztottság}
+
 Elosztott rendszert tervezünk, mely alatt jelen esetben azt értjük, hogy
 nincs központi eleme a rendszernek, és ez által nincsen egyetlen olyan
 elem se, amely meghibásodása esetén az egész rendszer leállna. Egy
@@ -491,6 +493,8 @@ a jelzésrõl többen is értesítést kapjanak. Természetesen a redundanciát
 tovább is fokozhatjuk, de ha ezt nem is tesszük, az idáig hat elembõl
 álló rendszerünk tökéletesen üzemelni fog mindaddig amíg legfeljebb egy
 elem esik ki a rendszerbõl.
+
+\subsection{A rendszer elemei}
 
 Ebbõl következõen a rendszer \emph{csomópontokból} épül fel. A
 csomópontoknak két fontosabb fajtáját különböztetjük meg: a
@@ -561,6 +565,84 @@ zárva van, majd a célszemély úgy dönt, hogy ez az állapot nem kívánatos,
 folyamat akár meg is mentheti egy idõs ember életét, aki nem képes a
 nagy füstben kinyitni az zárat, ellenben az egyszerûen kilinccsel
 nyitható ajtón keresztül már képes elhagyni a lakást.
+
+\subsection{Dinamizmus}
+
+Volt már szó arról, hogy értelemszerûen minden csomópont futási idõben
+képes változtatni azon csomópontok listáját, amelyekkel kommunikálni
+képes. Központok esetén ez azt jelenti, hogy egy új szenzor
+regisztrációjakor nem kell a rendszert újraindítani, a végpontok pedig
+bármikor lekérhetik egy üzenetbõl az eredeti feladót, vagy egy központ
+névszolgáltatásán keresztül egy, a név mögött álló szenzor címét, majd
+annak üzenetet küldhetnek. Ezek az igények nélkülözhetetlenek a rendszer
+mûködéséhez.
+
+Amire viszont elsõ körben nem biztos, hogy gondolnánk, az az, hogy a
+központoknak különbözõ típusú szenzorokat kell kezelniük, és ez
+korántsem egyszerû feladat. A probléma az, hogy minden szenzor más módon
+hajlandó adatokat szolgáltatni. Még ha feltételezzük, hogy minden
+szenzor egy Erlang csomópont is, akkor is más üzenetet kell küldeni egy
+hõmérõnek (például \texttt{getTermperature()}), és mást egy
+vérnyomásmérõnek (például \texttt{getBloodPressure()}). Ezek egységes
+kezeléséhez a központban driverek szükségesek.
+
+A megoldás tehát az lesz, hogy minden szenzor-típus egy egyedi
+azonosítóval rendelkezik, ezt elküldi a központnak, a központ az
+azonosító alapján letölt egy drivert, betölti, és onnantól tudja, hogy
+hogyan kell kezelni.
+
+\subsection{Biztonság}
+
+Az elõzõ alfejezet címe kapcsán a dinamizmus szóról még egy jelenség
+juthat eszünkbe: amíg mûködik addig jó, de ha valami gond van a
+rendszerrel, akkor bajban vagyunk, hiszen egy dimanikusan mûködõ
+rendszerben hibát keresni nem kellemes feladat. Ha tovább keressük a
+problémákat a dinamizmussal, akkor felmerül az a kérdés is, hogy milyen
+biztonsági kockázatokat hozunk be ezzel a rendszerbe.
+
+A két probléma részben összefügg, de valójában független. Az inteligens,
+plug-and-play rendszerekre valós igény van idõs embereknél, hiszen õk
+nem szakemberek, így nem várható el, hogy hosszabb tanulás elõzi meg a
+rendszer használatát. Tekintve, hogy elsõsorban õértük jött létre a
+rendszer, ezt nem hagyhatjuk figyelmen kívül. A másik cél -- a rendszer
+üzemeltetõinek szemszögébõl -- természetesen, hogy minél inkább kontroll
+alatt legyen a rendszer, kézzel állítva mindent, hogy a nem várt
+eseményeket elkerüljük. Sajnos a két célt nem lehet kifogástalanul
+teljesíteni egyszerre, de találhatunk olyan kompromisszumos megoldást,
+mely mindkét fél türéshatárán belül helyezkedik el.
+
+A biztonság kérdése annyiben kapcsolódik az elõzõ problémához, hogy egy
+biztonságos rendszer egyik alapfeltétele, hogy minden, a rendszer
+számára érdekes objektum azonosítva legyen, ami jelen esetben azt
+jelentené, hogy a felhasználók és az eszközök is valamilyen
+authentikációs mechanizmus teljesítése után válhassanak csak a rendszer
+részévé. Ez problémát jelenthet például egy idõs embernél, aki
+telefonálni se tud, mikor elesett, nem hogy jelszavakat megadni, mielõtt
+értesítené a központot. Ezzel ellentétes igény, hogy ne helyezhessen el
+bárki egy terminált az ablakunk alatt, mely azonnal értesíti a támadót,
+ahogy elhagytuk a lakást.
+
+Jelen munkában ezt a felmerülõ két problémát úgy oldjuk meg, hogy
+feltételezzük a közvetkezõket:
+
+\begin{itemize}
+	\item A központoknak van interaktív felhasználói felülete.
+	\item A központokhoz fizikailag csak olyan személy fér hozzá,
+akinek van is jogosultsága ehhez.
+	\item A rendszer minden végpontja egyedi azonosítóval
+rendelkezik, melyet nem tud megváltoztatni.
+	\item A kommunikációra használt csatorna biztonságos. (Vagy
+titkosított, vagy zárt a hálózat.)
+	\item A központokhoz ha új szenzor vagy terminál próbál
+csatlakozni, akkor azt elsõ alkalommal ezt a központban jóvá kell
+hagyni. Legalább az elsõ végpont jóváhagyását fizikailag a központban
+kell elvégezni. (Innentõl az engedélyezett eszköz távolról is
+engedélyezhet más eszközöket.)
+\end{itemize}
+
+Ezekkel a feltételekkel idõs emberek is könnyen integrálhatnak új,
+gyárilag a rendszerrel kompatibilisnak tervezett eszközöket a
+rendszerbe, anélkül, hogy potenciális biztonsági réseket hagynánk abban.
 
 \section{Megvalósítás}
 

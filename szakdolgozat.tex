@@ -475,6 +475,93 @@ elõre definiált szolgáltatás, például XML értelmezõ.
 
 \section{Az Erlang életviteli rendszer terve}
 
+Az általunk tervezett életviteli rendszer legfontosabb ismérve tehát az
+lesz, hogy Erlang környezetben valósítjuk meg. Ezen fejezet célja
+specifikálni a követelményrendszert, és ezen specifikációnak néhány
+jellegzetes elemét fogjuk megvalósítani a következõ fejezetben.
+
+Elosztott rendszert tervezünk, mely alatt jelen esetben azt értjük, hogy
+nincs központi eleme a rendszernek, és ez által nincsen egyetlen olyan
+elem se, amely meghibásodása esetén az egész rendszer leállna. Egy
+egyszerû példa: az idõs ember elhagyja az ágyát, majd a lakását is, és
+megadott idõn belül nem tér vissza. Két szenzor is jelez a türelmi idõ
+letelte után. A rendszer lehetõséget ad arra, hogy egy szenzor több
+központnak is jelezzen, valamint azt, is, hogy egy központban ugyanarról
+a jelzésrõl többen is értesítést kapjanak. Természetesen a redundanciát
+tovább is fokozhatjuk, de ha ezt nem is tesszük, az idáig hat elembõl
+álló rendszerünk tökéletesen üzemelni fog mindaddig amíg legfeljebb egy
+elem esik ki a rendszerbõl.
+
+Ebbõl következõen a rendszer \emph{csomópontokból} épül fel. A
+csomópontoknak két fontosabb fajtáját különböztetjük meg: a
+\emph{központokat} és a \emph{végpontokat}.
+
+Egy központ bekapcsolás után nem tesz semmit, csak vár arra, hogy
+végpontok keressék. Ha egy végpont központot keres, akkor válaszol. Ha
+egy végpont regisztrál, akkor nevet ad neki, és erre a névre más
+végpontok feliratkozhatnak. Ilyen módon a végpont úgy küldhet üzenetet,
+hogy nem tudja, hogy pontosan ki fogja megkapni. Ténylegesen csak a
+központnak küldi el, majd a központ küldi tovább a feliratkozott
+végpontoknak.
+
+A központ nem rejti el az eredeti feladót, az üzenetet kapott végpontnak
+lehetõsége van válaszolni az eredeti feladónak, abban az esetben ha
+például döntés szükséges. Ebben az esetben az üzenet közvetlenül kerül
+átvitelre a két végpont között, központok igénybevétele nélkül.
+
+A központ ezenkívül hajlandó kiadni egy név mögött álló szenzor címét
+is, ez akkor hasznos, hogyha a végpont tudja a számára érdekes szenzor
+nevét, de az aktuális címét nem, valamint a szenzor sose ad ki magáról
+adatot implicit módon, így más módon a végpont nem szerezhetne tudomást
+a szenzor címérõl.
+
+A végpontok bekapcsolás után szórt üzenetet küldenek, majd várnak, amíg
+legalább egy központ válaszol a kérésre.
+
+A végpontoknak két fajtáját különböztetjük meg. Ezek egymástól sokkal
+inkább logikailag, mintsem technikailag különböznek. A \emph{szenzorok}
+olyan érzékelõk, melyek a környezetrõl szolgáltatnak információt. Ez az
+információ-adás lehet implicit vagy explicit. Implicit eset alatt azt
+értjük, ha például egy hõmérõ a mért hõmérsékletet óránként elküldi az
+általa ismert központoknak. Explicit esetben viszont egy másik végpont
+kérésére, közvetlenül a másik végpontnak bármikor elküldheti a kért
+adatot. Láthatjuk, hogy az implicit esetet nem elõzi meg kérés-üzenet,
+míg explicit esetben mindig csak egy végpont kap értesítést.
+
+Egy érdekes probléma annak a jelenségnek a kezelése, mely olyan
+szenzorok integrálásakor merül fel, melyek folyamatosan mérnek. Ezeket
+tehát nem lehet explicit módon lekérdezni, viszont az összes mért adat
+implicit közlése indokolatlanul nagy hálóhati forgalmat generálna. Ezt a
+problémát úgy küszöbölhetjük ki -- ezáltal ezt a szenzor-típust
+beillesztve a fenti két szenzor-kategóriába --, hogy a mûszer elé
+teszünk egy modult, mely mindig tárolja az utoljára mért értéket. Így a
+legutóbbi mért adat explicit módon bárkinek bármilyen idõpontban
+elérhetõvé válik.
+
+Egy másik tulajdonság, melyben a szenszorok különbözhetnek a
+vezérelhetõség. Például egy hõmérõ esetében a legtöbbször nincs mit
+vezérelni, ellenben egy ház ajtajába szerelt zár esetén megoldható, hogy
+ne csak lekérdezni tudjuk, hanem a zár állapotát vezérelni is lehessen.
+
+A \emph{terminálok} olyan végpontok, melyek elsõsorban üzenetek
+fogadására hivatottak, tehát bekapcsolás után keresnek legalább egy
+központot, valamint vagy elõre beállított, vagy a felhasználó által
+interaktívan beállítható módon feliratkoznak a központ(ok)
+névszolgáltatása által adott eseményekre. A terminálok között lehet
+passzív, mint például egy képernyõ, vagy aktív, például egy
+mobiltelefon. Az aktív terminálok reagálhatnak egy-egy üzenetre, míg a
+passzívok csak tájékoztató üzeneteket képesek megjeleníteni.
+
+Egy gyakorlati példa például, hogy a tûzjelzõ jelez a központnak, a
+központ továbbítja az üzenetet egy telefonra, ott a célszemély egy
+üzenetet küld a tûzjelzõt tartalmazó lakás ajtajában lévõ zárnak, hogy
+az adja meg az állapotát, az válaszol közvetlenül a telefonra, hogy
+zárva van, majd a célszemély úgy dönt, hogy ez az állapot nem kívánatos,
+és egy olyan vezérlõ-üzenetet küld a zárnak, hogy az nyíljon ki. Ez a
+folyamat akár meg is mentheti egy idõs ember életét, aki nem képes a
+nagy füstben kinyitni az zárat, ellenben az egyszerûen kilinccsel
+nyitható ajtón keresztül már képes elhagyni a lakást.
+
 \section{Megvalósítás}
 
 \section{Eredmények, jövõbeli munka}

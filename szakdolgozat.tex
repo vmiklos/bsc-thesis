@@ -490,9 +490,17 @@ megadott idõn belül nem tér vissza. Két szenzor is jelez a türelmi idõ
 letelte után. A rendszer lehetõséget ad arra, hogy egy szenzor több
 központnak is jelezzen, valamint azt, is, hogy egy központban ugyanarról
 a jelzésrõl többen is értesítést kapjanak. Természetesen a redundanciát
-tovább is fokozhatjuk, de ha ezt nem is tesszük, az idáig hat elembõl
-álló rendszerünk tökéletesen üzemelni fog mindaddig amíg legfeljebb egy
-elem esik ki a rendszerbõl.
+tovább is fokozhatjuk, de ha ezt nem is tesszük, akkor is a következõkre
+számíthatunk:
+
+\begin{itemize}
+\item Legrosszabb esetben is kieshez egy elem, és a rendszerünk
+tökéletesen fog tovább üzemelni.
+\item Két elem kiesésekor már fennáll a veszélye annak, hogy gond lesz,
+például ha a két szenzor esik ki.
+\item Legjobb esetben három elem is kieshet: ha pont az egyik szenzor,
+az egyik központ és az egyik terminál esik ki.
+\end{itemize}
 
 \subsection{A rendszer elemei}
 

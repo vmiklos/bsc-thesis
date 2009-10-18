@@ -55,9 +55,9 @@ esetén a legjobb, ha maga az eszköz tudja, hogy mikor kell a mérést
 elvégezni, és erre figyelmeztetni az illetõt. Mikor a mérés elkészült,
 hogy akkor nem szerencsés, ha a mérési eredményt a betegnek kell kézzel
 rögzítenie, helyette maga a mûszer rendelkezzen saját memóriával, melyet
-vagy azonnal vagy késõbb valamilyen adatbázisba küld.
+vagy azonnal vagy késõbb valamilyen adatbázisba küld. Ezen kívül fontos
+szempont, hogy a kezelés minél egyszerûbb legyen.
 
-Ezen kívül fontos szempont, hogy a kezelés minél egyszerûbb legyen.
 Például egy mérleg esetén a legjobb, ha a ráhelyezett súly nyomóereje
 stabilizálódik akkor automatikusan rögzíti a mérési eredményt, ne
 kelljen erre kézzel utasítani.
@@ -122,14 +122,17 @@ A számunkra szükséges funkcionalitást nyújtó keretrendszerre jó példa az
 OSGi\cite{osgi}, mely Java nyelven készült és sok olyan problémára nyújt
 megoldást, amely a Java alatt dolgozó JVM esetén különös nehézséget
 jelent, míg ezek jelentõs hányadára Erlang Beam virtuális gépe nyelvi
-szinten nyújt megoldást. Példaként említhetnénk itt a futási idõben
-betölthetõ, újratölthetõ és törölhetõ modulokat, automatikus
-felügyeletét az egyes monitorozandó csomópontoknak, vagy
-rendszerjavítási célból futási idõben kiértékelt parancsok
-végrehajtását. A jelen bevezetõnek azonban nem célja részletesen
-specifikálni ezeket a feladatokat, csak rá akar mutatni a szemmel
-látható szimmetriára az Erlang környezet által nyújtott szolgáltatások
-és az életviteli rendszerek által igényelt funkcionalitás között.
+szinten nyújt megoldást.
+
+Példaként említhetnénk itt a futási idõben betölthetõ, újratölthetõ és
+törölhetõ modulokat, automatikus felügyeletét az egyes monitorozandó
+csomópontoknak, vagy rendszerjavítási célból futási idõben kiértékelt
+parancsok végrehajtását.
+
+A jelen bevezetõnek azonban nem célja részletesen specifikálni ezeket a
+feladatokat, csak rá akar mutatni a szemmel látható szimmetriára az
+Erlang környezet által nyújtott szolgáltatások és az életviteli
+rendszerek által igényelt funkcionalitás között.
 
 \subsection{Életviteli rendszerek}
 
@@ -376,11 +379,13 @@ nehézségekkel. Ez azt jelenti, hogy új vagy összetett információkat,
 önállóságot az átlagos embernél nehezebben tanulnak. A cég célja, hogy
 ezeknek az embereknek a tanulási nehézségein segítve ne kerüljenek távol
 a családjuktól, vagy valamilyen közösség részeként önállóbb életet
-tudjanak élni. Példaként lehetne említeni az elõzõ pontokban is
-részletezett szenzort, mely az ágy elhagyásakor és adott idõn belül való
-vissza nem téréskor jelez, így értesítve a családtagokat, ha probléma
-merült fel, míg az esetek nagy részében a rokonok nyugodtan alhatnak,
-hiszen a szenzor jelzésére biztosan felébrednek.
+tudjanak élni.
+
+Példaként lehetne említeni az elõzõ pontokban is részletezett szenzort,
+mely az ágy elhagyásakor és adott idõn belül való vissza nem téréskor
+jelez, így értesítve a családtagokat, ha probléma merült fel, míg az
+esetek nagy részében a rokonok nyugodtan alhatnak, hiszen a szenzor
+jelzésére biztosan felébrednek.
 \end{itemize}
 
 A technikai részletekrõl kevesebbet lehet tudni, de azért akadnak kivételek. A
@@ -559,9 +564,11 @@ legutóbbi mért adat explicit módon bárkinek bármilyen idõpontban
 elérhetõvé válik.
 
 Egy másik tulajdonság, melyben a szenszorok különbözhetnek a
-vezérelhetõség. Például egy hõmérõ esetében a legtöbbször nincs mit
-vezérelni, ellenben egy ház ajtajába szerelt zár esetén megoldható, hogy
-ne csak lekérdezni tudjuk, hanem a zár állapotát vezérelni is lehessen.
+vezérelhetõség.
+
+Például egy hõmérõ esetében a legtöbbször nincs mit vezérelni, ellenben
+egy ház ajtajába szerelt zár esetén megoldható, hogy ne csak lekérdezni
+tudjuk, hanem a zár állapotát vezérelni is lehessen.
 
 A \emph{terminálok} olyan végpontok, melyek elsõsorban üzenetek
 fogadására hivatottak, tehát bekapcsolás után keresnek legalább egy

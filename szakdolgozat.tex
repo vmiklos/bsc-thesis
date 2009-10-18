@@ -485,7 +485,9 @@ lesz, hogy Erlang környezetben valósítjuk meg. Ezen fejezet célja
 specifikálni a követelményrendszert, és ezen specifikációnak néhány
 jellegzetes elemét fogjuk megvalósítani a következõ fejezetben.
 
-\subsection{Elosztottság}
+\subsection{Fõ követelmények}
+
+\subsubsection{Elosztottság}
 
 Elosztott rendszert tervezünk, mely alatt jelen esetben azt értjük, hogy
 nincs központi eleme a rendszernek, és ez által nincsen egyetlen olyan
@@ -515,7 +517,7 @@ korábban megkapott üzenetekhez, valamint ha ezek között keresni akarnak
 az szintén gyorsabb lesz, mint egy központosított rendszer esetén,
 hiszen nem kell hálózati késleltetéssel számolni.
 
-\subsection{A rendszer elemei}
+\subsubsection{A rendszer elemei}
 
 Ebbõl következõen a rendszer \emph{csomópontokból} épül fel. A
 csomópontoknak két fontosabb fajtáját különböztetjük meg: a
@@ -589,7 +591,7 @@ folyamat akár meg is mentheti egy idõs ember életét, aki nem képes a
 nagy füstben kinyitni az zárat, ellenben az egyszerûen kilinccsel
 nyitható ajtón keresztül már képes elhagyni a lakást.
 
-\subsection{Dinamizmus}
+\subsubsection{Dinamizmus}
 
 Volt már szó arról, hogy értelemszerûen minden csomópont futási idõben
 képes változtatni azon csomópontok listáját, amelyekkel kommunikálni
@@ -614,7 +616,7 @@ azonosítóval rendelkezik, ezt elküldi a központnak, a központ az
 azonosító alapján letölt egy drivert, betölti, és onnantól tudja, hogy
 hogyan kell kezelni.
 
-\subsection{Biztonság}
+\subsubsection{Biztonság}
 
 Az elõzõ alfejezet címe kapcsán a dinamizmus szóról még egy jelenség
 juthat eszünkbe: amíg mûködik addig jó, de ha valami gond van a

@@ -13,6 +13,22 @@
  
 \let\stdsection\section
 \renewcommand\section{\clearpage\stdsection}
+
+% make \paragraph behave like \subsubsubsection
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{0mm} % name, level, indent
+{-\baselineskip} % beforeskip
+{0.5\baselineskip} % afterskip
+{\normalfont\bfseries}}%
+\makeatother
+\setcounter{secnumdepth}{4}% to get numbered subsections
+\setcounter{tocdepth}{4}% to add \paragraph to the ToC
+
+% avoid widow / orphan lines
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+
 \begin{document}
 \singlespacing
 \include{preliminaries}
@@ -519,9 +535,13 @@ hiszen nem kell hálózati késleltetéssel számolni.
 
 \subsubsection{A rendszer elemei}
 
+\paragraph*{Csomópontok}
+
 Ebbõl következõen a rendszer \emph{csomópontokból} épül fel. A
 csomópontoknak két fontosabb fajtáját különböztetjük meg: a
 \emph{központokat} és a \emph{végpontokat}.
+
+\paragraph*{Központok}
 
 Egy központ bekapcsolás után nem tesz semmit, csak vár arra, hogy
 végpontok keressék. Ha egy végpont központot keres, akkor válaszol. Ha
@@ -542,9 +562,11 @@ nevét, de az aktuális címét nem, valamint a szenzor sose ad ki magáról
 adatot implicit módon, így más módon a végpont nem szerezhetne tudomást
 a szenzor címérõl.
 
+\paragraph*{Végpontok}
 A végpontok bekapcsolás után szórt üzenetet küldenek, majd várnak, amíg
 legalább egy központ válaszol a kérésre.
 
+\paragraph*{Szenzorok}
 A végpontoknak két fajtáját különböztetjük meg. Ezek egymástól sokkal
 inkább logikailag, mintsem technikailag különböznek. A \emph{szenzorok}
 olyan érzékelõk, melyek a környezetrõl szolgáltatnak információt. Ez az
@@ -572,6 +594,7 @@ Például egy hõmérõ esetében a legtöbbször nincs mit vezérelni, ellenben
 egy ház ajtajába szerelt zár esetén megoldható, hogy ne csak lekérdezni
 tudjuk, hanem a zár állapotát vezérelni is lehessen.
 
+\paragraph{Terminálok}
 A \emph{terminálok} olyan végpontok, melyek elsõsorban üzenetek
 fogadására hivatottak, tehát bekapcsolás után keresnek legalább egy
 központot, valamint vagy elõre beállított, vagy a felhasználó által

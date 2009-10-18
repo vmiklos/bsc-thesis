@@ -700,14 +700,35 @@ egyszer párosítani kell, és ehhez a mechanizmushoz egy korábban
 egyeztetett jelszót kell megadni. Ha mindkét oldalon ugyanazt a jelszót
 adják meg, akkor a párosítás sikerült. Az CD-k esetében Windows
 operációs rendszer esetén úgy döntöttek, hogy alapértelmezésben
-figyelmeztetés nélkül elindul a program, amint behelyeztuk a CD-t a
+figyelmeztetés nélkül elindul a program, amint behelyeztük a CD-t a
 meghajtóba. Ezt természetesen tiltani lehet, és a biztonsági kérdésekre
 kicsit komolyabban odafigyelõ felhasználók ezt meg is teszik.
 Ellenpéldaként lehetne felhozni a legtöbb UNIX operációs rendszert, ahol
 a CD automatikus csatolása vagy fel se merül problémaként, vagy a
-felhasználóbarátabb rendszerekekben is alapértelmezésként csak jelzést
+felhasználóbarátabb rendszerekben is alapértelmezésként csak jelzést
 kap a felhasználó a CD behelyezésérõl, de automatikus csatolásra
 felhasználói interakció nélkül soha nem kerül sor.
+
+\subsubsection{Határok}
+
+A fõ követelmények áttekintésének végén megjegyezzük azt, amire már a bevezetõben is utaltunk: jelen munka célja egy életviteli rendszer köztes rétegének kidolgozása. Szándékosan nem foglalkozunk tehát a következõkkel:
+
+\begin{itemize}
+\item Skálázhatósági kérdésekkel. A rendszerben típusonként kis számú
+elem található meg, kisebb finomítások szükségesek lehetnek ha a
+rendszert típusonként nagyságrendekkel több elemmel használjuk, ezekre
+nem térünk ki.
+\item Felhasználói felülettel. Az egyszerûség kedvéért az összes
+csomópont a standard kimenetre (stdout) írja az üzeneteit. Egy tényleges
+rendszerben ezt célszerû valamilyen felhasználóbarátabb grafikus vagy
+webes felületre cserélni.
+\item Távoli karbantartás. A driverek automatikus letöltésén kívül egyéb
+automatikus kód-letöltéssel nem foglalkozunk, de megjegyezzük, hogy a
+driver-letöltéshez hasonló módon az egyes csomópontok teljes szoftverét
+frissíthetõvé lehetne tenni. Az Erlang rendszer használata esetén --
+ahol futás közben lehet modulokat betölteni vagy frissíteni -- ehhez
+nincs is szükség komolyabb erõfeszítésekre.
+\end{itemize}
 
 \section{Megvalósítás}
 

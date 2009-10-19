@@ -534,30 +534,6 @@ lesz, hogy Erlang környezetben valósítjuk meg. Ezen fejezet célja
 specifikálni a követelményrendszert, és ezen specifikációnak néhány
 jellegzetes elemét fogjuk megvalósítani a következõ fejezetben.
 
-A rendszer tervezésekor formális jelölésrendszerként az UML (Unified
-Modeling Language) jelöléseit használjuk. Az UML elõsorban
-objektumorientált környezetbe készült, mig Joe Armstrong\cite{armstrong}
-szerint az Erlang valójában nem objektumorientált nyelv, így a
-jelölésrendszer nem használható magyarázat nélkül.
-
-Anélkül, hogy általános megfeleltetést állítanánk fel az
-objektumorientált nyelvek fogalmai és az Erlang rendszerben elérhetõ
-elemek között, a jelen életviteli rendszer tervezése során a
-következõket feltételezzük:
-
-\begin{itemize}
-\item Az objektumok az Erlang rendszerben Erlang processek lesznek.
-\item Ha egy Erlang process üzenetet kap, és az üzenet típusa szerint az
-üzenetre más-más módon reagál azt megfeleltethetjük az objektumok
-metódusainak.
-\item Szekvenciadiagramok esetén objektumok létrehozása alatt
-\texttt{spawn()} hívásokat értünk, metódushívás alatt pedig adott típusú
-üzenet küldését.
-\item Állapotdiagramok esetén az egyes Erlang processek életciklusát
-értjük, hiszen szerencsére az Erlangban nincsenek tényleges állapotok,
-mely sok programozási hibától óv meg minket.
-\end{itemize}
-
 \subsection{Fõ követelmények}
 
 \subsubsection{Elosztottság}
@@ -785,6 +761,191 @@ driver-letöltéshez hasonló módon az egyes csomópontok teljes szoftverét
 frissíthetõvé lehetne tenni. Az Erlang rendszer használata esetén --
 ahol futás közben lehet modulokat betölteni vagy frissíteni -- ehhez
 nincs is szükség komolyabb erõfeszítésekre.
+\end{itemize}
+
+\subsection{Erlang és UML}
+
+A rendszer tervezésekor formális jelölésrendszerként az UML (Unified
+Modeling Language) jelöléseit használjuk. Az UML elõsorban
+objektumorientált környezetbe készült, mig Joe Armstrong\cite{armstrong}
+szerint az Erlang valójában nem objektumorientált nyelv, így a
+jelölésrendszer nem használható magyarázat nélkül.
+
+Anélkül, hogy általános megfeleltetést állítanánk fel az
+objektumorientált nyelvek fogalmai és az Erlang rendszerben elérhetõ
+elemek között, a jelen életviteli rendszer tervezése során a
+következõket feltételezzük:
+
+\begin{itemize}
+\item Az objektumok az Erlang rendszerben Erlang processek lesznek.
+\item Ha egy Erlang process üzenetet kap, és az üzenet típusa szerint az
+üzenetre más-más módon reagál azt megfeleltethetjük az objektumok
+metódusainak.
+\item Szekvenciadiagramok esetén objektumok létrehozása alatt
+\texttt{spawn()} hívásokat értünk, metódushívás alatt pedig adott típusú
+üzenet küldését.
+\item Állapotdiagramok esetén az egyes Erlang processek életciklusát
+értjük, hiszen az Erlangban nincsenek tényleges változók, hacsak nem
+számolunk egy külsõ adatbázissal.
+\end{itemize}
+
+\subsection{Az elemek katalógusa}
+
+A rendszer tehát a következõ elemekbõl fog állni:
+
+\begin{itemize}
+\item Node: a rendszerben lévõ bármilyen csomópont
+\item Center: olyan csomópont, mely központ
+\item Endpoint: olyan csomópont, mely végpont
+\item Sensor: olyan végpont, mely elsõsorban üzeneteket küld
+\item Terminal: olyan végpont, mely elõsorban üzeneteket fogad
+\item Message: a csomópontok közötti üzenetek formátumát definiálja
+\item Driver: a letölthetõ eszközmeghajtók interfészét definiálja
+\end{itemize}
+
+\subsection{Az elemek leírása}
+
+\subsubsection*{Node}
+
+\begin{itemize}
+\item Leírás:
+
+Egy Erlang processt jelöl, mely képes a Message formátumban küldött
+üzenetek fogadására.
+
+\item Változók:
+
+Id -- Egyedi azonosító, mely nem változtatható meg.
+
+\item Szolgáltatások:
+
+Nincsenek.
+\end{itemize}
+
+\subsubsection*{Center}
+
+\begin{itemize}
+\item Leírás:
+
+Olyan csomópontot jelöl, melybe regisztrálhatnak szenzorok valamint a
+regisztrált nevekre feliratkozhatnak terminálok.
+
+\item Változók:
+
+Sensors -- Regisztált szenzorok név-cím párjait tartalmazó lista
+
+Subscriptions -- Nevekre feliratkozott terminálok név-cím párjait
+tartalmazó lista
+
+\item Szolgáltatások:
+
+register(Address, Name) -- Cím regisztrálása névként
+
+subscribe(Name, Address) -- Névre feliratkozás adott címmel
+\end{itemize}
+
+\subsubsection*{Endpoint}
+
+\begin{itemize}
+\item Leírás:
+
+Olyan csomópontot jelöl, mely csak küld vagy fogad üzeneteket, nem továbbít.
+
+\item Változók:
+
+Messages -- Beérkezett üzenetek listája.
+
+\item Szolgáltatások:
+
+Nincsenek.
+\end{itemize}
+
+\subsubsection*{Sensor}
+
+\begin{itemize}
+\item Leírás:
+
+Olyan végpontot jelöl, mely a külvilág valamely változásának hatására
+üzenetet küld. Támogathat még vezérlést, illetve explicit lekérdezést
+is.
+
+\item Változók:
+
+Centers -- Azon központok listája, melyeket értesíteni kell ha változott
+a környezet.
+
+\item Szolgáltatások:
+
+query(Message) -- Lekérdez egy adott funkciót, és a feladó címére
+megküldi.
+
+control(Message) -- Beállít egy adott funkciót.
+\end{itemize}
+
+\subsubsection*{Terminal}
+
+\begin{itemize}
+\item Leírás:
+
+Olyan végpontot jelöl, mely elsõsorban üzenetek fogadására hivatott.
+Opcionálisan üzeneteket is lehet vele küldeni, válaszként egy korábban
+egy szenzortól kapott üzenetre.
+
+\item Változók:
+
+Nincsenek.
+
+\item Szolgáltatások:
+
+notify(Message) -- Üzenet átadása a terminál számára
+\end{itemize}
+
+\subsubsection*{Message}
+
+\begin{itemize}
+\item Leírás:
+
+Egy Erlang recordot jelöl, mely egy adat mellett tartalmazza azt, hogy
+az adat micsoda, kitõl jött, kinek megy és ki továbbította.
+
+\item Változók:
+
+data -- Egy szám, a mért érték vagy döntés.
+
+description -- Ha a szenzor több típusú értéket is mérne, ez mondja meg,
+hogy melyik típust jelöli az adat mezõ.
+
+from -- A feladót jelöli.
+
+to -- A címzettet jelöli.
+
+receiver -- A központot jelöli.
+\item Szolgáltatások:
+
+Nincsenek.
+\end{itemize}
+
+\subsubsection*{Driver}
+
+\begin{itemize}
+\item Leírás:
+
+Egy Erlang függvényt ír le, ezáltal lehetõvé téve, hogy különbözõ
+szenzorokat egységes interfészen kezeljünk. A drivernek megküldjük, hogy
+hányadik funkciót akarjuk lekérdezni/vezérelni, majd az megmondja a
+funkció nevét, amit már az eszköz megért.
+
+Például a \texttt{translate(0)} hatására az adott driver valasza lehet
+az \texttt{sugar}, mely egy vérnyomás- és vércukormérõ esetén a vércukor
+lekérdezését teszi lehetõvé.
+
+\item Változók:
+
+Nincsenek.
+\item Szolgáltatások:
+
+translate(Number) -- Megad egy atomot, amelyet már az üzenet rekord
+\texttt{description} mezõjében felhasználhatunk és a szenzor megért.
 \end{itemize}
 
 \section{Megvalósítás}

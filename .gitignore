@@ -9,4 +9,7 @@
 *.fls
 *.temp
 *.pdf
+*.bbl
+*.blg
 *~
+.*.swp

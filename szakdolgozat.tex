@@ -534,6 +534,30 @@ lesz, hogy Erlang környezetben valósítjuk meg. Ezen fejezet célja
 specifikálni a követelményrendszert, és ezen specifikációnak néhány
 jellegzetes elemét fogjuk megvalósítani a következõ fejezetben.
 
+A rendszer tervezésekor formális jelölésrendszerként az UML (Unified
+Modeling Language) jelöléseit használjuk. Az UML elõsorban
+objektumorientált környezetbe készült, mig Joe Armstrong\cite{armstrong}
+szerint az Erlang valójában nem objektumorientált nyelv, így a
+jelölésrendszer nem használható magyarázat nélkül.
+
+Anélkül, hogy általános megfeleltetést állítanánk fel az
+objektumorientált nyelvek fogalmai és az Erlang rendszerben elérhetõ
+elemek között, a jelen életviteli rendszer tervezése során a
+következõket feltételezzük:
+
+\begin{itemize}
+\item Az objektumok az Erlang rendszerben Erlang processek lesznek.
+\item Ha egy Erlang process üzenetet kap, és az üzenet típusa szerint az
+üzenetre más-más módon reagál azt megfeleltethetjük az objektumok
+metódusainak.
+\item Szekvenciadiagramok esetén objektumok létrehozása alatt
+\texttt{spawn()} hívásokat értünk, metódushívás alatt pedig adott típusú
+üzenet küldését.
+\item Állapotdiagramok esetén az egyes Erlang processek életciklusát
+értjük, hiszen szerencsére az Erlangban nincsenek tényleges állapotok,
+mely sok programozási hibától óv meg minket.
+\end{itemize}
+
 \subsection{Fõ követelmények}
 
 \subsubsection{Elosztottság}

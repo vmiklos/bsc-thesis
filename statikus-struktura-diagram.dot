@@ -1,0 +1,21 @@
+digraph G {
+	node [shape=record]
+	c0 [label="{Node\l|- Id\l|}"]
+
+	c1 [label="{Center\l|- Sensors\l- Subscriptions\l|+ register(Address, Name)\l+ subscribe(Name, Address)\l}"]
+	c0 -> c1 [dir=back,arrowtail=empty]
+
+	c2 [label="{Endpoint\l|- Messages\l|}"]
+	c0 -> c2 [dir=back,arrowtail=empty]
+
+	c3 [label="{Sensor\l|- Centers\l|+ query(Message)\l+ control(Message)\l}"]
+	c2 -> c3 [dir=back,arrowtail=empty]
+
+	c4 [label="{Terminal\l||+ notify(Message)}"]
+	c2 -> c4 [dir=back,arrowtail=empty]
+
+	c5 [label="{Message\l|+ data\l+ description\l+ from\l+ to\l+ receiver\l|}"]
+
+	c6 [label="{Driver\l||+ translate(Number)\l}}"]
+}
+

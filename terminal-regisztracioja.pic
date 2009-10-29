@@ -1,0 +1,26 @@
+.PS
+copy "sequence.pic";
+
+actor(Actor);
+pobject(Terminal);
+pobject(Center);
+step();
+
+cmessage(Actor,Center,":Center");
+active(Center);
+step();
+
+cmessage(Actor,Terminal,":Terminal");
+active(Terminal);
+step();
+
+message(Terminal,Center,"subscribe()");
+inactive(Terminal);
+step();
+
+inactive(Center);
+step();
+
+.PE
+
+# vim: ft=pic

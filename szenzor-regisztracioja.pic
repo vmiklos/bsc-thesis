@@ -1,0 +1,27 @@
+.PS
+copy "sequence.pic";
+
+actor(Actor);
+pobject(Sensor);
+pobject(Center);
+step();
+
+cmessage(Actor,Center,":Center");
+active(Center);
+step();
+
+cmessage(Actor,Sensor,":Sensor");
+active(Sensor);
+step();
+
+message(Sensor,Center,"register()");
+message(Center,Sensor,"addToCenters()");
+inactive(Sensor);
+step();
+
+inactive(Center);
+step();
+
+.PE
+
+# vim: ft=pic

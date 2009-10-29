@@ -1,0 +1,18 @@
+.PS
+copy "sequence.pic";
+
+actor(Actor);
+pobject(Center);
+step();
+
+cmessage(Actor,Center,":Center");
+active(Center);
+message(Center,Center,"loop()");
+inactive(Center);
+step();
+
+complete(Center);
+step();
+.PE
+
+# vim: ft=pic

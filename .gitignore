@@ -4,6 +4,7 @@
 *.make
 *.doc
 *.ps
+*.eps
 *.toc
 *.log
 *.fls
@@ -13,11 +14,3 @@
 *.blg
 *~
 .*.swp
-statikus-struktura-diagram.eps
-kozpont-indulasa.eps
-eszkoz-engedelyezese.eps
-explicit-lekerdezes-terminalrol.eps
-szenzor-regisztracioja.eps
-terminal-regisztracioja.eps
-uzenetkuldes-szenzorrol-redundans-eset.eps
-uzenetkuldes-szenzorrol.eps

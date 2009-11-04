@@ -14,6 +14,8 @@ digraph G {
 	c4 [label="{Terminal\l||+ notify(Message)}"]
 	c2 -> c4 [dir=back,arrowtail=empty]
 
+	s1 [label="",shape=none,width=2]
+
 	c5 [label="{Message\l|+ data\l+ description\l+ from\l+ to\l+ receiver\l|}"]
 
 	c6 [label="{Driver\l||+ translate(Number)\l}}"]

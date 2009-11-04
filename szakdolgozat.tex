@@ -831,8 +831,9 @@ Nincsenek.
 \begin{itemize}
 \item Leírás:
 
-Olyan csomópontot jelöl, melybe regisztrálhatnak szenzorok valamint a
-regisztrált nevekre feliratkozhatnak terminálok.
+Olyan Node-ot jelöl, melybe regisztrálhatnak szenzorok
+valamint a regisztrált nevekre feliratkozhatnak terminálok. Csak
+továbbítja az üzeneteket, nem tényleges feladó vagy címzett.
 
 \item Változók:
 
@@ -853,7 +854,7 @@ subscribe(Name, Address) -- Névre feliratkozás adott címmel
 \begin{itemize}
 \item Leírás:
 
-Olyan csomópontot jelöl, mely csak küld vagy fogad üzeneteket, nem továbbít.
+Olyan Node-ot jelöl, mely csak küld vagy fogad üzeneteket, nem továbbít.
 
 \item Változók:
 
@@ -954,15 +955,18 @@ translate(Number) -- Megad egy atomot, amelyet már az üzenet rekord
 
 \subsection{Statikus struktúra diagram}
 
-A statikus struktúra diagram \aref{fig:statikus-struktura-diagram}.
-ábrán a rendszer elemeirõl tárolt adatokat, azok összefüggéseit és
-kapcsolatait mutatja.
+%A statikus struktúra diagram \aref{fig:statikus-struktura-diagram}.
+%ábrán a rendszer elemeirõl tárolt adatokat, azok összefüggéseit és
+%kapcsolatait mutatja.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=150mm,keepaspectratio]{statikus-struktura-diagram.eps}
 \caption{A rendszer statikus struktúra diagramja}\label{fig:statikus-struktura-diagram}
 \end{figure}
+
+A statikus struktúra diagram a rendszer elemeirõl tárolt adatokat, azok
+összefüggéseit és kapcsolatait mutatja.
 
 \subsection{Szekvencia diagramok}
 
@@ -974,6 +978,12 @@ kapcsolatait mutatja.
 \caption{Szekvencia diagram: központ indulása}\label{fig:kozpont-indulasa}
 \end{figure}
 
+Az ábrán látható, hogy a központot mindig a felhasználó helyezi üzembe,
+és a központ bekapcsolás után belép a várakozási hurokba.
+
+Ebbõl a helyzetbõl aztán majd késõbb a regisztráló vagy riasztó
+szenzorok és feliratkozó terminálok mozdíthatják ki.
+
 \subsubsection*{Szenzor regisztrációja}
 
 \begin{figure}[H]
@@ -981,6 +991,11 @@ kapcsolatait mutatja.
 \includegraphics[width=75mm,keepaspectratio]{szenzor-regisztracioja.eps}
 \caption{Szekvencia diagram: szenzor regisztrációja}\label{fig:szenzor-regisztracioja}
 \end{figure}
+
+Az ábra mutatja, hogy a szenzor bekapcsolásakor már legalább egy
+központnak bekapcsolt állapotban kell lenni a rendszerben. Ekkor a
+szenzor regisztrál, majd a központ elküldi a címét, melyre a szenzor
+jelezhet ha az szükséges.
 
 \subsubsection*{Terminál regisztrációja}
 
@@ -990,6 +1005,11 @@ kapcsolatait mutatja.
 \caption{Szekvencia diagram: terminál regisztrációja}\label{fig:terminal-regisztracioja}
 \end{figure}
 
+A terminál regisztrációja esetén is elõkövetelmény legalább egy központ
+mûködése, ahova feliratkozhat a terminál, de itt a központnak nem kell
+azonosítót küldenie, hiszen a terminál nem fogja értesíteni a központot
+eseményekrõl.
+
 \subsubsection*{Üzenetküldés szenzorról}
 
 \begin{figure}[H]
@@ -997,6 +1017,11 @@ kapcsolatait mutatja.
 \includegraphics[width=100mm,keepaspectratio]{uzenetkuldes-szenzorrol.eps}
 \caption{Szekvencia diagram: üzenetküldés szenzorról}\label{fig:uzenetkuldes-szenzorrol}
 \end{figure}
+
+Az ábra azt mutatja, hogy az üzenetküldés akkor értelmes, ha egy központ
+bekapcsolása és a szenzor regisztrációja után legalább egy terminál
+feliratkozott az üzenetekre az üzenetküldés elõtt. Ilyenkor a szenzor a
+központot értesíti, a központ pedig a terminált.
 
 \subsubsection*{Üzenetküldés szenzorról, redundáns eset}
 
@@ -1006,6 +1031,11 @@ kapcsolatait mutatja.
 \caption{Szekvencia diagram: üzenetküldés szenzorról redundáns esetben}\label{fig:uzenetkuldes-szenzorrol-redundans-eset}
 \end{figure}
 
+Az elõzõ eset általánosítása ha több szenzort, központot és terminált
+helyezünk el a rendszerben. Az ábra két-két példány kommunikációját
+mutatja be abban az esetben ha olyan esemény következik be, melynek
+hatására mindkét szenzor jelez.
+
 \subsubsection*{Explicit lekérdezés terminálról}
 
 \begin{figure}[H]
@@ -1014,6 +1044,10 @@ kapcsolatait mutatja.
 \caption{Szekvencia diagram: explicit lekérdezés terminálról}\label{fig:explicit-lekerdezes-terminalrol}
 \end{figure}
 
+Explicit lekérdezés esetén a terminál elõször a központhoz fordul a
+szenzor címéért, majd a címnek birtokában közvetlenül a szenzornak küld
+üzenetet az adatok lekérdeze céljából.
+
 \subsubsection*{Eszköz engedélyezése}
 
 \begin{figure}[H]
@@ -1021,6 +1055,10 @@ kapcsolatait mutatja.
 \includegraphics[width=100mm,keepaspectratio]{eszkoz-engedelyezese.eps}
 \caption{Szekvencia diagram: eszköz engedélyezése}\label{fig:eszkoz-engedelyezese}
 \end{figure}
+
+Az eszközök engedélyezése esetén az ábrán látható módon elsõ alkalommal
+ha egy szenzor regisztrálni vagy egy terminál feliratkozni akar, akkor a
+felhasználónak azt egyszer engedélyeznie kell.
 
 \section{Megvalósítás}
 

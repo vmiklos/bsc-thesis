@@ -2,7 +2,7 @@ digraph G {
 	node [shape=record]
 	c0 [label="{Node\l|- Id\l|}"]
 
-	c1 [label="{Center\l|- Sensors\l- Subscriptions\l|+ register(Address, Name)\l+ subscribe(Name, Address)\l}"]
+	c1 [label="{Center\l|- Sensors\l- Subscriptions\l|+ register(Address, Name)\l+ subscribe(Name, Address)\l+ notify(Message)\l}"]
 	c0 -> c1 [dir=back,arrowtail=empty]
 
 	c2 [label="{Endpoint\l|- Messages\l|}"]

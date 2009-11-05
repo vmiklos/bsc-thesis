@@ -6,7 +6,7 @@
 start(ConfigFile) ->
 	{ok, Config} = file:consult(ConfigFile),
 	Centers = [ C || {center, C} <- Config],
-	lists:foreach(fun(I) -> rpc:call(I, center, subscribe, [foo, node()]) end, Centers),
+	lists:foreach(fun(I) -> rpc:call(I, center, subscribe, [event, node()]) end, Centers),
 	register(terminal, spawn(fun() -> loop() end)).
 
 stop() -> terminal ! stop.

@@ -5,13 +5,10 @@
 % nothing.
 
 start(ConfigFile) ->
-	Message = {data, desc, node(), foo, false},
 	{ok, Config} = file:consult(ConfigFile),
-	Centers = [ C || {center, C} <- Config],
-	register(sensor, spawn(fun() ->
-		lists:foreach(fun(I) -> rpc:call(I, center, notify, [Message]) end, Centers),
-		loop()
-	end)).
+	Centers = [ {C, E} || {center, C, E} <- Config],
+	lists:foreach(fun({C, E}) -> rpc:call(C, center, notify, [{data, desc, node(), E, false}]) end, Centers),
+	register(sensor, spawn(fun() -> loop() end)).
 
 stop() -> sensor ! stop.
 

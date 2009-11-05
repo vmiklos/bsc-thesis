@@ -9,7 +9,6 @@ start(ConfigFile) ->
 	Centers = [ {C, E} || {center, C, E} <- Config],
 	lists:foreach(fun({C, E}) ->
 		Message = {data, desc, node(), E, false},
-		error_logger:info_msg("[~p] call ~p:notify(~p)~n", [node(), C, Message]),
 		rpc:call(C, center, notify, [Message])
 	end, Centers),
 	register(sensor, spawn(fun() -> loop() end)).

@@ -1,9 +1,14 @@
 -module(sensor).
--export([start/0, stop/0, ping/0]).
+-export([start/1, stop/0, ping/0]).
 
-start() ->
+start(ConfigFile) ->
 	Message = {data, desc, node(), foo, false},
-	register(sensor, spawn(fun() -> rpc:call(center0@clevo.local, center, notify, [Message]), loop() end)).
+	{ok, Config} = file:consult(ConfigFile),
+	Centers = [ C || {center, C} <- Config],
+	register(sensor, spawn(fun() ->
+		lists:foreach(fun(I) -> rpc:call(I, center, notify, [Message]) end, Centers),
+		loop()
+	end)).
 
 stop() -> sensor ! stop.
 

@@ -5,8 +5,8 @@
 
 start(ConfigFile) ->
 	{ok, Config} = file:consult(ConfigFile),
-	Centers = [ C || {center, C} <- Config],
-	lists:foreach(fun(I) -> rpc:call(I, center, subscribe, [event, node()]) end, Centers),
+	Centers = [ {C, E} || {center, C, E} <- Config],
+	lists:foreach(fun({C, E}) -> rpc:call(C, center, subscribe, [E, node()]) end, Centers),
 	register(terminal, spawn(fun() -> loop() end)).
 
 stop() -> terminal ! stop.

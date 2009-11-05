@@ -28,7 +28,7 @@ loop() ->
 			From ! {terminal, pong},
 			loop();
 		{From, {notify, Message}} ->
-			error_logger:info_msg("[~p] notify(~p)~n", [node(), Message]),
+			io:format("[~p] notify(~p)~n", [node(), Message]),
 			From ! {terminal, ok},
 			loop();
 		stop ->

@@ -38,13 +38,13 @@ loop() ->
 			From ! {center, {ok,A}},
 			loop();
 		{From, {subscribe, Name, Address}} ->
-			error_logger:info_msg("[~p] subscribe(~p,~p)~n", [node(), Address, Name]),
+			io:format("[~p] subscribe(~p,~p)~n", [node(), Address, Name]),
 			Subscriptions = get(subscriptions),
 			put(subscriptions, [{Name, Address}| Subscriptions]),
 			From ! {center, ok},
 			loop();
 		{From, {notify, Message}} ->
-			error_logger:info_msg("[~p] notify(~p)~n", [node(), Message]),
+			io:format("[~p] notify(~p)~n", [node(), Message]),
 			{Data, Description, Fro, To, _Receiver} = Message,
 			lists:foreach(fun(I) -> rpc:call(I, terminal, notify, [{Data, Description, Fro, To, node()}]) end,
 				[A || {N, A} <- get(subscriptions), N =:= To]),

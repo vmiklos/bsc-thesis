@@ -1,6 +1,9 @@
 -module(sensor).
 -export([start/1, stop/0, ping/0]).
 
+% helloworld sensor that just sends a message when it starts, then does
+% nothing.
+
 start(ConfigFile) ->
 	Message = {data, desc, node(), foo, false},
 	{ok, Config} = file:consult(ConfigFile),

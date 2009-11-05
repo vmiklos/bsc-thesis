@@ -2,17 +2,18 @@
 -export([start/1, stop/0, ping/0, query_data/1]).
 
 % helloworld sensor that just sends a message when it starts, and it
-% always states that 'desc' is 'data' when queried.
+% always sends 'desc' from the process dict when queried.
 
 start(ConfigFile) ->
+	Data = data,
 	{ok, Config} = file:consult(ConfigFile),
 	Centers = [ {C, E} || {center, C, E} <- Config],
 	lists:foreach(fun({C, E}) ->
 		rpc:call(C, center, reg, [node(), E]),
-		Message = {data, desc, node(), E, false},
+		Message = {Data, desc, node(), E, false},
 		rpc:call(C, center, notify, [Message])
 	end, Centers),
-	register(sensor, spawn(fun() -> loop() end)).
+	register(sensor, spawn(fun() -> put(desc, Data), loop() end)).
 
 stop() -> sensor ! stop.
 
@@ -33,7 +34,7 @@ loop() ->
 			From ! {sensor, pong},
 			loop();
 		{From, {query_data, {_Data, _Desc, Fro, _To, _Recv}}} ->
-			rpc:call(Fro, terminal, notify, [{data, desc, node(), Fro, false}]),
+			rpc:call(Fro, terminal, notify, [{get(desc), desc, node(), Fro, false}]),
 			From ! {sensor, ok},
 			loop();
 		stop ->

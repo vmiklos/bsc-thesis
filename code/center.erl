@@ -50,7 +50,5 @@ loop() ->
 			From ! {center, ok},
 			loop();
 		stop ->
-			erase(sensors),
-			erase(subscriptions),
-			exit(normal)
+			init:stop()
 	end.

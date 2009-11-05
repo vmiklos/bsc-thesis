@@ -8,6 +8,7 @@ start(ConfigFile) ->
 	{ok, Config} = file:consult(ConfigFile),
 	Centers = [ {C, E} || {center, C, E} <- Config],
 	lists:foreach(fun({C, E}) ->
+		rpc:call(C, center, reg, [node(), E]),
 		Message = {data, desc, node(), E, false},
 		rpc:call(C, center, notify, [Message])
 	end, Centers),

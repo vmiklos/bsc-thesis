@@ -1,14 +1,18 @@
 . ./lib.sh
 
 cat >expected <<EOF
-['center0@clevo.local'] subscribe('terminal0@clevo.local',event)
-['center0@clevo.local'] subscribe('terminal1@clevo.local',event)
+['center0@clevo.local'] subscribe(event,'terminal0@clevo.local')
+['center0@clevo.local'] subscribe(event,'terminal1@clevo.local')
+['center0@clevo.local'] reg('sensor0@clevo.local',event)
 ['center0@clevo.local'] notify({data,desc,'sensor0@clevo.local',event,false})
+['center0@clevo.local'] reg('sensor1@clevo.local',event)
 ['center0@clevo.local'] notify({data,desc,'sensor1@clevo.local',event,false})
 
-['center1@clevo.local'] subscribe('terminal0@clevo.local',event)
-['center1@clevo.local'] subscribe('terminal1@clevo.local',event)
+['center1@clevo.local'] subscribe(event,'terminal0@clevo.local')
+['center1@clevo.local'] subscribe(event,'terminal1@clevo.local')
+['center1@clevo.local'] reg('sensor0@clevo.local',event)
 ['center1@clevo.local'] notify({data,desc,'sensor0@clevo.local',event,false})
+['center1@clevo.local'] reg('sensor1@clevo.local',event)
 ['center1@clevo.local'] notify({data,desc,'sensor1@clevo.local',event,false})
 
 ['terminal0@clevo.local'] notify({data,desc,'sensor0@clevo.local',event,

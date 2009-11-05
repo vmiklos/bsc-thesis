@@ -28,17 +28,19 @@ loop() ->
 			From ! {center, pong},
 			loop();
 		{From, {reg, Address, Name}} ->
+			io:format("[~p] reg(~p,~p)~n", [node(), Address, Name]),
 			Sensors = get(sensors),
 			put(sensors, [{Address, Name}| Sensors]),
 			From ! {center, ok},
 			loop();
 		{From, {lookup, Name}} ->
+			io:format("[~p] lookup(~p)~n", [node(), Name]),
 			Sensors = get(sensors),
 			A = [A || {A, N} <- Sensors, N =:= Name],
 			From ! {center, {ok,A}},
 			loop();
 		{From, {subscribe, Name, Address}} ->
-			io:format("[~p] subscribe(~p,~p)~n", [node(), Address, Name]),
+			io:format("[~p] subscribe(~p,~p)~n", [node(), Name, Address]),
 			Subscriptions = get(subscriptions),
 			put(subscriptions, [{Name, Address}| Subscriptions]),
 			From ! {center, ok},

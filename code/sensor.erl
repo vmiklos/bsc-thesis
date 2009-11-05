@@ -1,8 +1,8 @@
 -module(sensor).
--export([start/1, stop/0, ping/0]).
+-export([start/1, stop/0, ping/0, query_data/1]).
 
-% helloworld sensor that just sends a message when it starts, then does
-% nothing.
+% helloworld sensor that just sends a message when it starts, and it
+% always states that 'desc' is 'data' when queried.
 
 start(ConfigFile) ->
 	{ok, Config} = file:consult(ConfigFile),
@@ -18,6 +18,8 @@ stop() -> sensor ! stop.
 
 ping() -> rpc({ping}).
 
+query_data(Message) -> rpc({query_data, Message}).
+
 rpc(Q) ->
 	sensor ! {self(), Q},
 	receive
@@ -29,6 +31,10 @@ loop() ->
 	receive
 		{From, {ping}} ->
 			From ! {sensor, pong},
+			loop();
+		{From, {query_data, {_Data, _Desc, Fro, _To, _Recv}}} ->
+			rpc:call(Fro, terminal, notify, [{data, desc, node(), Fro, false}]),
+			From ! {sensor, ok},
 			loop();
 		stop ->
 			init:stop()

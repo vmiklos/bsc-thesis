@@ -1,7 +1,13 @@
 -module(terminal).
--export([start/0, stop/0, ping/0, notify/1]).
+-export([start/1, stop/0, ping/0, notify/1]).
 
-start() -> register(terminal, spawn(fun() -> rpc:call(center0@clevo.local, center, subscribe, [foo, node()]), loop() end)).
+% a helloworld terminal that just outputs everything it gets to stdout
+
+start(ConfigFile) ->
+	{ok, Config} = file:consult(ConfigFile),
+	Centers = [ C || {center, C} <- Config],
+	lists:foreach(fun(I) -> rpc:call(I, center, subscribe, [foo, node()]) end, Centers),
+	register(terminal, spawn(fun() -> loop() end)).
 
 stop() -> terminal ! stop.
 

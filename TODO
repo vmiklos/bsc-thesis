@@ -2,3 +2,18 @@
 - testcase explicit lekerdezes / controlra
 - kod type commentek
 - user manual jellegu dolgok
+
+- use case: szenzor interaktivan olvas be terminalrol adatokat, terminal
+  pedig riaszt adott ertek felett.
+- szenzor: h -> homerseklet (test,kulteri,belteri), v -> vernyomas
+
+- use case-hez szoveges leiras, diagram.
+
+- utolso fejezet:
+Hogyan foglaljam össze az elvégzett munkát?  El?ször is a kiírásnak
+megfelel?en (múlt id?ben) vedd sorra, mi volt a kiindulási állapot, mi
+volt a feladat, és meddig jutottál el a megoldásában. Emeld ki az
+elemzés során feltárt f?bb eredményeket, amelyek a rendszer
+üzemképességét igazolják, és jelezd továbbfejlesztés lehetséges irányát.
+A végén azzal célszerõ zárni az egészet, hogy ki és hol tudja
+hasznosítani a munkád eredményeit.

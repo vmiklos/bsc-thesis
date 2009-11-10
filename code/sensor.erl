@@ -12,6 +12,8 @@ start(ConfigFile) ->
 		rpc:call(C, center, reg, [node(), E])
 	end, Centers),
 	register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
+	io:format("Adja meg a mert adatot 'tipus szam' formaban, majd usson ENTER-t!\n"),
+	io:format("A testhomerseklet merese utan peldaul 'h 38.2'\n"),
 	read_stdin(Centers).
 
 stop() -> sensor ! stop.

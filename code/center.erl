@@ -1,20 +1,35 @@
+%% @doc A center is a Node which accepts and forwards messages.
 -module(center).
 -export([start/0, stop/0, ping/0, reg/2, lookup/1, subscribe/2, notify/1]).
 
+%% @doc Starts the center.
+%% Call this function to start the center, so that it can be
+%% controlled remotely.
+%% @end
 start() -> register(center, spawn(fun() -> put(sensors, []), put(subscriptions, []), loop() end)).
 
+%% @doc Stops the center and terminates the current Erlang node.
 stop() -> center ! stop.
 
+%% @doc Responds with pong to show that it's alive.
 ping() -> rpc({ping}).
 
+%% @doc Register a new sensor in the center.
 reg(Address, Name) -> rpc({reg, Address, Name}).
 
+%% @doc Get the address of a sensor based on its name.
 lookup(Name) -> rpc({lookup, Name}).
 
+%% @doc Subscribe a terminal to a given event of the center.
 subscribe(Name, Address) -> rpc({subscribe, Name, Address}).
 
+%% @doc Signal about a new measure data is available for terminals.
 notify(Message) -> rpc({notify, Message}).
 
+%% @doc Internal RPC handler.
+%% Communicates between the center server process and the public
+%% functions.
+%% @end
 rpc(Q) ->
 	center ! {self(), Q},
 	receive
@@ -22,6 +37,9 @@ rpc(Q) ->
 			Reply
 	end.
 
+%% @doc Main server loop.
+%% Waits for messages from the RPC handler and responds to them.
+%% @end
 loop() ->
 	receive
 		{From, {ping}} ->

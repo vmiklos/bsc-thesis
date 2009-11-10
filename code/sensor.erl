@@ -11,7 +11,8 @@ start(ConfigFile) ->
 	lists:foreach(fun({C, E}) ->
 		rpc:call(C, center, reg, [node(), E])
 	end, Centers),
-	register(sensor, spawn(fun() -> put(desc, Data), loop() end)).
+	register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
+	read_stdin(Centers).
 
 stop() -> sensor ! stop.
 
@@ -44,3 +45,14 @@ loop() ->
 		stop ->
 			init:stop()
 	end.
+
+read_stdin(Centers) ->
+	L = io:get_line("> "),
+	[A|[B]] = re:split(L, " "),
+	Desc = list_to_atom(binary_to_list(A)),
+	{Data, _} = string:to_float(binary_to_list(B)),
+	lists:foreach(fun({C, E}) ->
+		Message = {Data, Desc, node(), E, false},
+		rpc:call(C, center, notify, [Message])
+	end, Centers),
+	read_stdin(Centers).

@@ -42,7 +42,12 @@ loop() ->
 		{From, {subscribe, Name, Address}} ->
 			io:format("[~p] subscribe(~p,~p)~n", [node(), Name, Address]),
 			Subscriptions = get(subscriptions),
-			put(subscriptions, [{Name, Address}| Subscriptions]),
+			case lists:member({Name, Address}, Subscriptions) of
+				false ->
+					put(subscriptions, [{Name, Address}| Subscriptions]);
+				_ ->
+					ok
+			end,
 			From ! {center, ok},
 			loop();
 		{From, {notify, Message}} ->

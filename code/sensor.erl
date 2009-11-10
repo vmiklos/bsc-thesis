@@ -1,5 +1,5 @@
 -module(sensor).
--export([start/1, stop/0, ping/0, query_data/1, querydesc/0, control/1]).
+-export([start/1, stop/0, ping/0, query_data/1, control/1]).
 
 % helloworld sensor that just sends a message when it starts, and it
 % always sends 'desc' from the process dict when queried.
@@ -21,9 +21,6 @@ query_data(Message) -> rpc({query_data, Message}).
 
 control(Message) -> rpc({control, Message}).
 
-% specific direct functions
-querydesc() -> rpc({querydesc}).
-
 rpc(Q) ->
 	sensor ! {self(), Q},
 	receive
@@ -43,9 +40,6 @@ loop() ->
 		{From, {control, {Data, _Desc, _Fro, _To, _Recv}}} ->
 			put(desc, Data),
 			From ! {sensor, ok},
-			loop();
-		{From, {querydesc}} ->
-			From ! {sensor, get(desc)},
 			loop();
 		stop ->
 			init:stop()

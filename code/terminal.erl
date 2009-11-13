@@ -47,9 +47,9 @@ loop() ->
 					case Data > 37.2 of
 						true ->
 							io:fwrite([7]), % bell
-							io:format("Figyelem, a homerseklet ~p homerseklet tobb a megengedettnel!~n", [Data]);
+							io:format("Figyelem, a(z) ~p °C homerseklet tobb a megengedettnel!~n", [Data]);
 						_ ->
-							io:format("Uj homerseklet adat: ~p.~n", [Data])
+							io:format("Uj homerseklet adat: ~p °C.~n", [Data])
 						end;
 				_ ->
 					io:format("A '~p' uj erteke: ~p.~n", [Desc, Data])

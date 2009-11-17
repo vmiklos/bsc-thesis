@@ -1150,7 +1150,11 @@ rpc(Q) ->
 \end{lstlisting}
 
 A függvény a korábban center néven regisztrált
-\footnote{Regisztráció és regisztráció törlése alatt itt az Erlang rendszer register/2 és unregister/1 függvényeit értjük, mely lehetõséget biztosít arra, hogy az aktuális node-on Pid-ekhez atomokat rendeljünk. Ezek a regisztrációk más node-okról nem láthatóak, a teljes rendszer szintjén nem egyediek, és ezt ki is fogjuk használni.}
+\footnote{Regisztráció és regisztráció törlése alatt itt az Erlang
+rendszer register/2 és unregister/1 függvényeit értjük, mely lehetõséget
+biztosít arra, hogy az aktuális node-on Pid-ekhez atomokat rendeljünk.
+Ezek a regisztrációk más node-okról nem láthatóak, a teljes rendszer
+szintjén nem egyediek, és ezt ki is fogjuk használni.}
 processnek küld egy két
 elemû ennest, megküldve a saját címét, valamint a tényleges adatokat,
 majd a válaszként kapott értékkel tér vissza.
@@ -1332,7 +1336,7 @@ ping() -> rpc({ping}).
 \end{lstlisting}
 
 Láthatjuk, hogy a start függvény itt is használ egy konfigurációs
-állományt, melynek aznos a formátuma a szenzoréval. A feladata
+állományt, melynek azonos a formátuma a szenzoréval. A feladata
 természetesen más: itt azt adja meg, hogy melyik központnak milyen néven
 kell elküldeni a mérési adatainkat.
 
@@ -1615,8 +1619,10 @@ start(ConfigFile) ->
 
 \section{Eredmények, jövõbeli munka}
 
-Ide jön majd a (teszt) környezet leírása, erlang node-ok indításának
-commandline paraméterei, viaskodás a tûzfallal, stb.
+Ide jön majd többek között a (teszt)környezet leírása, erlang node-ok
+indításának commandline paraméterei, viaskodás a tûzfallal, tehát minden
+ami a kódon kívül szükséges információ ahhoz, hogy valaki kipróbálhassa
+a munkámat.
 
 \bibliography{szakdolgozat}
 \bibliographystyle{unsrt}

@@ -1389,6 +1389,22 @@ loop() ->
 
 \subsection{Redundáns mûködés}
 
+A redundáns mûködés két szempontból különbözik az elõzõ alfejezetben
+ismertetett változathoz képest:
+
+\begin{itemize}
+\item A rendszer indításakor mindhárom elembõl két példányt kell indítani.
+\item A terminálok és szenzorok konfigurációs állományába két-ket
+központot kell definiálni.
+\end{itemize}
+
+Ez utóbbit például a következõképpen tehetjük meg:
+
+\begin{lstlisting}
+{center, center0@clevo.local, event}.
+{center, center1@clevo.local, event}.
+\end{lstlisting}
+
 \section{Eredmények, jövõbeli munka}
 
 \bibliography{szakdolgozat}

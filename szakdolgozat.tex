@@ -11,7 +11,9 @@
 \usepackage{fullpage}
 \usepackage{setspace}
 \usepackage{float}
- 
+\usepackage{listings}
+\lstset{breaklines=true} 
+
 \let\stdsection\section
 \renewcommand\section{\clearpage\stdsection}
 
@@ -1061,6 +1063,240 @@ ha egy szenzor regisztrálni vagy egy terminál feliratkozni akar, akkor a
 felhasználónak azt egyszer engedélyeznie kell.
 
 \section{Megvalósítás}
+
+A megvalósítás során a tervezés folyamán felmerült használati eseteket
+fogjuk sorra implementálni. Terjedelmi okokból nem kerül megvalósításra
+a teljes funkcionalitás, így célszerû mindjárt az elején definiálni,
+hogy mely részletek esetén alkalmazunk egyszerûsítéseket, és hol cél a
+teljes megvalósítás.
+
+A tervezés során definiált osztályok, az párhuzamosság, hibatûrés és
+elosztottság támogatása a program részét képezik. Az elkészítés során
+nyomon fogjuk követni, ahogy a tervezés szakaszában leírt használati
+esetek sorra mûködõképessé válnak.
+
+Amit nem teljes megvalósításra:
+
+\begin{itemize}
+\item A szenzorok nem automatikusan fedezik fel a központokat, hanem egy
+konfigurációs állomány elõre definiálja ezek listáját.
+\item A korábban felvetett biztonsági kérdésekkel nem foglalkozunk,
+feltételezzük, hogy a rendszer zárt, a rendszer elemei pedig
+megbízhatóak.
+\item Eltekintünk a grafikus felhasználói felület létrehozásától,
+egyszerû parancssoros interfészt biztosítva a felhasználó számára.
+\end{itemize}
+
+\subsection{A legegyszerûbb, már mûködõ változat}
+
+A legkisebb már mûködõ változata a rendszernek az az eset, mikor a
+rendszerben egy szenzor, egy központ és egy terminál van. Mivel ez lesz
+minden késõbbi változat alapja, tekintsük át tüzetesen a mûködését. A
+késõbbiekben csak az ehhez a változathoz képest eszközölt módosítások
+kerülnek ismertetésre.
+
+\subsubsection*{Központ}
+
+A központ három olyan függvényt definiál, mely a process életciklusát
+érinti:
+
+\begin{lstlisting}
+start() -> register(center, spawn(fun() -> put(sensors, []), put(subscriptions, []), loop() end)).
+
+stop() -> center ! stop.
+
+ping() -> rpc({ping}).
+\end{lstlisting}
+
+A start/0 függvény egy új processt indít az aktuális node-on, mely
+inicializálja a szenzorok és feliratkozások listáját, majd várakozó
+állapotba kerül, ld. késõbb.
+
+A stop/0 függvény ennek az új processnek küld egy üzenetet, melynek hatására az leáll.
+
+A ping/0 függvény kizárólag hibakeresési célokat szolgál a lejjebb
+ismertetésre kerülõ rpc/1 függvény felhasználásával, lehetõvé téve, hogy
+megvizsgáljuk, hogy a központ válaszképes-e.
+
+További négy függvény pedig a központ tényleges vezérlésére szolgál:
+
+\begin{lstlisting}
+reg(Address, Name) -> rpc({reg, Address, Name}).
+
+lookup(Name) -> rpc({lookup, Name}).
+
+subscribe(Name, Address) -> rpc({subscribe, Name, Address}).
+
+notify(Message) -> rpc({notify, Message}).
+\end{lstlisting}
+
+Láthatjuk, hogy ezek mind a lenn ismertetett rpc/1 függvény köré épített
+csomagoló függvények.
+
+A csomagoló függvények által hívott rpc/1 függvény a következõ:
+
+\begin{lstlisting}
+rpc(Q) ->
+        center ! {self(), Q},
+        receive
+                {center, Reply} ->
+                        Reply
+        end.
+\end{lstlisting}
+
+A függvény a korábban center néven regisztrált
+\footnote{Regisztráció és regisztráció törlése alatt itt az Erlang rendszer register/2 és unregister/1 függvényeit értjük, mely lehetõséget biztosít arra, hogy az aktuális node-on Pid-ekhez atomokat rendeljünk. Ezek a regisztrációk más node-okról nem láthatóak, a teljes rendszer szintjén nem egyediek, és ezt ki is fogjuk használni.}
+processnek küld egy két
+elemû ennest, megküldve a saját címét, valamint a tényleges adatokat,
+majd a válaszként kapott értékkel tér vissza.
+
+Végül a center néven regisztrált processünk fõ függvénye a következõ:
+
+\begin{lstlisting}
+loop() ->
+        receive
+                {From, {ping}} ->
+                        From ! {center, pong},
+                        loop();
+                {From, {reg, Address, Name}} ->
+                        io:format("[~p] reg(~p,~p)~n", [node(), Address, Name]),
+                        Sensors = get(sensors),
+                        put(sensors, [{Address, Name}| Sensors]),
+                        From ! {center, ok},
+                        loop();
+                {From, {lookup, Name}} ->
+                        io:format("[~p] lookup(~p)~n", [node(), Name]),
+                        Sensors = get(sensors),
+                        A = [A || {A, N} <- Sensors, N =:= Name],
+                        From ! {center, {ok,A}},
+                        loop();
+                {From, {subscribe, Name, Address}} ->
+                        io:format("[~p] subscribe(~p,~p)~n", [node(), Name, Address]),
+                        Subscriptions = get(subscriptions),
+                        put(subscriptions, [{Name, Address}| Subscriptions]),
+                        From ! {center, ok},
+                        loop();
+                {From, {notify, Message}} ->
+                        io:format("[~p] notify(~p)~n", [node(), Message]),
+                        {Data, Description, Fro, To, _Receiver} = Message,
+                        lists:foreach(fun(I) -> rpc:call(I, terminal, notify, [{Data, Description, Fro, To, node()}]) end,
+                                [A || {N, A} <- get(subscriptions), N =:= To]),
+                        From ! {center, ok},
+                        loop();
+                stop ->
+                        init:stop()
+        end.
+\end{lstlisting}
+
+Az egyes beérkezõ üzenetekre tehát a következõ válaszokat adja:
+
+\begin{itemize}
+\item A ping atomra mindig pong atommal válaszol.
+\item A reg atomra a paraméterként kapott szenzor címét és nevét
+regisztrálja a egy listába, melyet a process dictionary-ben tárol, így
+késõbb is lehetõvé válik annak módosítása.
+\item A lookup atomra a paraméterként kapott névhez tartozó szenzor
+címet adja vissza vissza a sensors listából.
+\item A subscribe atomra a paraméterként kapott névhez eltárolja a kapott címet.
+\item A notify atom esetén egy öt elemû ennest (melynek elemeit a
+tervezés során Message néven definiáltuk) vár paraméterként. Ebben
+szerepel az, hogy milyen névre szól az üzenet. A központ azoknak a
+termináloknak továbbítja az üzenetet, amelyek ilyen névvel iratkoztak
+fel, beleírva saját magát, mint továbbító.
+\item Végül a stop atomra leállítja az aktuális Erlang node-ot.
+\end{itemize}
+
+A másik két elemmel ellentétben itt megfigyelhetõ, hogy a központnak
+nincs konfigurációs állománya, valamint elindítása után nincs semmilyen
+bekövetkezõ esemény.
+
+\subsubsection*{Terminál}
+
+A struktúra diagramban láthattuk, hogy a Center és a Terminal is egy
+Node, így itt is megtalálható a három, a process életciklusával
+kapcsolatos függvény:
+
+\begin{lstlisting}
+start(ConfigFile) ->
+        {ok, Config} = file:consult(ConfigFile),
+        Centers = [ {C, E} || {center, C, E} <- Config],
+        lists:foreach(fun({C, E}) -> rpc:call(C, center, subscribe, [E, node()]) end, Centers),
+        register(terminal, spawn(fun() -> loop() end)).
+
+stop() -> terminal ! stop.
+
+ping() -> rpc({ping}).
+\end{lstlisting}
+
+A start/1 függvény azonban itt egy konfigurációs állományt vár paraméterül. Erre egy példa:
+
+\begin{lstlisting}
+{center, center0@clevo.local, event}.
+\end{lstlisting}
+
+A konfigurációs állomány szintaxisára az egyetlen megkötés az, hogy
+minden egyes sorban egy Erlang termnek kell lennie, mivel ezt fogadja el
+a file:consult/1 értelmezõ függvény. A fenti fájlban az egyetlen sor egy
+központra való feliratkozást definiál, erre utal a center atom. Az ennes
+másik két paramétere a központ címét és annak az eseménynek a nevét
+definiálja, melyre fel szeretnénk iratkozni az adott központban.
+
+Az indítás során tehát értelmezzük a beállításokat, és a kérésnek
+megfelelõen feliratkozunk a központoknál, azok subscribe metódusát
+meghívva. Ha ez megtörtént, üzenetre várunk a lenn ismertetésre kerülõ
+loop/0 függvény használatával.
+
+A stop/0 és ping/0 feladata és mûködése más ismerõs, a center modulban
+definiáltakkal megegyezõ.
+
+A terminálnak egyetlen, a modellben is létezõ metódusa a notify/1:
+
+\begin{lstlisting}
+notify(Message) -> rpc({notify, Message}).
+\end{lstlisting}
+
+A center:notify/1-hez hasonló módon ez is csak csomagoló függvény az
+rpc/1 köré.
+
+A terminal modul maradék része a korábban hivatkozott rpc/1 és loop/0
+függvényekbõl áll:
+
+\begin{lstlisting}
+rpc(Q) ->
+        terminal ! {self(), Q},
+        receive
+                {terminal, Reply} ->
+                        Reply
+        end.
+
+loop() ->
+        receive
+                {From, {ping}} ->
+                        From ! {terminal, pong},
+                        loop();
+                {From, {notify, Message}} ->
+                        io:format("[~p] notify(~p)~n", [node(), Message]),
+                        From ! {terminal, ok},
+                        loop();
+                stop ->
+                        init:stop()
+        end.
+\end{lstlisting}
+
+Az rpc/1 feladata tehát kommunikálni a terminal néven regisztrált
+process-szel: az üzenetküldés után válaszra várni, majd azzal
+visszatérni. A center modulhoz hasonló módon itt is azért van erre
+szükség erre a csomagolásra, mivel terminal néven más node-on más
+processt érhetünk el.
+
+A loop/0 függvény pedig üzeneteket vár:
+
+\begin{itemize}
+\item A ping és stop atomok az életciklus monitorozására és vezérlésére
+szolgálnak a center modullal megegyezõ módon.
+\item A notify atomra pedig a terminál egyszerûen a standard kimenetre
+küldi a kapott üzenet tartalmát, nem túl felhasználóbarát módon.
+\end{itemize}
 
 \section{Eredmények, jövõbeli munka}
 

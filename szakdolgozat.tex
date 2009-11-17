@@ -1,7 +1,7 @@
 \documentclass[12pt,a4paper,oneside]{article}
 \usepackage[magyar, english]{babel}
 \ifx\magyarOptions\relax\else 
-  \PackageError{magyar.ldf}{http://www.math.bme.hu/latex/}{}        
+  \PackageError{magyar.ldf}{http://www.math.bme.hu/latex/}{} 
   \csname @@end\endcsname \fi
 \usepackage[latin2]{inputenc}
 \usepackage[T1]{fontenc}
@@ -1075,7 +1075,7 @@ elosztottság támogatása a program részét képezik. Az elkészítés során
 nyomon fogjuk követni, ahogy a tervezés szakaszában leírt használati
 esetek sorra mûködõképessé válnak.
 
-Amit nem teljes megvalósításra:
+Ami nem kerül teljes megvalósításra:
 
 \begin{itemize}
 \item A szenzorok nem automatikusan fedezik fel a központokat, hanem egy
@@ -1142,11 +1142,11 @@ A csomagoló függvények által hívott rpc/1 függvény a következõ:
 
 \begin{lstlisting}
 rpc(Q) ->
-        center ! {self(), Q},
-        receive
-                {center, Reply} ->
-                        Reply
-        end.
+ center ! {self(), Q},
+ receive
+  {center, Reply} ->
+   Reply
+ end.
 \end{lstlisting}
 
 A függvény a korábban center néven regisztrált
@@ -1159,38 +1159,38 @@ Végül a center néven regisztrált processünk fõ függvénye a következõ:
 
 \begin{lstlisting}
 loop() ->
-        receive
-                {From, {ping}} ->
-                        From ! {center, pong},
-                        loop();
-                {From, {reg, Address, Name}} ->
-                        io:format("[~p] reg(~p,~p)~n", [node(), Address, Name]),
-                        Sensors = get(sensors),
-                        put(sensors, [{Address, Name}| Sensors]),
-                        From ! {center, ok},
-                        loop();
-                {From, {lookup, Name}} ->
-                        io:format("[~p] lookup(~p)~n", [node(), Name]),
-                        Sensors = get(sensors),
-                        A = [A || {A, N} <- Sensors, N =:= Name],
-                        From ! {center, {ok,A}},
-                        loop();
-                {From, {subscribe, Name, Address}} ->
-                        io:format("[~p] subscribe(~p,~p)~n", [node(), Name, Address]),
-                        Subscriptions = get(subscriptions),
-                        put(subscriptions, [{Name, Address}| Subscriptions]),
-                        From ! {center, ok},
-                        loop();
-                {From, {notify, Message}} ->
-                        io:format("[~p] notify(~p)~n", [node(), Message]),
-                        {Data, Description, Fro, To, _Receiver} = Message,
-                        lists:foreach(fun(I) -> rpc:call(I, terminal, notify, [{Data, Description, Fro, To, node()}]) end,
-                                [A || {N, A} <- get(subscriptions), N =:= To]),
-                        From ! {center, ok},
-                        loop();
-                stop ->
-                        init:stop()
-        end.
+ receive
+  {From, {ping}} ->
+   From ! {center, pong},
+   loop();
+  {From, {reg, Address, Name}} ->
+   io:format("[~p] reg(~p,~p)~n", [node(), Address, Name]),
+   Sensors = get(sensors),
+   put(sensors, [{Address, Name}| Sensors]),
+   From ! {center, ok},
+   loop();
+  {From, {lookup, Name}} ->
+   io:format("[~p] lookup(~p)~n", [node(), Name]),
+   Sensors = get(sensors),
+   A = [A || {A, N} <- Sensors, N =:= Name],
+   From ! {center, {ok,A}},
+   loop();
+  {From, {subscribe, Name, Address}} ->
+   io:format("[~p] subscribe(~p,~p)~n", [node(), Name, Address]),
+   Subscriptions = get(subscriptions),
+   put(subscriptions, [{Name, Address}| Subscriptions]),
+   From ! {center, ok},
+   loop();
+  {From, {notify, Message}} ->
+   io:format("[~p] notify(~p)~n", [node(), Message]),
+   {Data, Description, Fro, To, _Receiver} = Message,
+   lists:foreach(fun(I) -> rpc:call(I, terminal, notify, [{Data, Description, Fro, To, node()}]) end,
+    [A || {N, A} <- get(subscriptions), N =:= To]),
+   From ! {center, ok},
+   loop();
+  stop ->
+   init:stop()
+ end.
 \end{lstlisting}
 
 Az egyes beérkezõ üzenetekre tehát a következõ válaszokat adja:
@@ -1223,10 +1223,10 @@ kapcsolatos függvény:
 
 \begin{lstlisting}
 start(ConfigFile) ->
-        {ok, Config} = file:consult(ConfigFile),
-        Centers = [ {C, E} || {center, C, E} <- Config],
-        lists:foreach(fun({C, E}) -> rpc:call(C, center, subscribe, [E, node()]) end, Centers),
-        register(terminal, spawn(fun() -> loop() end)).
+ {ok, Config} = file:consult(ConfigFile),
+ Centers = [ {C, E} || {center, C, E} <- Config],
+ lists:foreach(fun({C, E}) -> rpc:call(C, center, subscribe, [E, node()]) end, Centers),
+ register(terminal, spawn(fun() -> loop() end)).
 
 stop() -> terminal ! stop.
 
@@ -1275,24 +1275,24 @@ függvényekbõl áll:
 
 \begin{lstlisting}
 rpc(Q) ->
-        terminal ! {self(), Q},
-        receive
-                {terminal, Reply} ->
-                        Reply
-        end.
+ terminal ! {self(), Q},
+ receive
+  {terminal, Reply} ->
+   Reply
+ end.
 
 loop() ->
-        receive
-                {From, {ping}} ->
-                        From ! {terminal, pong},
-                        loop();
-                {From, {notify, Message}} ->
-                        io:format("[~p] notify(~p)~n", [node(), Message]),
-                        From ! {terminal, ok},
-                        loop();
-                stop ->
-                        init:stop()
-        end.
+ receive
+  {From, {ping}} ->
+   From ! {terminal, pong},
+   loop();
+  {From, {notify, Message}} ->
+   io:format("[~p] notify(~p)~n", [node(), Message]),
+   From ! {terminal, ok},
+   loop();
+  stop ->
+   init:stop()
+ end.
 \end{lstlisting}
 
 Az rpc/1 feladata tehát kommunikálni a terminal néven regisztrált
@@ -1316,15 +1316,15 @@ A sensor modul implementációja a start, stop és ping metódusokra:
 
 \begin{lstlisting}
 start(ConfigFile) ->
-        Data = data,
-        {ok, Config} = file:consult(ConfigFile),
-        Centers = [ {C, E} || {center, C, E} <- Config],
-        lists:foreach(fun({C, E}) ->
-                rpc:call(C, center, reg, [node(), E]),
-                Message = {Data, desc, node(), E, false},
-                rpc:call(C, center, notify, [Message])
-        end, Centers),
-        register(sensor, spawn(fun() -> put(desc, Data), loop() end)).
+ Data = data,
+ {ok, Config} = file:consult(ConfigFile),
+ Centers = [ {C, E} || {center, C, E} <- Config],
+ lists:foreach(fun({C, E}) ->
+  rpc:call(C, center, reg, [node(), E]),
+  Message = {Data, desc, node(), E, false},
+  rpc:call(C, center, notify, [Message])
+ end, Centers),
+ register(sensor, spawn(fun() -> put(desc, Data), loop() end)).
 
 stop() -> sensor ! stop.
 
@@ -1350,11 +1350,11 @@ query_data(Message) -> rpc({query_data, Message}).
 control(Message) -> rpc({control, Message}).
 
 rpc(Q) ->
-        sensor ! {self(), Q},
-        receive
-                {sensor, Reply} ->
-                        Reply
-        end.
+ sensor ! {self(), Q},
+ receive
+  {sensor, Reply} ->
+   Reply
+ end.
 \end{lstlisting}
 
 Az elõzõekben megszokott módon ezek is az rpc/1 függvényt hívják,
@@ -1364,21 +1364,21 @@ A korábban hivatkozott loop/0 függvénye pedig a következõ:
 
 \begin{lstlisting}
 loop() ->
-        receive
-                {From, {ping}} ->
-                        From ! {sensor, pong},
-                        loop();
-                {From, {query_data, {_Data, _Desc, Fro, _To, _Recv}}} ->
-                        rpc:call(Fro, terminal, notify, [{get(desc), desc, node(), Fro, false}]),
-                        From ! {sensor, ok},
-                        loop();
-                {From, {control, {Data, _Desc, _Fro, _To, _Recv}}} ->
-                        put(desc, Data),
-                        From ! {sensor, ok},
-                        loop();
-                stop ->
-                        init:stop()
-        end.
+ receive
+  {From, {ping}} ->
+   From ! {sensor, pong},
+   loop();
+  {From, {query_data, {_Data, _Desc, Fro, _To, _Recv}}} ->
+   rpc:call(Fro, terminal, notify, [{get(desc), desc, node(), Fro, false}]),
+   From ! {sensor, ok},
+   loop();
+  {From, {control, {Data, _Desc, _Fro, _To, _Recv}}} ->
+   put(desc, Data),
+   From ! {sensor, ok},
+   loop();
+  stop ->
+   init:stop()
+ end.
 \end{lstlisting}
 
 \begin{itemize}
@@ -1440,10 +1440,10 @@ A sensor0\_clevo\_local modul egyetlen translate/1 függvényt definiál:
 \begin{lstlisting}
 translate(Num) ->
        case Num of
-               0 ->
-                       "querydesc";
-               _ ->
-                       false
+        0 ->
+         "querydesc";
+        _ ->
+         false
        end.
 \end{lstlisting}
 
@@ -1457,9 +1457,9 @@ querydesc() -> rpc({querydesc}).
 Valamint a loop/0 függvényben egy új esetet kell felvenni:
 
 \begin{lstlisting}
-               {From, {querydesc}} ->
-                       From ! {sensor, get(desc)},
-                       loop();
+        {From, {querydesc}} ->
+         From ! {sensor, get(desc)},
+         loop();
 \end{lstlisting}
 
 \subsection{Felhasználói felület}
@@ -1480,31 +1480,31 @@ Ehhez a szenzor kódjában a start/1 függvényt változtatjuk meg:
 
 \begin{lstlisting}
 start(ConfigFile) ->
-        Data = data,
-        {ok, Config} = file:consult(ConfigFile),
-        Centers = [ {C, E} || {center, C, E} <- Config],
-        lists:foreach(fun({C, E}) ->
-                rpc:call(C, center, reg, [node(), E])
-        end, Centers),
-        register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
-        io:format("Adja meg a mert adatot 'tipus szam' formaban, majd usson ENTER-t!\n"),
-        io:format("A testhomerseklet merese utan peldaul 'h 38.2'\n"),
-        read_stdin(Centers).
+ Data = data,
+ {ok, Config} = file:consult(ConfigFile),
+ Centers = [ {C, E} || {center, C, E} <- Config],
+ lists:foreach(fun({C, E}) ->
+  rpc:call(C, center, reg, [node(), E])
+ end, Centers),
+ register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
+ io:format("Adja meg a mert adatot 'tipus szam' formaban, majd usson ENTER-t!\n"),
+ io:format("A testhomerseklet merese utan peldaul 'h 38.2'\n"),
+ read_stdin(Centers).
 \end{lstlisting}
 
 Az újonnan bevezetett read\_stdin függvény pedig:
 
 \begin{lstlisting}
 read_stdin(Centers) ->
-        L = io:get_line("> "),
-        [A|[B]] = re:split(L, " "),
-        Desc = list_to_atom(binary_to_list(A)),
-        {Data, _} = string:to_float(binary_to_list(B)),
-        lists:foreach(fun({C, E}) ->
-                Message = {Data, Desc, node(), E, false},
-                rpc:call(C, center, notify, [Message])
-        end, Centers),
-        read_stdin(Centers).
+ L = io:get_line("> "),
+ [A|[B]] = re:split(L, " "),
+ Desc = list_to_atom(binary_to_list(A)),
+ {Data, _} = string:to_float(binary_to_list(B)),
+ lists:foreach(fun({C, E}) ->
+  Message = {Data, Desc, node(), E, false},
+  rpc:call(C, center, notify, [Message])
+ end, Centers),
+ read_stdin(Centers).
 \end{lstlisting}
 
 A feladat második fele pedig a terminál átalakítása, azt szeretnénk,
@@ -1540,7 +1540,83 @@ loop() ->
  end.
 \end{lstlisting}
 
+\subsection{Hibatûrés}
+
+A rendszerrel szemben elvárás, hogy hibatûrõ legyen, azonban ezt idáig
+nem valósítottuk meg, például ha hõmérsékletnek nem lebegõpontos számot
+adunk meg, akkor nem kapunk semmilyen hibát, egyszerûen hibás lesz a
+mûködés.
+
+Két feladatunk van tehát:
+
+\begin{itemize}
+\item A hiba esetén biztosítani, hogy leálljon az adott process, mielõtt
+az hibás mûködéshez vezetne.
+\item A leállt process helyébe újat indítani.
+\end{itemize}
+
+A leállás biztosításához a terminal:read\_stdin/0 függvényt a következõképpen
+módosíthatjuk:
+
+\begin{lstlisting}
+read_stdin(Centers) ->
+ L = io:get_line("> "),
+ [A|[B]] = re:split(L, " "),
+ Desc = list_to_atom(binary_to_list(A)),
+ {Data, _} = string:to_float(binary_to_list(B)),
+ case Data of
+  error ->
+   erlang:error(badarg);
+  _ ->
+   lists:foreach(fun({C, E}) ->
+      Message = {Data, Desc, node(), E, false},
+      rpc:call(C, center, notify, [Message])
+    end, Centers),
+   read_stdin(Centers)
+ end.
+\end{lstlisting}
+
+Az új process indítása két lépéses folyamat. Elõször is definiálni kell
+egy függvényt, mely akkor hívódik meg, ha az aktuális process leáll:
+
+\begin{lstlisting}
+on_exit(Pid, Fun) ->
+ spawn(fun() ->
+  process_flag(trap_exit, true),
+  link(Pid),
+  receive
+   {'EXIT', Pid, _Why} ->
+    Fun()
+  end
+ end).
+\end{lstlisting}
+
+Valamint a start/1 függvényben ezt a függvényt regisztrálnunk kell:
+
+\begin{lstlisting}
+start(ConfigFile) ->
+ Data = data,
+ {ok, Config} = file:consult(ConfigFile),
+ Centers = [ {C, E} || {center, C, E} <- Config],
+ lists:foreach(fun({C, E}) ->
+  rpc:call(C, center, reg, [node(), E])
+ end, Centers),
+ catch unregister(sensor),
+ register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
+ on_exit(self(),
+  fun() ->
+    io:format("A szenzor hibaval lepett ki, ujrainditas...~n"),
+    start(ConfigFile)
+  end),
+ io:format("Adja meg a mert adatot 'tipus szam' formaban, majd usson ENTER-t!\n"),
+ io:format("A testhomerseklet merese utan peldaul 'h 38.2'\n"),
+ read_stdin(Centers).
+\end{lstlisting}
+
 \section{Eredmények, jövõbeli munka}
+
+Ide jön majd a (teszt) környezet leírása, erlang node-ok indításának
+commandline paraméterei, viaskodás a tûzfallal, stb.
 
 \bibliography{szakdolgozat}
 \bibliographystyle{unsrt}

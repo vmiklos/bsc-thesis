@@ -10,7 +10,13 @@ start(ConfigFile) ->
 	lists:foreach(fun({C, E}) ->
 		rpc:call(C, center, reg, [node(), E])
 	end, Centers),
+	catch unregister(sensor),
 	register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
+	on_exit(self(),
+		fun(_) ->
+				io:format("A szenzor hibaval lepett ki, ujrainditas...~n"),
+				start(ConfigFile)
+		end),
 	io:format("Adja meg a mert adatot 'tipus szam' formaban, majd usson ENTER-t!\n"),
 	io:format("A testhomerseklet merese utan peldaul 'h 38.2'\n"),
 	read_stdin(Centers).
@@ -63,8 +69,23 @@ read_stdin(Centers) ->
 	[A|[B]] = re:split(L, " "),
 	Desc = list_to_atom(binary_to_list(A)),
 	{Data, _} = string:to_float(binary_to_list(B)),
-	lists:foreach(fun({C, E}) ->
-		Message = {Data, Desc, node(), E, false},
-		rpc:call(C, center, notify, [Message])
-	end, Centers),
-	read_stdin(Centers).
+	case Data of
+		error ->
+			erlang:error(badarg);
+		_ ->
+			lists:foreach(fun({C, E}) ->
+						Message = {Data, Desc, node(), E, false},
+						rpc:call(C, center, notify, [Message])
+				end, Centers),
+			read_stdin(Centers)
+	end.
+
+on_exit(Pid, Fun) ->
+	spawn(fun() ->
+				process_flag(trap_exit, true),
+				link(Pid),
+				receive
+					{'EXIT', Pid, Why} ->
+						Fun(Why)
+				end
+			end).

@@ -1462,6 +1462,84 @@ Valamint a loop/0 függvényben egy új esetet kell felvenni:
                        loop();
 \end{lstlisting}
 
+\subsection{Felhasználói felület}
+
+Idáig alapvetõen azzal foglalkoztunk, hogy hogyan tudunk adatokat küldeni Erlang node-ok között.
+
+A felhasználói felület feladata, hogy az idáig elkészült middleware-t
+felhasználva a felhasználók számára is hasznos támogatást nyújtson,
+ezáltal tényleges életviteli rendszert megvalósítva.
+
+Felhasználói felületünk kialakítását kezdjük a szenzorral. A start/1
+függvény idáig visszatért ha sikeres volt az üzeneteket kezelõ process
+regisztrációja terminal néven. Most ezt megváltoztatjuk, és
+interaktívan, a standard bemenetrõl fogunk beolvasni értékeket, majd
+azonnal jelzünk ha a felhasználó ENTER-t ütött.
+
+Ehhez a szenzor kódjában a start/1 függvényt változtatjuk meg:
+
+\begin{lstlisting}
+start(ConfigFile) ->
+        Data = data,
+        {ok, Config} = file:consult(ConfigFile),
+        Centers = [ {C, E} || {center, C, E} <- Config],
+        lists:foreach(fun({C, E}) ->
+                rpc:call(C, center, reg, [node(), E])
+        end, Centers),
+        register(sensor, spawn(fun() -> put(desc, Data), loop() end)),
+        io:format("Adja meg a mert adatot 'tipus szam' formaban, majd usson ENTER-t!\n"),
+        io:format("A testhomerseklet merese utan peldaul 'h 38.2'\n"),
+        read_stdin(Centers).
+\end{lstlisting}
+
+Az újonnan bevezetett read\_stdin függvény pedig:
+
+\begin{lstlisting}
+read_stdin(Centers) ->
+        L = io:get_line("> "),
+        [A|[B]] = re:split(L, " "),
+        Desc = list_to_atom(binary_to_list(A)),
+        {Data, _} = string:to_float(binary_to_list(B)),
+        lists:foreach(fun({C, E}) ->
+                Message = {Data, Desc, node(), E, false},
+                rpc:call(C, center, notify, [Message])
+        end, Centers),
+        read_stdin(Centers).
+\end{lstlisting}
+
+A feladat második fele pedig a terminál átalakítása, azt szeretnénk,
+hogyha a hõmérséklet értéke meghaladja 37.2 fokot, akkor csipogjon.
+Egyéb esetben pedig egyszerûen adjon barátságos kimenetet.
+
+Ehhez a terminal modul loop/0 függvényét a következõképpen módosítjuk:
+
+\begin{lstlisting}
+loop() ->
+ receive
+  {From, {ping}} ->
+   From ! {terminal, pong},
+   loop();
+  {From, {notify, Message}} ->
+   {Data, Desc, _Fro, _To, _Recv} = Message,
+   case Desc of
+    h ->
+     case Data > 37.2 of
+      true ->
+       io:fwrite([7]),
+       io:format("Figyelem, a homerseklet ~p homerseklet tobb a megengedettnel!~n", [Data]);
+      _ ->
+       io:format("Uj homerseklet adat: ~p.~n", [Data])
+      end;
+    _ ->
+     io:format("A '~p' uj erteke: ~p.~n", [Desc, Data])
+   end,
+   From ! {terminal, ok},
+   loop();
+  stop ->
+   init:stop()
+ end.
+\end{lstlisting}
+
 \section{Eredmények, jövõbeli munka}
 
 \bibliography{szakdolgozat}

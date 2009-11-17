@@ -1087,13 +1087,18 @@ megbízhatóak.
 egyszerû parancssoros interfészt biztosítva a felhasználó számára.
 \end{itemize}
 
-\subsection{A legegyszerûbb, már mûködõ változat}
+\subsection{Elsõ, már mûködõ változat}
 
 A legkisebb már mûködõ változata a rendszernek az az eset, mikor a
 rendszerben egy szenzor, egy központ és egy terminál van. Mivel ez lesz
 minden késõbbi változat alapja, tekintsük át tüzetesen a mûködését. A
 késõbbiekben csak az ehhez a változathoz képest eszközölt módosítások
 kerülnek ismertetésre.
+
+E változat mûködése során a felhasználó egy központot indít, majd egy
+terminált, mely regisztrál a központba, végül egy szenzort, mely indulás
+után azonnal értesít. Ezt az értesítést kapja meg a központ, majd
+továbbítja a terminálnak.
 
 \subsubsection*{Központ}
 
@@ -1238,7 +1243,14 @@ A konfigurációs állomány szintaxisára az egyetlen megkötés az, hogy
 minden egyes sorban egy Erlang termnek kell lennie, mivel ezt fogadja el
 a file:consult/1 értelmezõ függvény. A fenti fájlban az egyetlen sor egy
 központra való feliratkozást definiál, erre utal a center atom. Az ennes
-másik két paramétere a központ címét és annak az eseménynek a nevét
+másik két paramétere a központ címét
+\footnote{
+A következõ, tesztelésrõl is szóló fejezetben látni fogjuk, hogy mi az
+oka annak, hogy a cím ebben a formátumban lett megadva. Általánosságban
+a cím egy node-ot és egy gépet azonosító atomból áll, a kukac
+karakterrel összekötve.
+}
+és annak az eseménynek a nevét
 definiálja, melyre fel szeretnénk iratkozni az adott központban.
 
 Az indítás során tehát értelmezzük a beállításokat, és a kérésnek
@@ -1297,6 +1309,85 @@ szolgálnak a center modullal megegyezõ módon.
 \item A notify atomra pedig a terminál egyszerûen a standard kimenetre
 küldi a kapott üzenet tartalmát, nem túl felhasználóbarát módon.
 \end{itemize}
+
+\subsubsection*{Szenzor}
+
+A sensor modul implementációja a start, stop és ping metódusokra:
+
+\begin{lstlisting}
+start(ConfigFile) ->
+        Data = data,
+        {ok, Config} = file:consult(ConfigFile),
+        Centers = [ {C, E} || {center, C, E} <- Config],
+        lists:foreach(fun({C, E}) ->
+                rpc:call(C, center, reg, [node(), E]),
+                Message = {Data, desc, node(), E, false},
+                rpc:call(C, center, notify, [Message])
+        end, Centers),
+        register(sensor, spawn(fun() -> put(desc, Data), loop() end)).
+
+stop() -> sensor ! stop.
+
+ping() -> rpc({ping}).
+\end{lstlisting}
+
+Láthatjuk, hogy a start függvény itt is használ egy konfigurációs
+állományt, melynek aznos a formátuma a szenzoréval. A feladata
+természetesen más: itt azt adja meg, hogy melyik központnak milyen néven
+kell elküldeni a mérési adatainkat.
+
+Az elsõ változat tehát rögtön indulás után küld egy üzenetet a
+konfigurációs állományban megadott központba, a megadott eseménynevet
+használva, mely arról fogja informálni a terminálokat, hogy a desc
+típusú mérési adat értéke data.
+
+A tervezés során a szenzorok explicit lekérdezésének igénye is
+felmerült, az ehhez szükséges függvények:
+
+\begin{lstlisting}
+query_data(Message) -> rpc({query_data, Message}).
+
+control(Message) -> rpc({control, Message}).
+
+rpc(Q) ->
+        sensor ! {self(), Q},
+        receive
+                {sensor, Reply} ->
+                        Reply
+        end.
+\end{lstlisting}
+
+Az elõzõekben megszokott módon ezek is az rpc/1 függvényt hívják,
+melynek mûködési elve nem változott a korábbi két modulhoz képest.
+
+A korábban hivatkozott loop/0 függvénye pedig a következõ:
+
+\begin{lstlisting}
+loop() ->
+        receive
+                {From, {ping}} ->
+                        From ! {sensor, pong},
+                        loop();
+                {From, {query_data, {_Data, _Desc, Fro, _To, _Recv}}} ->
+                        rpc:call(Fro, terminal, notify, [{get(desc), desc, node(), Fro, false}]),
+                        From ! {sensor, ok},
+                        loop();
+                {From, {control, {Data, _Desc, _Fro, _To, _Recv}}} ->
+                        put(desc, Data),
+                        From ! {sensor, ok},
+                        loop();
+                stop ->
+                        init:stop()
+        end.
+\end{lstlisting}
+
+\begin{itemize}
+\item A ping és stop atomok kezelését már ismerjük
+\item A query\_data atom hatására a szenzor process dictionary-jébõl lehet lekérdezni.
+\item A control atom segítségével pedig vezérelni lehet a szenzort.
+\end{itemize}
+
+\subsection{Redundáns mûködés}
 
 \section{Eredmények, jövõbeli munka}
 

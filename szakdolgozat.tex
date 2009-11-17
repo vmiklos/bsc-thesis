@@ -1405,6 +1405,63 @@ Ez utóbbit például a következõképpen tehetjük meg:
 {center, center1@clevo.local, event}.
 \end{lstlisting}
 
+\subsection{Meghajtóprogramok támogatása}
+
+Meghajtóprogramokra akkor van szükségünk, ha egy általános interfészen
+keresztül akarunk elérni egy-egy eszközt, melynek a speciális jellemzõit
+nem ismerjük. Tegyük fel, hogy egy szenzor több mérést is képes végezni,
+és ezeket számozzuk.  A megvalósított példa esetén a szenzor egy
+querydesc/0 függvénnyel rendelkezik, a terminál ezt szeretné explicit
+módon lekérdezni, de csak annyit tud, hogy ez a nulladik típusú mérési
+funkciója az eszköznek. A driver modul fog abban segíteni, hogy a 0
+alapján megkapja a querydesc atomot.
+
+A modul egyetlen translate/2 függvényt definiál az interfészében:
+
+\begin{lstlisting}
+sub(Str,Old,New) ->
+       RegExp = "\\Q"++Old++"\\E",
+       re:replace(Str,RegExp,New,[multiline, {return, list}]).
+
+translate(Node, Num) ->
+       Module = sub(sub(atom_to_list(Node), "@", "_"), ".", "_"),
+       compile:file(Module),
+       Modulea = list_to_atom(Module),
+       list_to_atom(Modulea:translate(Num)).
+\end{lstlisting}
+
+Az elsõ segédfüggvény node nevébõl a driver modul nevét állítja elõ, A
+kukacokat és pontokat aláhúzásjellel helyettesítve. A második pedig az
+elõállított modulnév alapján lefordítja a drivert, meghívja annak
+translate metódusát, és a kapott értékkel visszatér.
+
+A sensor0\_clevo\_local modul egyetlen translate/1 függvényt definiál:
+
+\begin{lstlisting}
+translate(Num) ->
+       case Num of
+               0 ->
+                       "querydesc";
+               _ ->
+                       false
+       end.
+\end{lstlisting}
+
+Ahhoz, hogy ezt ki is próbálhassuk, a szenzor kódjában a querydesc
+függvényt implementálni kell:
+
+\begin{lstlisting}
+querydesc() -> rpc({querydesc}).
+\end{lstlisting}
+
+Valamint a loop/0 függvényben egy új esetet kell felvenni:
+
+\begin{lstlisting}
+               {From, {querydesc}} ->
+                       From ! {sensor, get(desc)},
+                       loop();
+\end{lstlisting}
+
 \section{Eredmények, jövõbeli munka}
 
 \bibliography{szakdolgozat}

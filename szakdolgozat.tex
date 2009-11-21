@@ -872,7 +872,9 @@ Messages -- Beérkezett üzenetek listája.
 
 \item Szolgáltatások:
 
-Nincsenek.
+start(Config) -- Endpoint indítása adott beállításokkal
+
+stop() -- Endpoint leállítása
 \end{itemize}
 
 \subsubsection*{Sensor}
@@ -891,10 +893,6 @@ a környezet.
 
 \item Szolgáltatások:
 
-start() -- Sensor indítása
-
-stop() -- Sensor leállítása
-
 query(Message) -- Lekérdez egy adott funkciót, és a feladó címére
 megküldi.
 
@@ -912,13 +910,9 @@ egy szenzortól kapott üzenetre.
 
 \item Változók:
 
-Nincsenek.
+Centers -- Azon központok listája, melyekre fel kell iratkozni induláskor.
 
 \item Szolgáltatások:
-
-start() -- Terminal indítása
-
-stop() -- Terminal leállítása
 
 notify(Message) -- Üzenet átadása a terminál számára
 \end{itemize}

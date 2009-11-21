@@ -1629,6 +1629,63 @@ start(ConfigFile) ->
 
 \section{Eredmények, jövõbeli munka}
 
+\subsection{Eredmények}
+
+\subsubsection*{Tesztelési környezet}
+
+A tényleges eredmények áttekintése elõtt tekintsük át, hogy milyen
+környezetben készült el a munka. A dolgozat tördelése a \TeX{} 3.141592
+verziójával készült, Frugalware Linux operációs rendszeren. A programok
+teszteléséhez az Erlang R12B-5 verzióját használtam.
+
+A dolgozatban ismertetett kódok kipróbálásának feltétele, hogy az egyes
+Erlang node-oknak nevet adjunk. A tesztelés során a következõ
+beállításokat használtam:
+
+\begin{itemize}
+\item A tesztrendszer két fizikai gépbõl állt: a gyártó, illetve
+terméknév után a gépek IP címeit a rendszer \texttt{/etc/hosts}
+file-jába \texttt{clevo.local} és \texttt{ibook.local} néven írtam be
+mindkét rendszeren.
+\item Az Erlang node-ok elnevezésére parancssori kapcsolót használtam.
+
+Példa a \texttt{sensor0} nevû node indítására a \texttt{clevo} gépen:
+
+\begin{lstlisting}
+erl -name sensor0@clevo.local
+\end{lstlisting}
+
+\item Mikor a tesztelést két node között fizikailag azonos gépen
+végeztem, akkor nem volt szükség tudni arról, hogy az Erlang rendszerben
+két node akkor kommunikálhat egymással ha azok \emph{cookie-jai}
+megegyeznek. Ennek értéke parancssori kapcsolót nem használva a
+\texttt{\~/.erlang.cookie} file tartalma, mely ha nem létezik,
+automatikusan létrejön és véletlenszerû tartalommal töltõdik fel. Ha
+fizikailag két külön gépen tesztelünk, akkor ez a véletlenszerû érték
+különbözni fog, és így a tesztelés sikertelen lesz. Erre parancssori kapcsoló használata a megoldás:
+
+\begin{lstlisting}
+erl -name sensor0@clevo.local -setcookie s3cr3t
+\end{lstlisting}
+
+A másik probléma abból adódott, hogy mindkét gép rendelkezett saját
+tûzfallal. Ezt két részproblémára lehetett bontani. Egyrészt az epmd
+(Erlang Port Mapper Daemon) fixen az 4369-es porton akar bejövõ
+kéréseket kiszolgálni, ezt engedélyezni kell a tûzfalon. Másrészt az
+egyes távoli eljáráshívásokhoz egy port-tartományt kell kijelölnünk. Ezt
+a következõ opciókkal érhetjük el:
+
+\begin{lstlisting}
+erl -name sensor0@clevo.local -setcookie s3cr3t -kernel inet_dist_listen_min minimum inet_dist_listen_max maximum
+\end{lstlisting}
+
+A minimum és a maximum értéke egyezhet, például állíthatjuk mind a
+kettõt 4370-re. Ha ezek a portok ki és bemenõ forgalma engedélyezett a
+tûzfalon, akkor a tûzfal több beállítást már nem igényel.
+\end{itemize}
+
+\subsection{Jövõbeli munka}
+
 Ide jön majd többek között a (teszt)környezet leírása, erlang node-ok
 indításának commandline paraméterei, viaskodás a tûzfallal, tehát minden
 ami a kódon kívül szükséges információ ahhoz, hogy valaki kipróbálhassa

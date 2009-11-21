@@ -1684,6 +1684,50 @@ kettõt 4370-re. Ha ezek a portok ki és bemenõ forgalma engedélyezett a
 tûzfalon, akkor a tûzfal több beállítást már nem igényel.
 \end{itemize}
 
+
+\subsubsection*{Kiindulási állapot, feladat}
+
+A munka megkezdésekor tehát bizonyos ismeretekkel rendelkeztem már az
+szekvenciális Erlang programozásával kapcsolatban, valamint adott volt
+az fent ismertetett Erlang környezet. A cél pedig egyrészt a hasonló
+megoldások felkutatása, valamint az Erlang nyelv alkalmasságának
+vizsgálata abból a szempontból, hogy ha egy életviteli rendszert
+szeretnénk létrehozni, azt érdemes-e Erlang környezetben megvalósítani.
+
+\subsubsection*{Elért eredmények}
+
+A munka végére világossá vált, hogy egy ilyen rendszer létrehozása
+lehetséges, egy kis életviteli rendszert meg is terveztem Erlang
+környezetben, valamint néhány jellegzetes elemét nem is valósítottam.
+
+Mint arról korábban szó volt, a megvalósított rendszer legkomolyabb
+hiányossága a biztonság megfelelõ granularitású kezelése: ha egy Erlang
+node egy másik Erlang node-hoz hozzáférést szerez, onnantól azon
+bármilyen kódot futtathat.\cite{afts} Természetesen erre a problémára
+több részmegoldás is született, de mindegyiknek meg van a maga
+problémája:
+\begin {itemize}
+\item Választhatjuk, hogy nem használjuk az Erlang elosztott
+képességeit, és például egy saját protokollt vezetünk be, és annak
+értelmezésekor döntjük el, hogy a bejövõ kéréseket kiszolgáljuk-e vagy
+sem. Ekkor sok olyan funkciót kell saját magunknak megvalósítani, melyet
+idáig az Erlang nyelvi szinten adott számunkra.
+
+\item Egy másik egyszerû megoldás az, hogy zárt rendszert feltételezünk,
+ahol nincsenek megbízhatatlan felhasználók. Ha ezt az esetet bõvítjük
+azzal, hogy a kódokat valamilyen technikával aláírjuk, és csak aláírt
+kódot hajtunk végre, akkor sok szituációban elegendõ a nyújtott
+biztonsági színvonal, például megfelelõ lehet egy kis életviteli
+rendszer számára.
+\end{itemize}
+
+Azt azonban el kell ismernünk, hogy egyik megoldás sem ad olyan fokú
+biztonsági beállítási lehetõségeket, mint amilyeneket például a Java
+futtatókörnyezet beépítetten támogat. Ez természetesen érthetõ is,
+hiszen az Erlang környezetet eredetileg zárt, telefonos hálózatokba
+tervezték, ahol nem volt szükség a jelenleg rendelkezésre állónál
+finomabb biztonság-kezelésre.
+
 \subsection{Jövõbeli munka}
 
 Ide jön majd többek között a (teszt)környezet leírása, erlang node-ok

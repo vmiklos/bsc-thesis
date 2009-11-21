@@ -1698,7 +1698,7 @@ szeretnénk létrehozni, azt érdemes-e Erlang környezetben megvalósítani.
 
 A munka végére világossá vált, hogy egy ilyen rendszer létrehozása
 lehetséges, egy kis életviteli rendszert meg is terveztem Erlang
-környezetben, valamint néhány jellegzetes elemét nem is valósítottam.
+környezetben, valamint néhány jellegzetes elemét meg is valósítottam.
 
 Mint arról korábban szó volt, a megvalósított rendszer legkomolyabb
 hiányossága a biztonság megfelelõ granularitású kezelése: ha egy Erlang
@@ -1728,12 +1728,31 @@ hiszen az Erlang környezetet eredetileg zárt, telefonos hálózatokba
 tervezték, ahol nem volt szükség a jelenleg rendelkezésre állónál
 finomabb biztonság-kezelésre.
 
+Mindezek ellenére megállapíthatjuk, hogy egy kis életviteli rendszer
+megvalósítása során ki tudjuk használni az Erlang környezet által
+nyújtott legfontosabb szolgáltatásokat: az elosztottság hatékony
+kezelését, a párhuzamosság jó támogatottságát és a hibatûrési
+mechanizmusokat.
+
 \subsection{Jövõbeli munka}
 
-Ide jön majd többek között a (teszt)környezet leírása, erlang node-ok
-indításának commandline paraméterei, viaskodás a tûzfallal, tehát minden
-ami a kódon kívül szükséges információ ahhoz, hogy valaki kipróbálhassa
-a munkámat.
+Sok olyan probléma került elõ a munka során, mellyel terjedelmi okokból
+nem foglalkoztam, de a jövõben még foglalkozni lehetne. A
+legfontosabbak:
+
+\begin{itemize}
+\item A felhasználói felületet le lehetne cserélni egy grafikus verzióra.
+\item A szenzorok és terminálok jelenleg a beállítási file-jukba
+drótozott központokhoz csatlakoznak. Ezt automatizálni lehetne, például
+ha feltételezhetnénk, hogy a rendszer alapértelmezett átjárója egyben
+egy központ is, vagy ha egy újabb elemet vezetnénk be, amely az
+alapértelmezett átjárón fut, és a központok naprakész listáját
+szolgáltatná.
+\item A mért adatokat jelenleg nem tároljuk semmilyen módon, egy Mnesia
+vagy valamilyen SQL adatbázisban való tárolásnak számtalan elõnye lenne.
+\item A központ is kaphatna felhasználói felületet, ahol az egyes
+eszközöket a tervezés fejezetben ismertetett módon engedélyezni lehetne.
+\end{itemize}
 
 \bibliography{szakdolgozat}
 \bibliographystyle{unsrt}

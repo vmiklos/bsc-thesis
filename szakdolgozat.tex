@@ -825,7 +825,7 @@ Id -- Egyedi azonosító, mely nem változtatható meg.
 
 \item Szolgáltatások:
 
-Nincsenek.
+ping() -- Egy pong atommal válaszol, jelezve, hogy a process fut.
 \end{itemize}
 
 \subsubsection*{Center}
@@ -846,9 +846,17 @@ tartalmazó lista
 
 \item Szolgáltatások:
 
-register(Address, Name) -- Cím regisztrálása névként
+start() -- Center indítása
 
-subscribe(Name, Address) -- Névre feliratkozás adott címmel
+stop() -- Center leállítása
+
+reg(Address, Name) -- Sensor címének regisztrálása névként
+
+subscribe(Name, Address) -- Névre feliratkozás egy Terminal adott címével
+
+lookup(Name) -- Sensor nevének feloldása címre
+
+notify(Message) -- Message feladása továbbítás céljából
 \end{itemize}
 
 \subsubsection*{Endpoint}
@@ -883,6 +891,10 @@ a környezet.
 
 \item Szolgáltatások:
 
+start() -- Sensor indítása
+
+stop() -- Sensor leállítása
+
 query(Message) -- Lekérdez egy adott funkciót, és a feladó címére
 megküldi.
 
@@ -904,6 +916,10 @@ Nincsenek.
 
 \item Szolgáltatások:
 
+start() -- Terminal indítása
+
+stop() -- Terminal leállítása
+
 notify(Message) -- Üzenet átadása a terminál számára
 \end{itemize}
 
@@ -912,7 +928,7 @@ notify(Message) -- Üzenet átadása a terminál számára
 \begin{itemize}
 \item Leírás:
 
-Egy Erlang recordot jelöl, mely egy adat mellett tartalmazza azt, hogy
+Egy Erlang ennest jelöl, mely egy adat mellett tartalmazza azt, hogy
 az adat micsoda, kitõl jött, kinek megy és ki továbbította.
 
 \item Változók:
@@ -939,20 +955,20 @@ Nincsenek.
 
 Egy Erlang függvényt ír le, ezáltal lehetõvé téve, hogy különbözõ
 szenzorokat egységes interfészen kezeljünk. A drivernek megküldjük, hogy
-hányadik funkciót akarjuk lekérdezni/vezérelni, majd az megmondja a
-funkció nevét, amit már az eszköz megért.
+melyik Node hányadik funkcióját akarjuk lekérdezni/vezérelni, majd az
+megmondja a funkció nevét, amit már az eszköz megért.
 
-Például a \texttt{translate(0)} hatására az adott driver valasza lehet
-az \texttt{sugar}, mely egy vérnyomás- és vércukormérõ esetén a vércukor
-lekérdezését teszi lehetõvé.
+Például a \texttt{translate(sensor0@clevo.local, 0)} hatására az adott
+driver válasza lehet az \texttt{sugar}, mely egy vérnyomás- és
+vércukormérõ esetén a vércukor lekérdezését teszi lehetõvé.
 
 \item Változók:
 
 Nincsenek.
 \item Szolgáltatások:
 
-translate(Number) -- Megad egy atomot, amelyet már az üzenet rekord
-\texttt{description} mezõjében felhasználhatunk és a szenzor megért.
+translate(Node, Number) -- Megad egy atomot, melyet metódusnévként
+használhatunk ha a szenzort explicit módon akarjuk lekérdezni.
 \end{itemize}
 
 \subsection{Statikus struktúra diagram}

@@ -1,0 +1,181 @@
+\section{Egy-egy kiválasztott rendszer részletes ismertetése}
+
+\subsection{A Tunstall életviteli rendszer}
+
+A számos, jelenleg elérhetõ életviteli rendszer közül az angol Tunstall
+cég életviteli rendszerét választottuk részletesebb ismertetés céljából.
+Ennek oka, hogy az általuk nyújtott szolgáltatásokról részletes
+információt tettek elérhetõvé, valamint számokkal, valós életbõl vett
+példákkal és esettanulmányokkal szolgálnak az érdeklõdõnek, így engedve
+betekintést bármely akár nem kompetens érdeklõdõnek is.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=75mm,keepaspectratio]{tunstall.eps}
+\caption{A Tunstall Telehealth Monitor egy Bluetooth alapú vérnyomásmérõvel}\label{fig:tunstall}
+\end{figure}
+
+A cég által létrehozott életviteli rendszer számos, a napi életben
+elõforduló problémát igyekszik megoldani:
+
+\begin{itemize}
+	\item Elmezavar. Gyakori probléma, hogy az ilyen problémákkal
+küzdõ emberek elhagyják otthonukat, majd indokolatlanul sok ideig nem
+térnek vissza. A cég forgalmaz olyan szenzort, amely adott idõ
+elteltével riaszt, ha nem történt meg a hazaérkezés. Egy hasonló
+probléma, hogy az ágyból kikelve nem találják az utat a fürdõszoba felé,
+vagy vissza, ehhez is létrehoztak egy megoldást, mely érzékeli, hogy
+mikor kelt ki az ágyból az ember, és ekkor kapcsolja be a világítást az
+útvonal könnyebb megtalálásához. Végül az ilyen emberek sokszor
+képtelenek felmérni, hogyha veszélybe keveredtek, és nem teszik meg a
+szükséges óvintézkedéseket. A cél füst-, széndioxid- és
+földgáz-érzékelõket is forgalmaz, melyek egy központban riasztanak, ha
+segítségre van szükség.
+	\item Esések. Naponta 8000 idõsebb vagy gyenge ember esik el.
+\footnote{Ez, és a többi szám a Tunstall cég által, a jelen írás
+pillanatában (2009 október) közölt adatokból való, és Angliára
+vonatkozik.}
+Ezek 70 százaléka éjszaka történik. Minden ötödik ember, aki eltöri a
+csípõjét 6 hónapon belül hal meg. Ebbõl következik, hogy ha egy embernek
+félnie kell az eleséstõl, az magával vonja azt az érzést, hogy már nem
+képes függetlenül mozogni, valamint hogy már nem él teljes életet. A cég
+így két problémakört céloz meg: egyrészt minimálisra csökkenteni az
+esések hatását, másrészt növelni az indokolatlanul kis mértékû
+önbizalmat. A cég olyan szenzort forgalmaz, mely érzékeli, ha az ember
+elhagyta az ágyát, és nem tért vissza meghatározott idõn belül, ami
+vélhetõleg arra utal, hogy az illetõ elesett. Az esés-érzékelõ egy
+derékszíjon viselt szenzor, mely egyrészt automatikusan érzékelni képes
+az esést, valamint egyszerû megoldást ad az elesett ember számára is az
+esés jelzésére, így a gyors segítség nyújtása könnyebbé válik. A
+harmadik mûszer pedig egy mozgás-érzékelõ, mely akkor riaszt, ha az
+ember hosszabb ideje nem mozgott még lakáson belül, mely nagy
+valószínûséggel elesést jelent. Ezek az eszközök segítenek megelõzni
+olyan eseteket, mikor például egy idõs ember a fürdõszobából visszatérve
+elesik a küszöbön, majd az egész éjszakát ott kell töltse, mivel nem tud
+segítséget kérni.
+	\item Átmeneti biztosítás. Ennek célja, hogy olyan emberek akik
+kis segítséggel már otthon gyógyulhatnának, sokszor a kórházban
+maradnak, és ott lassabban gyógyulnak, csupán néhány könnyen
+kiküszöbölhetõ probléma miatt. Ilyen például az elõzõ pontban említett
+esés-érzékelõ, e nélkül egy lábadozó beteget hazaengedni felelõtlenség
+lenne.
+	\item Tanulási nehézségek. Hetente 200 ember születik tanulási
+nehézségekkel. Ez azt jelenti, hogy új vagy összetett információkat,
+önállóságot az átlagos embernél nehezebben tanulnak. A cég célja, hogy
+ezeknek az embereknek a tanulási nehézségein segítve ne kerüljenek távol
+a családjuktól, vagy valamilyen közösség részeként önállóbb életet
+tudjanak élni.
+
+Példaként lehetne említeni az elõzõ pontokban is részletezett szenzort,
+mely az ágy elhagyásakor és adott idõn belül való vissza nem téréskor
+jelez, így értesítve a családtagokat, ha probléma merült fel, míg az
+esetek nagy részében a rokonok nyugodtan alhatnak, hiszen a szenzor
+jelzésére biztosan felébrednek.
+\end{itemize}
+
+A technikai részletekrõl kevesebbet lehet tudni, de azért akadnak kivételek. A
+British Telecom\cite{bt} angol telefontársasággal együttmûködve számos
+IP-alapú szolgáltatást tettek elérhetõvé. A BT 21 CN\cite{bt21cn} (21st
+Century Network) néven elindított programjuk technikai szempontból
+leginkább a hagyományos telefonhálózat (PSTN) lecserélése VoIP
+megoldásokra. Ez lehetõvé teszi, hogy az egyes végpontokon ne csak
+beszédet, hanem sokféle adatforgalmat is lebonyolítsanak az ügyfelek. Ez
+a megoldás kiválóan használható a szenzorok által gyûjtött adatok
+továbbítására, valamint szükség esetén riasztásra. A Tunstall egy listát
+vezet azokról a szenzorokról, melyek a 21CN hálózat felett használt,
+általuk bevezetett protokollt támogatni tudják. Sajnálatos módon azonban
+nem érhetõ el részletes információ az általuk kifejlesztett, és éles
+üzemben is használt protokoll részleteirõl.
+
+\subsection{Az OSGi keretrendszer}
+
+Az OSGI Szövetég (régebbi nevén Open Services Gateway initiative) egy
+nyílt szabványügyi szervezet. A szövetség tagjai egy Java-alapú
+szolgáltatás-platformot definiáltak, mely távolról kezelhetõ.
+
+A szabvány mögött olyan neves cégek állnak, mint a Nokia, Motorola vagy
+az IBM. Leginkább mobil eszközökben használják, de például a népszerû
+Eclipse IDE is ezt használja a beépülõ moduljainak kezelésére.  A
+szabvány szót itt a hagyományos értelemben használhatjuk, mivel csak a
+nyílt forrású implementációkat számolva is többesszámról beszélhetünk.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=100mm,keepaspectratio]{extensions.eps}
+\caption{UML szekvenciadiagram, mely Eclipse kiterjesztések mûködését mutatja be, mely OSGi-t használ.}\label{fig:extensions}
+\end{figure}
+
+Elõször 2000-ben jelent meg, a jelenleg aktuális 4-es verzióját pedig
+2009 szeptemberében adták ki, így méltán tekinthetünk rá, mint aktívan
+fejlesztett és karbantartott megoldásra.
+
+A keretrendszer legfontosabb elemei:
+
+\begin{itemize}
+	\item Alkalmazások életciklusának kezelési modellje: az
+alkamazásokat csomagok (bundle) formájában lehet terjeszteni, majd a JVM
+leállítása nélkül telepíteni, elindítani, frissíteni vagy eltávolítani.
+	\item Szolgáltatás adatbázis: ez az adatbázis lehetõvé teszi az
+alkalmazások számára, hogy értesüljenek he új szolgáltatások érhetõek el
+vagy egy szolgáltatás megszûnt, és így alkalmazkodhatnak az új
+környezethez.
+	\item Végrehajtási környezet: A végrehajtási környezet azt
+definiálja, hogy egy környezetben milyen osztályok és metódusok érhetõek
+el. A Java Platform, Standard Edition is egy elfogadott OSGi
+végrehajtási környezet, de a CDC keretrendszer (amit például a legtöbb
+mai mobiltelefon is támogat) is támogatott, valamint van saját, általuk
+definiált környezet is. Minden egyes OSGi implementáció maga döntheti
+el, hogy milyen végrehajtási környezetet támogat, az elõbbieket a
+legtöbb támogatja.
+	\item Modulok: Azt is szabványosították, hogy az egyes csomagok
+milyen módon tudják az egymás közt fennálló függõségeket, valamint a
+kívülrõl elérhetõ API-kat definiálni, lehetõvé téve ezáltal, hogy
+egységes módon lehessen az egyes egységekbõl és egységekbe
+metódus-hívásokat végezni.
+\end{itemize}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=100mm,keepaspectratio]{layering-osgi.eps}
+\caption{Az OSGi rétegei}\label{fig:layering-osgi}
+\end{figure}
+
+Az egyes csomagok olyan Java könyvtárak (JAR fájlok), amik
+OSGi-specifikus fejléccel rendelkeznek a JAR MANIFEST.MF fájljában.
+
+Az egyes alkalmazásoknak a következõ állapotai lehetnek:
+
+\begin{itemize}
+	\item Telepítve: Ekkor még elképzelhetõ, hogy egy csomag
+függõségei nem állnak rendelkezésre.
+	\item Feloldva: Minden függõség elérhetõ, az alkalmazást vagy
+leállították, vagy kész az indulásra.
+	\item Indul: Az alkalmazás aszinkron módon el lett indítva, de
+még nem tért vissza.
+	\item Aktív: Az alkalmazás elindult, és még nem kezdeményezték a
+leállítását.
+	\item Leáll: Az alkalmazás leállítása aszinkron módon
+elkezdõdött, de még nem fejezõdött be.
+	\item Eltávolítva: Az alkalmazás újabb telepítésig nem indítható
+el.
+\end{itemize}
+
+A szolgáltatások Java interfészeket jelentenek. Ezeket az API-kat
+implementálhatják a csomagok, majd ha a csomagot regisztrálták  a
+szolgáltatás-adatbázisban, akkor a kliensek itt megtalálhatják õket, és
+innentõl értesítést kérhetnek a szolgáltatás elérhetõsége és el nem
+érhetõsége esetén.
+
+Az OSGi szabvány is tartalmaz elõre definiált szolgáltatásokat, melyeket
+három csoportra oszthatunk:
+
+\begin{itemize}
+	\item OSGi System Services: ide tartoznak az olyan
+rendszerszolgáltatások, mint az eseménykezelõ, a beállításkezelõ,
+alkalmazások adminisztrációja, I/O mûveletek, felhasználókezelés.
+	\item OSGi Protocol Services: Elõre definiált protokolok
+használatát segíti -- HTTP feletti kommunikációt, UPnP-t támogató és
+mobil eszközök felé való kommunikációt.
+	\item OSGi Miscellaneous Services: Ide tartozik minden egyéb
+elõre definiált szolgáltatás, például XML értelmezõ.
+\end{itemize}

@@ -1,0 +1,130 @@
+\section{Eredmények, jövõbeli munka}
+
+\subsection{Eredmények}
+
+\subsubsection*{Tesztelési környezet}
+
+A tényleges eredmények áttekintése elõtt tekintsük át, hogy milyen
+környezetben készült el a munka. A dolgozat tördelése a \TeX{} 3.141592
+verziójával készült, Frugalware Linux operációs rendszeren. A programok
+teszteléséhez az Erlang R12B-5 verzióját használtam.
+
+A dolgozatban ismertetett kódok kipróbálásának feltétele, hogy az egyes
+Erlang node-oknak nevet adjunk. A tesztelés során a következõ
+beállításokat használtam:
+
+\begin{itemize}
+\item A tesztrendszer két fizikai gépbõl állt: a gyártó, illetve
+terméknév után a gépek IP címeit a rendszer \texttt{/etc/hosts}
+file-jába \texttt{clevo.local} és \texttt{ibook.local} néven írtam be
+mindkét rendszeren.
+\item Az Erlang node-ok elnevezésére parancssori kapcsolót használtam.
+
+Példa a \texttt{sensor0} nevû node indítására a \texttt{clevo} gépen:
+
+\begin{lstlisting}
+erl -name sensor0@clevo.local
+\end{lstlisting}
+
+\item Mikor a tesztelést két node között fizikailag azonos gépen
+végeztem, akkor nem volt szükség tudni arról, hogy az Erlang rendszerben
+két node akkor kommunikálhat egymással ha azok \emph{cookie-jai}
+megegyeznek. Ennek értéke parancssori kapcsolót nem használva a
+\texttt{\~/.erlang.cookie} file tartalma, mely ha nem létezik,
+automatikusan létrejön és véletlenszerû tartalommal töltõdik fel. Ha
+fizikailag két külön gépen tesztelünk, akkor ez a véletlenszerû érték
+különbözni fog, és így a tesztelés sikertelen lesz. Erre parancssori kapcsoló használata a megoldás:
+
+\begin{lstlisting}
+erl -name sensor0@clevo.local -setcookie s3cr3t
+\end{lstlisting}
+
+A másik probléma abból adódott, hogy mindkét gép rendelkezett saját
+tûzfallal. Ezt két részproblémára lehetett bontani. Egyrészt az epmd
+(Erlang Port Mapper Daemon) fixen az 4369-es porton akar bejövõ
+kéréseket kiszolgálni, ezt engedélyezni kell a tûzfalon. Másrészt az
+egyes távoli eljáráshívásokhoz egy port-tartományt kell kijelölnünk. Ezt
+a következõ opciókkal érhetjük el:
+
+\begin{lstlisting}
+erl -name sensor0@clevo.local -setcookie s3cr3t -kernel inet_dist_listen_min minimum inet_dist_listen_max maximum
+\end{lstlisting}
+
+A minimum és a maximum értéke egyezhet, például állíthatjuk mind a
+kettõt 4370-re. Ha ezek a portok ki és bemenõ forgalma engedélyezett a
+tûzfalon, akkor a tûzfal több beállítást már nem igényel.
+\end{itemize}
+
+
+\subsubsection*{Kiindulási állapot, feladat}
+
+A munka megkezdésekor tehát bizonyos ismeretekkel rendelkeztem már az
+szekvenciális Erlang programozásával kapcsolatban, valamint adott volt
+az fent ismertetett Erlang környezet. A cél pedig egyrészt a hasonló
+megoldások felkutatása, valamint az Erlang nyelv alkalmasságának
+vizsgálata abból a szempontból, hogy ha egy életviteli rendszert
+szeretnénk létrehozni, azt érdemes-e Erlang környezetben megvalósítani.
+
+\subsubsection*{Elért eredmények}
+
+A munka végére világossá vált, hogy egy ilyen rendszer létrehozása
+lehetséges, egy kis életviteli rendszert meg is terveztem Erlang
+környezetben, valamint néhány jellegzetes elemét meg is valósítottam.
+
+Mint arról korábban szó volt, a megvalósított rendszer legkomolyabb
+hiányossága a biztonság megfelelõ granularitású kezelése: ha egy Erlang
+node egy másik Erlang node-hoz hozzáférést szerez, onnantól azon
+bármilyen kódot futtathat.\cite{afts} Természetesen erre a problémára
+több részmegoldás is született, de mindegyiknek meg van a maga
+problémája:
+\begin {itemize}
+\item Választhatjuk, hogy nem használjuk az Erlang elosztott
+képességeit, és például egy saját protokollt vezetünk be, és annak
+értelmezésekor döntjük el, hogy a bejövõ kéréseket kiszolgáljuk-e vagy
+sem. Ekkor sok olyan funkciót kell saját magunknak megvalósítani, melyet
+idáig az Erlang nyelvi szinten adott számunkra.
+
+\item Egy másik egyszerû megoldás az, hogy zárt rendszert feltételezünk,
+ahol nincsenek megbízhatatlan felhasználók. Ha ezt az esetet bõvítjük
+azzal, hogy a kódokat valamilyen technikával aláírjuk, és csak aláírt
+kódot hajtunk végre, akkor sok szituációban elegendõ a nyújtott
+biztonsági színvonal, például megfelelõ lehet egy kis életviteli
+rendszer számára.
+\end{itemize}
+
+Azt azonban el kell ismernünk, hogy egyik megoldás sem ad olyan fokú
+biztonsági beállítási lehetõségeket, mint amilyeneket például a Java
+futtatókörnyezet beépítetten támogat. Ez természetesen érthetõ is,
+hiszen az Erlang környezetet eredetileg zárt, telefonos hálózatokba
+tervezték, ahol nem volt szükség a jelenleg rendelkezésre állónál
+finomabb biztonság-kezelésre.
+
+Mindezek ellenére megállapíthatjuk, hogy egy kis életviteli rendszer
+megvalósítása során ki tudjuk használni az Erlang környezet által
+nyújtott legfontosabb szolgáltatásokat: az elosztottság hatékony
+kezelését, a párhuzamosság jó támogatottságát és a hibatûrési
+mechanizmusokat.
+
+\subsection{Jövõbeli munka}
+
+Sok olyan probléma került elõ a munka során, mellyel terjedelmi okokból
+nem foglalkoztam, de a jövõben még foglalkozni lehetne. A
+legfontosabbak:
+
+\begin{itemize}
+\item A felhasználói felületet le lehetne cserélni egy grafikus verzióra.
+\item A szenzorok és terminálok jelenleg a beállítási file-jukba
+drótozott központokhoz csatlakoznak. Ezt automatizálni lehetne, például
+ha feltételezhetnénk, hogy a rendszer alapértelmezett átjárója egyben
+egy központ is, vagy ha egy újabb elemet vezetnénk be, amely az
+alapértelmezett átjárón fut, és a központok naprakész listáját
+szolgáltatná.
+\item A mért adatokat jelenleg nem tároljuk semmilyen módon, egy Mnesia
+vagy valamilyen SQL adatbázisban való tárolásnak számtalan elõnye lenne.
+\item A központ is kaphatna felhasználói felületet, ahol az egyes
+eszközöket a tervezés fejezetben ismertetett módon engedélyezni lehetne.
+\item A rendszer mûködésének demonstrálása sokkal látványosabb lehetne
+valódi szenzorokkal. Az elõzõ félév során az önálló laboratóriumi munka
+keretében készült egy vérnyomásmérõhöz Erlang driver, célszerû lenne azt
+integrálni ebbe a rendszerbe.
+\end{itemize}

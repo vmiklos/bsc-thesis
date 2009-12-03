@@ -84,14 +84,14 @@ míg explicit esetben mindig csak egy végpont kap értesítést.
 Egy érdekes probléma annak a jelenségnek a kezelése, mely olyan
 szenzorok integrálásakor merül fel, melyek folyamatosan mérnek. Ezeket
 tehát nem lehet explicit módon lekérdezni, viszont az összes mért adat
-implicit közlése indokolatlanul nagy hálóhati forgalmat generálna. Ezt a
+implicit közlése indokolatlanul nagy hálózati forgalmat generálna. Ezt a
 problémát úgy küszöbölhetjük ki -- ezáltal ezt a szenzor-típust
 beillesztve a fenti két szenzor-kategóriába --, hogy a mûszer elé
 teszünk egy modult, mely mindig tárolja az utoljára mért értéket. Így a
 legutóbbi mért adat explicit módon bárkinek bármilyen idõpontban
 elérhetõvé válik.
 
-Egy másik tulajdonság, melyben a szenszorok különbözhetnek a
+Egy másik tulajdonság, melyben a szenzorok különbözhetnek a
 vezérelhetõség.
 
 Például egy hõmérõ esetében a legtöbbször nincs mit vezérelni, ellenben
@@ -147,12 +147,12 @@ hogyan kell kezelni.
 
 Az elõzõ alfejezet címe kapcsán a dinamizmus szóról még egy jelenség
 juthat eszünkbe: amíg mûködik addig jó, de ha valami gond van a
-rendszerrel, akkor bajban vagyunk, hiszen egy dimanikusan mûködõ
+rendszerrel, akkor bajban vagyunk, hiszen egy dinamikusan mûködõ
 rendszerben hibát keresni nem kellemes feladat. Ha tovább keressük a
 problémákat a dinamizmussal, akkor felmerül az a kérdés is, hogy milyen
 biztonsági kockázatokat hozunk be ezzel a rendszerbe.
 
-A két probléma részben összefügg, de valójában független. Az inteligens,
+A két probléma részben összefügg, de valójában független. Az intelligens,
 plug-and-play rendszerekre valós igény van idõs embereknél, hiszen õk
 nem szakemberek, így nem várható el, hogy hosszabb tanulás elõzi meg a
 rendszer használatát. Tekintve, hogy elsõsorban õértük jött létre a
@@ -161,13 +161,13 @@ rendszer, ezt nem hagyhatjuk figyelmen kívül. A másik cél -- a rendszer
 alatt legyen a rendszer, kézzel állítva mindent, hogy a nem várt
 eseményeket elkerüljük. Sajnos a két célt nem lehet kifogástalanul
 teljesíteni egyszerre, de találhatunk olyan kompromisszumos megoldást,
-mely mindkét fél türéshatárán belül helyezkedik el.
+mely mindkét fél tûréshatárán belül helyezkedik el.
 
-A biztonság kérdése annyiben kapcsolódik az elõzõ problémához, hogy egy
+A biztonság kérdése annyiban kapcsolódik az elõzõ problémához, hogy egy
 biztonságos rendszer egyik alapfeltétele, hogy minden, a rendszer
 számára érdekes objektum azonosítva legyen, ami jelen esetben azt
 jelentené, hogy a felhasználók és az eszközök is valamilyen
-authentikációs mechanizmus teljesítése után válhassanak csak a rendszer
+autentikációs mechanizmus teljesítése után válhassanak csak a rendszer
 részévé. Ez problémát jelenthet például egy idõs embernél, aki
 telefonálni se tud, mikor elesett, nem hogy jelszavakat megadni, mielõtt
 értesítené a központot. Ezzel ellentétes igény, hogy ne helyezhessen el
@@ -193,7 +193,7 @@ engedélyezhet más eszközöket.)
 \end{itemize}
 
 Ezekkel a feltételekkel idõs emberek is könnyen integrálhatnak új,
-gyárilag a rendszerrel kompatibilisnak tervezett eszközöket a
+gyárilag a rendszerrel kompatibilisnek tervezett eszközöket a
 rendszerbe, anélkül, hogy potenciális biztonsági réseket hagynánk abban.
 
 Összehasonlításképpen megemlítjük, hogy hasonló jellegû probléma merül
@@ -237,8 +237,8 @@ nincs is szükség komolyabb erõfeszítésekre.
 \subsection{Erlang és UML}
 
 A rendszer tervezésekor formális jelölésrendszerként az UML (Unified
-Modeling Language) jelöléseit használjuk. Az UML elõsorban
-objektumorientált környezetbe készült, mig Joe Armstrong\cite{armstrong}
+Modeling Language) jelöléseit használjuk. Az UML elsõsorban
+objektumorientált környezetbe készült, míg Joe Armstrong\cite{armstrong}
 szerint az Erlang valójában nem objektumorientált nyelv, így a
 jelölésrendszer nem használható magyarázat nélkül.
 
@@ -261,7 +261,7 @@ számolunk egy külsõ adatbázissal.
 \end{itemize}
 
 A következõ alfejezetekben tehát az elõzõ alfejezetben kifejtett fõ
-szompontokat pontosítjuk, az UML jelöléseit használva.
+szempontokat pontosítjuk, az UML jelöléseit használva.
 
 \subsection{Az elemek katalógusa}
 
@@ -272,7 +272,7 @@ A rendszer tehát a következõ elemekbõl fog állni:
 \item Center: olyan csomópont, mely központ
 \item Endpoint: olyan csomópont, mely végpont
 \item Sensor: olyan végpont, mely elsõsorban üzeneteket küld
-\item Terminal: olyan végpont, mely elõsorban üzeneteket fogad
+\item Terminal: olyan végpont, mely elsõsorban üzeneteket fogad
 \item Message: a csomópontok közötti üzenetek formátumát definiálja
 \item Driver: a letölthetõ eszközmeghajtók interfészét definiálja
 \end{itemize}
@@ -307,7 +307,7 @@ továbbítja az üzeneteket, nem tényleges feladó vagy címzett.
 
 \item Változók:
 
-Sensors -- Regisztált szenzorok név-cím párjait tartalmazó lista
+Sensors -- Regisztrált szenzorok név-cím párjait tartalmazó lista
 
 Subscriptions -- Nevekre feliratkozott terminálok név-cím párjait
 tartalmazó lista
@@ -526,7 +526,7 @@ hatására mindkét szenzor jelez.
 
 Explicit lekérdezés esetén a terminál elõször a központhoz fordul a
 szenzor címéért, majd a címnek birtokában közvetlenül a szenzornak küld
-üzenetet az adatok lekérdeze céljából.
+üzenetet az adatok lekérdezése céljából.
 
 \subsubsection*{Eszköz engedélyezése}
 

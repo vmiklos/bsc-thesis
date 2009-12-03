@@ -29,24 +29,24 @@ Az életviteli rendszerbe kapcsolt infokommunikációs eszközök tehát
 elsõsorban abban különböznek a hagyományos társaiktól, hogy az azokat
 használó ember felé minimális elvárásokat támasztanak. Egy vérnyomásmérõ
 esetén a legjobb, ha maga az eszköz tudja, hogy mikor kell a mérést
-elvégezni, és erre figyelmeztetni az illetõt. Mikor a mérés elkészült,
-hogy akkor nem szerencsés, ha a mérési eredményt a betegnek kell kézzel
-rögzítenie, helyette maga a mûszer rendelkezzen saját memóriával, melyet
-vagy azonnal vagy késõbb valamilyen adatbázisba küld. Ezen kívül fontos
-szempont, hogy a kezelés minél egyszerûbb legyen.
+elvégezni, és erre figyelmeztetni az illetõt. Nem szerencsés, ha a mérés
+elkészülte után a mérési eredményt a betegnek kell kézzel rögzítenie,
+jobb ha maga a mûszer rendelkezik saját memóriával, melyet azonnal vagy
+késõbb valamilyen adatbázisba küld. Ezen kívül fontos szempont, hogy a
+kezelés minél egyszerûbb legyen.
 
-Például egy mérleg esetén a legjobb, ha a ráhelyezett súly nyomóereje
-stabilizálódik akkor automatikusan rögzíti a mérési eredményt, ne
-kelljen erre kézzel utasítani.
+Például egy mérleg esetén a legjobb, ha a ráhelyezett súly nyomóerejének
+stabilizálódása esetén automatikusan rögzíti a mérési eredményt, és nem
+kell erre kézzel utasítani.
 
 Az ezzel szemben álló technikai probléma viszont, hogy az eszközök
 tipikusan kevés információt árulnak el magukról, így az automatikus
 beállítás abban az esetben, ha az eszköz még korábban nem volt a rendszer
 része, igencsak nehézkes. Ezen segíthetünk, ha megengedjük, hogy ne
 közvetlenül az eszközökkel kommunikáljon a rendszer, hanem az egyes
-mûszerekhez készítünk illesztõket, és azt a célt tûzzük ki, hogy minden
-(de csak olyan) eszközökkel akarunk együttmûködni, melyek fel vannak
-készítve a mi rendszerünkben való mûködésre.
+mûszerekhez készítünk illesztõket, és azt a célt tûzzük ki, hogy csak
+olyan eszközökkel akarunk együttmûködni, melyek fel vannak készítve a mi
+rendszerünkben való mûködésre.
 
 Ezzel elérhetõvé válhat az a használati eset, mikor a vásárló meglátja a
 boltban egy eszközön egy rendszer emblémáját, hazaviszi a terméket, és
@@ -63,8 +63,8 @@ valamilyen kommunikációs keretrendszert, tehát az ilyen irányú elérhetõ
 alternatívákat érdemes mérlegelni, figyelembe véve, hogy milyen igényeink
 vannak, és milyen funkcionalitást nyújtanak az egyes jelenleg elérhetõ
 implementációk. Másrészt érdemes azt is tanulmányozni, hogy ezekre a
-keretrendszerekre milyen jelenleg is mûködõ és elérhetõ életviteli
-rendszerek készültek el.
+keretrendszerekre építkezve milyen jelenleg is mûködõ és elérhetõ
+életviteli rendszerek készültek el.
 
 Arra sajnos már elõre fel kell készülni, hogy jelenleg még nem érhetõ el
 nyílt szabvány életviteli rendszerekkel kapcsolatban, illetve
@@ -72,8 +72,7 @@ esetlegesen jövõbeli ilyen rendszerhez készítendõ mûszerekhez, így a
 jelenleg rendelkezésre álló rendszerek sem használhatnak ilyet,
 következésképp kevés információt tudhatunk meg róluk. Ennek ellenére
 célunk felfedni ezen rendszerek elõnyeit és hátrányait, hogy egy új
-rendszer tervezésekor a korábbiak példájából tanulva, ne kövessük el
-ugyanazon hibákat újfent.
+rendszer tervezésekor a korábbiak példájából tanulva tudjunk mérlegelni.
 
 A jelenleg használt életviteli rendszerekben használt keretrendszerek
 tanulmányozásával nem célunk tanulni azok hibáiból, hiszen a jelenlegi
@@ -89,11 +88,12 @@ igyekszünk megmutatni, majd ezen elemzés figyelembevételével nekikezdeni
 a saját, Erlang alapú rendszer tervezésének.
 
 Fontos leszögezni, hogy a jelen munka tárgya elsõsorban az életviteli
-rendszer megalkotásához szükséges köztes réteg (middleware) megalkotása
-Erlang környezetben. Terjedelmi okokból egy teljes életviteli rendszer
-megvalósítására sajnos nem térhetünk ki, de megvizsgálunk néhány
-jelenleg is elérhetõ megoldást, így reális képet kaphatunk arról, hogy a
-tervezett rendszer milyen is lenne teljesen megvalósított állapotában.
+rendszer megalkotásához szükséges köztes réteg (middleware) tervezése és
+elkészítése Erlang környezetben. Terjedelmi okokból egy teljes
+életviteli rendszer megvalósítására sajnos nem térhetünk ki, de
+megvizsgálunk néhány jelenleg is elérhetõ megoldást, így reális képet
+kaphatunk arról, hogy a tervezett rendszer milyen is lenne teljesen
+megvalósított állapotában.
 
 A számunkra szükséges funkcionalitást nyújtó keretrendszerre jó példa az
 OSGi\cite{osgi}, mely Java nyelven készült és sok olyan problémára nyújt
@@ -242,18 +242,18 @@ az Erlang környezet által nyújtott funkcionalitás megítéléséhez.
 
 \subsubsection*{RPC}
 
-Az egyik legelsõ\cite{rpc1} ilyen megoldást a Sun cég specifikálta ki
+Az egyik legelsõ\cite{rpc1} ilyen megoldást a Sun cég specifikálta
 1988-ban. A szabványt ma is aktívan használják, (e munka írásának
 pillanatában) legutolsó verzióját\cite{rpc2} 2009-ben adták ki. A
 megcélzott probléma a következõ: adott egy C függvény, és szeretnénk azt
 transzparens módon meghívni, de úgy, hogy az egy másik gépen fusson le.
 Tehát a kliens oldalon kell egy csonk (stub), mely azonos interfésszel
 rendelkezik, mint az eredeti függvény, de az implementáció magában
-foglalja a távoli kiszolgálóhoz való csatlakozást, a távoli kódfuttatást,
-valamint az eredmény lekérését. A kiszolgáló oldalán szintén szükség
-van egy csonk függvényre, mely lehetõvé teszi, hogy az RPC kiszolgáló
-kérés esetén meghívja a tényleges implementációját a függvénynek. A
-távoli eljáráshíváshoz egy interfészt kell definiálni egy
+foglalja a távoli kiszolgálóhoz való csatlakozást, a távoli
+kódfuttatást, valamint az eredmény lekérését. A kiszolgáló oldalán
+szintén szükség van egy csonk függvényre, mely lehetõvé teszi, hogy az
+RPC kiszolgáló kérés esetén meghívja a tényleges implementációját a
+függvénynek. A távoli eljáráshíváshoz egy interfészt kell definiálni egy
 interfész-leíró nyelvvel (Interface Description Language, IDL), majd
 ebbõl a csonkok generálhatóak például az \emph{rpcgen} programmal.
 
@@ -291,7 +291,7 @@ tehát lehetõvé tegye közöttük a távoli eljáráshívást. Fontos újdonság
 még benne, hogy teljes mértékben hordozható.
 
 Az interfész megadása itt is IDL segítségével történik, viszont az is a
-szabvány része, hogy az IDL-t, hogyan kell leképezni számos nyelvre.
+szabvány része, hogy az IDL-t hogyan kell leképezni számos nyelvre.
 Természetesen ezen kívül az elõre meghatározott nyelv-listán kívül is
 még több nyelvhez elérhetõ a CORBA, de ott az implementáció már nem
 szabványosított.
@@ -306,7 +306,7 @@ hasonló feladatokat ellátni.
 \subsubsection*{XML-RPC}
 
 Végezetül megemlítjük az XML-RPC\cite{xmlrpc} szabványt, mely HTTP
-protokoll felett, XML használatával oldja meg a távoli eljáráshívást. Az
+protokoll felett, XML használatával oldja meg a távoli eljáráshívást. Ez
 a megközelítés rendkívül népszerû napjainkban webszolgáltatások esetén,
 valamint a Microsoft által a DCOM leváltására megalkotott WCF (Windows
-Communications Framework) is belül XML-RPC-t használ.
+Communications Framework) is XML-RPC-t használ belül.

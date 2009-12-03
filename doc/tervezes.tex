@@ -108,7 +108,7 @@ passzív, mint például egy képernyõ, vagy aktív, például egy
 mobiltelefon. Az aktív terminálok reagálhatnak egy-egy üzenetre, míg a
 passzívok csak tájékoztató üzeneteket képesek megjeleníteni.
 
-Egy gyakorlati példa például, hogy a tûzjelzõ jelez a központnak, a
+Egy használati eset például, hogy a tûzjelzõ jelez a központnak, a
 központ továbbítja az üzenetet egy telefonra, ott a célszemély egy
 üzenetet küld a tûzjelzõt tartalmazó lakás ajtajában lévõ zárnak, hogy
 az adja meg az állapotát, az válaszol közvetlenül a telefonra, hogy
@@ -132,8 +132,8 @@ mûködéséhez.
 Amire viszont elsõ körben nem biztos, hogy gondolnánk, az az, hogy a
 központoknak különbözõ típusú szenzorokat kell kezelniük, és ez
 korántsem egyszerû feladat. A probléma az, hogy minden szenzor más módon
-hajlandó adatokat szolgáltatni. Még ha feltételezzük, hogy minden
-szenzor egy Erlang csomópont is, akkor is más üzenetet kell küldeni egy
+hajlandó adatokat szolgáltatni. Még ha feltételezzük is, hogy minden
+szenzor egy Erlang csomópont, akkor is más üzenetet kell küldeni egy
 hõmérõnek (például \texttt{getTermperature()}), és mást egy
 vérnyomásmérõnek (például \texttt{getBloodPressure()}). Ezek egységes
 kezeléséhez a központban driverek szükségesek.
@@ -185,8 +185,8 @@ akinek van is jogosultsága ehhez.
 rendelkezik, melyet nem tud megváltoztatni.
 	\item A kommunikációra használt csatorna biztonságos. (Vagy
 titkosított, vagy zárt a hálózat.)
-	\item A központokhoz ha új szenzor vagy terminál próbál
-csatlakozni, akkor azt elsõ alkalommal ezt a központban jóvá kell
+	\item Ha a központokhoz új szenzor vagy terminál próbál
+csatlakozni, akkor azt elsõ alkalommal a központban jóvá kell
 hagyni. Legalább az elsõ végpont jóváhagyását fizikailag a központban
 kell elvégezni. (Innentõl az engedélyezett eszköz távolról is
 engedélyezhet más eszközöket.)
@@ -215,14 +215,17 @@ felhasználói interakció nélkül soha nem kerül sor.
 
 \subsubsection{Határok}
 
-A fõ követelmények áttekintésének végén megjegyezzük azt, amire már a bevezetõben is utaltunk: jelen munka célja egy életviteli rendszer köztes rétegének kidolgozása. Szándékosan nem foglalkozunk tehát a következõkkel:
+A fõ követelmények áttekintésének végén megjegyezzük azt, amire már a
+bevezetõben is utaltunk: jelen munka célja egy életviteli rendszer
+köztes rétegének kidolgozása. Szándékosan nem foglalkozunk tehát a
+következõkkel:
 
 \begin{itemize}
 \item Skálázhatósági kérdésekkel. A rendszerben típusonként kis számú
 elem található meg, kisebb finomítások szükségesek lehetnek ha a
 rendszert típusonként nagyságrendekkel több elemmel használjuk, ezekre
 nem térünk ki.
-\item Felhasználói felülettel. Az egyszerûség kedvéért az összes
+\item Felhasználói felület. Az egyszerûség kedvéért az összes
 csomópont a standard kimenetre (stdout) írja az üzeneteit. Egy tényleges
 rendszerben ezt célszerû valamilyen felhasználóbarátabb grafikus vagy
 webes felületre cserélni.

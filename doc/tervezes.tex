@@ -1,17 +1,17 @@
-\section{Az Erlang életviteli rendszer terve}
+\section{Az Erlang-alapú életviteli rendszer terve}
 
 Az általunk tervezett életviteli rendszer legfontosabb ismérve tehát az
 lesz, hogy Erlang környezetben valósítjuk meg. Ezen fejezet célja
-specifikálni a követelményrendszert, és ezen specifikációnak néhány
+specifikálni a követelményrendszert, és e specifikáció néhány
 jellegzetes elemét fogjuk megvalósítani a következõ fejezetben.
 
 \subsection{Fõ követelmények}
 
 \subsubsection{Elosztottság}
 
-Elosztott rendszert tervezünk, mely alatt jelen esetben azt értjük, hogy
+Elosztott rendszert tervezünk, ez a jelen esetben azt jelenti, hogy
 nincs központi eleme a rendszernek, és ez által nincsen egyetlen olyan
-elem se, amely meghibásodása esetén az egész rendszer leállna. Egy
+elem sem, amelynek a meghibásodása esetén az egész rendszer leállna. Egy
 egyszerû példa: az idõs ember elhagyja az ágyát, majd a lakását is, és
 megadott idõn belül nem tér vissza. Két szenzor is jelez a türelmi idõ
 letelte után. A rendszer lehetõséget ad arra, hogy egy szenzor több
@@ -33,7 +33,7 @@ A redundancián, mint az életviteli rendszerek szempontjából a leginkább
 szembetûnõ elõnyön kívül azonban más pozitívumai is lehetnek egy
 elosztott rendszernek. Említésre méltó, hogy a terminálok akár
 leválasztott (hálózati kapcsolat nélküli) állapotban is hozzáférnek a
-korábban megkapott üzenetekhez, valamint ha ezek között keresni akarnak
+korábban megkapott üzenetekhez, valamint ha ezek között keresni akarnak,
 az szintén gyorsabb lesz, mint egy központosított rendszer esetén,
 hiszen nem kell hálózati késleltetéssel számolni.
 
@@ -41,7 +41,7 @@ hiszen nem kell hálózati késleltetéssel számolni.
 
 \paragraph*{Csomópontok}
 
-Ebbõl következõen a rendszer \emph{csomópontokból} épül fel. A
+Elosztott rendszer lévén a rendszer \emph{csomópontokból} épül fel. A
 csomópontoknak két fontosabb fajtáját különböztetjük meg: a
 \emph{központokat} és a \emph{végpontokat}.
 
@@ -51,12 +51,12 @@ Egy központ bekapcsolás után nem tesz semmit, csak vár arra, hogy
 végpontok keressék. Ha egy végpont központot keres, akkor válaszol. Ha
 egy végpont regisztrál, akkor nevet ad neki, és erre a névre más
 végpontok feliratkozhatnak. Ilyen módon a végpont úgy küldhet üzenetet,
-hogy nem tudja, hogy pontosan ki fogja megkapni. Ténylegesen csak a
+hogy nem tudja, pontosan ki fogja megkapni. Ténylegesen csak a
 központnak küldi el, majd a központ küldi tovább a feliratkozott
 végpontoknak.
 
 A központ nem rejti el az eredeti feladót, az üzenetet kapott végpontnak
-lehetõsége van válaszolni az eredeti feladónak, abban az esetben ha
+lehetõsége van válaszolni az eredeti feladónak, ha
 például döntés szükséges. Ebben az esetben az üzenet közvetlenül kerül
 átvitelre a két végpont között, központok igénybevétele nélkül.
 
@@ -68,30 +68,31 @@ a szenzor címérõl.
 
 \paragraph*{Végpontok}
 A végpontok bekapcsolás után szórt üzenetet küldenek, majd várnak, amíg
-legalább egy központ válaszol a kérésre.
+legalább egy központ válaszol a kérésre.  A végpontoknak két fajtáját
+különböztetjük meg. Ezek egymástól sokkal inkább logikailag, mintsem
+technikailag különböznek.
 
 \paragraph*{Szenzorok}
-A végpontoknak két fajtáját különböztetjük meg. Ezek egymástól sokkal
-inkább logikailag, mintsem technikailag különböznek. A \emph{szenzorok}
-olyan érzékelõk, melyek a környezetrõl szolgáltatnak információt. Ez az
-információ-adás lehet implicit vagy explicit. Implicit eset alatt azt
-értjük, ha például egy hõmérõ a mért hõmérsékletet óránként elküldi az
-általa ismert központoknak. Explicit esetben viszont egy másik végpont
-kérésére, közvetlenül a másik végpontnak bármikor elküldheti a kért
-adatot. Láthatjuk, hogy az implicit esetet nem elõzi meg kérés-üzenet,
-míg explicit esetben mindig csak egy végpont kap értesítést.
+A \emph{szenzorok} olyan érzékelõk, melyek a környezetrõl szolgáltatnak
+információt. Ez az információ-adás lehet implicit vagy explicit.
+Implicit esetben azt értjük, ha például egy hõmérõ a mért
+hõmérsékletet óránként elküldi az általa ismert központoknak. Explicit
+esetben viszont egy másik végpont kérésére, közvetlenül a másik
+végpontnak bármikor elküldheti a kért adatot. Láthatjuk, hogy az
+implicit esetet nem elõzi meg kérés-üzenet, míg explicit esetben mindig
+csak egy végpont kap értesítést.
 
 Egy érdekes probléma annak a jelenségnek a kezelése, mely olyan
 szenzorok integrálásakor merül fel, melyek folyamatosan mérnek. Ezeket
-tehát nem lehet explicit módon lekérdezni, viszont az összes mért adat
-implicit közlése indokolatlanul nagy hálózati forgalmat generálna. Ezt a
+nem lehet explicit módon lekérdezni, viszont az összes mért adat
+implicit közlése indokolatlanul nagy hálózati forgalmat és adatmennyiséget generálna. Ezt a
 problémát úgy küszöbölhetjük ki -- ezáltal ezt a szenzor-típust
 beillesztve a fenti két szenzor-kategóriába --, hogy a mûszer elé
 teszünk egy modult, mely mindig tárolja az utoljára mért értéket. Így a
 legutóbbi mért adat explicit módon bárkinek bármilyen idõpontban
 elérhetõvé válik.
 
-Egy másik tulajdonság, melyben a szenzorok különbözhetnek a
+Egy másik tulajdonság, melyben a szenzorok különbözhetnek, a
 vezérelhetõség.
 
 Például egy hõmérõ esetében a legtöbbször nincs mit vezérelni, ellenben
@@ -103,24 +104,24 @@ A \emph{terminálok} olyan végpontok, melyek elsõsorban üzenetek
 fogadására hivatottak, tehát bekapcsolás után keresnek legalább egy
 központot, valamint vagy elõre beállított, vagy a felhasználó által
 interaktívan beállítható módon feliratkoznak a központ(ok)
-névszolgáltatása által adott eseményekre. A terminálok között lehet
+névszolgáltatása által adott eseményekre. A terminál lehet
 passzív, mint például egy képernyõ, vagy aktív, például egy
 mobiltelefon. Az aktív terminálok reagálhatnak egy-egy üzenetre, míg a
 passzívok csak tájékoztató üzeneteket képesek megjeleníteni.
 
-Egy használati eset például, hogy a tûzjelzõ jelez a központnak, a
+Egy lehetséges szcenárió például a következõ: a tûzjelzõ jelez a központnak, a
 központ továbbítja az üzenetet egy telefonra, ott a célszemély egy
 üzenetet küld a tûzjelzõt tartalmazó lakás ajtajában lévõ zárnak, hogy
 az adja meg az állapotát, az válaszol közvetlenül a telefonra, hogy
 zárva van, majd a célszemély úgy dönt, hogy ez az állapot nem kívánatos,
 és egy olyan vezérlõ-üzenetet küld a zárnak, hogy az nyíljon ki. Ez a
 folyamat akár meg is mentheti egy idõs ember életét, aki nem képes a
-nagy füstben kinyitni az zárat, ellenben az egyszerûen kilinccsel
+nagy füstben kinyitni a zárat, ellenben az egyszerûen kilinccsel
 nyitható ajtón keresztül már képes elhagyni a lakást.
 
 \subsubsection{Dinamizmus}
 
-Volt már szó arról, hogy értelemszerûen minden csomópont futási idõben
+Volt már szó arról, hogy minden csomópont futási idõben
 képes változtatni azon csomópontok listáját, amelyekkel kommunikálni
 képes. Központok esetén ez azt jelenti, hogy egy új szenzor
 regisztrációjakor nem kell a rendszert újraindítani, a végpontok pedig
@@ -133,33 +134,33 @@ Amire viszont elsõ körben nem biztos, hogy gondolnánk, az az, hogy a
 központoknak különbözõ típusú szenzorokat kell kezelniük, és ez
 korántsem egyszerû feladat. A probléma az, hogy minden szenzor más módon
 hajlandó adatokat szolgáltatni. Még ha feltételezzük is, hogy minden
-szenzor egy Erlang csomópont, akkor is más üzenetet kell küldeni egy
+szenzor egyben Erlang csomópont is, akkor is más üzenetet kell küldeni egy
 hõmérõnek (például \texttt{getTermperature()}), és mást egy
 vérnyomásmérõnek (például \texttt{getBloodPressure()}). Ezek egységes
-kezeléséhez a központban driverek szükségesek.
+kezeléséhez a központban meghajtóprogramok szükségesek.
 
-A megoldás tehát az lesz, hogy minden szenzor-típus egy egyedi
+A megoldás az, hogy minden szenzortípus egyedi
 azonosítóval rendelkezik, ezt elküldi a központnak, a központ az
-azonosító alapján letölt egy drivert, betölti, és onnantól tudja, hogy
+azonosító alapján letölt egy meghajtóprogramot, betölti, és onnantól tudja, hogy
 hogyan kell kezelni.
 
 \subsubsection{Biztonság}
 
-Az elõzõ alfejezet címe kapcsán a dinamizmus szóról még egy jelenség
-juthat eszünkbe: amíg mûködik addig jó, de ha valami gond van a
+Az elõzõ alfejezet címérõl, a dinamizmus szóról még egy jelenség
+juthat eszünkbe: amíg mûködik, addig jó, de ha valami gond van a
 rendszerrel, akkor bajban vagyunk, hiszen egy dinamikusan mûködõ
 rendszerben hibát keresni nem kellemes feladat. Ha tovább keressük a
 problémákat a dinamizmussal, akkor felmerül az a kérdés is, hogy milyen
 biztonsági kockázatokat hozunk be ezzel a rendszerbe.
 
-A két probléma részben összefügg, de valójában független. Az intelligens,
-plug-and-play rendszerekre valós igény van idõs embereknél, hiszen õk
+A két probléma látszólag összefügg, de valójában független. Az intelligens,
+plug-and-play rendszerekre valós igény van, különösen idõs emberek esetében, hiszen õk
 nem szakemberek, így nem várható el, hogy hosszabb tanulás elõzi meg a
-rendszer használatát. Tekintve, hogy elsõsorban õértük jött létre a
+rendszer használatát. Tekintve, hogy elsõsorban õértük jön létre a
 rendszer, ezt nem hagyhatjuk figyelmen kívül. A másik cél -- a rendszer
-üzemeltetõinek szemszögébõl -- természetesen, hogy minél inkább kontroll
-alatt legyen a rendszer, kézzel állítva mindent, hogy a nem várt
-eseményeket elkerüljük. Sajnos a két célt nem lehet kifogástalanul
+üzemeltetõinek szemszögébõl -- természetesen az, hogy minél inkább kontroll
+alatt legyen a rendszer, manuálisan beállítva a paramétereket, hogy a nem várt
+viselkedést elkerüljük. Sajnos a két célt nem lehet kifogástalanul
 teljesíteni egyszerre, de találhatunk olyan kompromisszumos megoldást,
 mely mindkét fél tûréshatárán belül helyezkedik el.
 
@@ -169,7 +170,7 @@ számára érdekes objektum azonosítva legyen, ami jelen esetben azt
 jelentené, hogy a felhasználók és az eszközök is valamilyen
 autentikációs mechanizmus teljesítése után válhassanak csak a rendszer
 részévé. Ez problémát jelenthet például egy idõs embernél, aki
-telefonálni se tud, mikor elesett, nem hogy jelszavakat megadni, mielõtt
+telefonálni se tud, mikor elesett, nemhogy jelszavakat megadni, mielõtt
 értesítené a központot. Ezzel ellentétes igény, hogy ne helyezhessen el
 bárki egy terminált az ablakunk alatt, mely azonnal értesíti a támadót,
 ahogy elhagytuk a lakást.
@@ -221,17 +222,17 @@ köztes rétegének kidolgozása. Szándékosan nem foglalkozunk tehát a
 következõkkel:
 
 \begin{itemize}
-\item Skálázhatósági kérdésekkel. A rendszerben típusonként kis számú
-elem található meg, kisebb finomítások szükségesek lehetnek ha a
+\item Skálázhatósági kérdések. A rendszerben típusonként kis számú
+elem található meg, kisebb finomítások szükségesek lehetnek, ha a
 rendszert típusonként nagyságrendekkel több elemmel használjuk, ezekre
 nem térünk ki.
 \item Felhasználói felület. Az egyszerûség kedvéért az összes
 csomópont a standard kimenetre (stdout) írja az üzeneteit. Egy tényleges
 rendszerben ezt célszerû valamilyen felhasználóbarátabb grafikus vagy
 webes felületre cserélni.
-\item Távoli karbantartás. A driverek automatikus letöltésén kívül egyéb
+\item Távoli karbantartás. A meghajtók automatikus letöltésén kívül egyéb
 automatikus kód-letöltéssel nem foglalkozunk, de megjegyezzük, hogy a
-driver-letöltéshez hasonló módon az egyes csomópontok teljes szoftverét
+meghajtó-letöltéshez hasonló módon az egyes csomópontok teljes szoftverét
 frissíthetõvé lehetne tenni. Az Erlang rendszer használata esetén --
 ahol futás közben lehet modulokat betölteni vagy frissíteni -- ehhez
 nincs is szükség komolyabb erõfeszítésekre.
@@ -241,8 +242,8 @@ nincs is szükség komolyabb erõfeszítésekre.
 
 A rendszer tervezésekor formális jelölésrendszerként az UML (Unified
 Modeling Language) jelöléseit használjuk. Az UML elsõsorban
-objektumorientált környezetbe készült, míg Joe Armstrong\cite{armstrong}
-szerint az Erlang valójában nem objektumorientált nyelv, így a
+objektumorientált rendszerek tervezésére készült, míg Joe Armstrong\cite{armstrong}
+szerint az Erlang nem objektumorientált nyelv, így a
 jelölésrendszer nem használható magyarázat nélkül.
 
 Anélkül, hogy általános megfeleltetést állítanánk fel az
@@ -251,15 +252,15 @@ elemek között, a jelen életviteli rendszer tervezése során a
 következõket feltételezzük:
 
 \begin{itemize}
-\item Az objektumok az Erlang rendszerben Erlang processek lesznek.
-\item Ha egy Erlang process üzenetet kap, és az üzenet típusa szerint az
-üzenetre más-más módon reagál azt megfeleltethetjük az objektumok
+\item Az objektumok az Erlang rendszerben Erlang processzek lesznek.
+\item Ha egy Erlang processz üzenetet kap, és az üzenet típusa szerint az
+üzenetre más-más módon reagál, azt megfeleltethetjük az objektumok
 metódusainak.
-\item Szekvenciadiagramok esetén objektumok létrehozása alatt
-\texttt{spawn()} hívásokat értünk, metódushívás alatt pedig adott típusú
+\item Szekvenciadiagramok esetén objektumok létrehozásán
+\texttt{spawn()} hívásokat értünk, metódushíváson pedig adott típusú
 üzenet küldését.
-\item Állapotdiagramok esetén az egyes Erlang processek életciklusát
-értjük, hiszen az Erlangban nincsenek tényleges változók, hacsak nem
+\item Állapotdiagramok esetén az egyes Erlang processzek életciklusát
+értjük, hiszen az Erlangban nincsenek frissíthetõ változók, hacsak nem
 számolunk egy külsõ adatbázissal.
 \end{itemize}
 
@@ -287,7 +288,7 @@ A rendszer tehát a következõ elemekbõl fog állni:
 \begin{itemize}
 \item Leírás:
 
-Egy Erlang processt jelöl, mely egyedi, nem megváltoztatható
+Egy Erlang processzt jelöl, mely egyedi, nem megváltoztatható
 azonosítóval rendelkezik.
 
 \item Változók:
@@ -296,7 +297,7 @@ Id -- Egyedi azonosító, mely nem változtatható meg.
 
 \item Szolgáltatások:
 
-ping() -- Egy pong atommal válaszol, jelezve, hogy a process fut.
+ping() -- Egy pong atommal válaszol, jelezve, hogy a processz fut.
 \end{itemize}
 
 \subsubsection*{Center}
@@ -304,30 +305,30 @@ ping() -- Egy pong atommal válaszol, jelezve, hogy a process fut.
 \begin{itemize}
 \item Leírás:
 
-Olyan Node-ot jelöl, melybe regisztrálhatnak szenzorok
+Olyan Node-ot jelöl, melybe regisztrálhatnak szenzorok,
 valamint a regisztrált nevekre feliratkozhatnak terminálok. Csak
 továbbítja az üzeneteket, nem tényleges feladó vagy címzett.
 
 \item Változók:
 
-Sensors -- Regisztrált szenzorok név-cím párjait tartalmazó lista
+Sensors -- Regisztrált szenzorok név-cím párjait tartalmazó lista.
 
 Subscriptions -- Nevekre feliratkozott terminálok név-cím párjait
-tartalmazó lista
+tartalmazó lista.
 
 \item Szolgáltatások:
 
-start() -- Center indítása
+start() -- Center indítása.
 
-stop() -- Center leállítása
+stop() -- Center leállítása.
 
-reg(Address, Name) -- Sensor címének regisztrálása névként
+reg(Address, Name) -- Sensor címének regisztrálása névként.
 
-subscribe(Name, Address) -- Névre feliratkozás egy Terminal adott címével
+subscribe(Name, Address) -- Névre feliratkozás egy Terminal adott címével.
 
-lookup(Name) -- Sensor nevének feloldása címre
+lookup(Name) -- Sensor nevének feloldása címre.
 
-notify(Message) -- Message feladása továbbítás céljából
+notify(Message) -- Message feladása továbbítás céljából.
 \end{itemize}
 
 \subsubsection*{Endpoint}
@@ -343,9 +344,9 @@ Messages -- Beérkezett üzenetek listája.
 
 \item Szolgáltatások:
 
-start(Config) -- Endpoint indítása adott beállításokkal
+start(Config) -- Endpoint indítása adott beállításokkal.
 
-stop() -- Endpoint leállítása
+stop() -- Endpoint leállítása.
 \end{itemize}
 
 \subsubsection*{Sensor}
@@ -359,7 +360,7 @@ is.
 
 \item Változók:
 
-Centers -- Azon központok listája, melyeket értesíteni kell ha változott
+Centers -- Azon központok listája, melyeket értesíteni kell, ha változott
 a környezet.
 
 \item Szolgáltatások:
@@ -385,7 +386,7 @@ Centers -- Azon központok listája, melyekre fel kell iratkozni induláskor.
 
 \item Szolgáltatások:
 
-notify(Message) -- Üzenet átadása a terminál számára
+notify(Message) -- Üzenet átadása a terminál számára.
 \end{itemize}
 
 \subsubsection*{Message}
@@ -393,21 +394,21 @@ notify(Message) -- Üzenet átadása a terminál számára
 \begin{itemize}
 \item Leírás:
 
-Egy Erlang ennest jelöl, mely egy adat mellett tartalmazza azt, hogy
-az adat micsoda, kitõl jött, kinek megy és ki továbbította.
+Egy Erlang ennest jelöl, mely az adat mellett tartalmazza az adat
+típusát, feladóját, címzettjét, továbbítóját.
 
 \item Változók:
 
-data -- Egy szám, a mért érték vagy döntés.
+Data -- Egy szám, a mért érték vagy döntés.
 
-description -- Ha a szenzor több típusú értéket is mérne, ez mondja meg,
-hogy melyik típust jelöli az adat mezõ.
+Description -- Ha a szenzor több típusú értéket is mérne, ez mondja meg,
+hogy melyik típust jelöli a Data mezõ.
 
-from -- A feladót jelöli.
+From -- A feladót jelöli.
 
-to -- A címzettet jelöli.
+To -- A címzettet jelöli.
 
-receiver -- A központot jelöli.
+Receiver -- A központot jelöli.
 \item Szolgáltatások:
 
 Nincsenek.
@@ -418,13 +419,13 @@ Nincsenek.
 \begin{itemize}
 \item Leírás:
 
-Egy Erlang függvényt ír le, ezáltal lehetõvé téve, hogy különbözõ
-szenzorokat egységes interfészen kezeljünk. A drivernek megküldjük, hogy
+Egy Erlang függvényt ír le, lehetõvé téve, hogy különbözõ
+szenzorokat egységes interfészen át kezeljünk. Az eszközmeghajtónak megküldjük, hogy
 melyik Node hányadik funkcióját akarjuk lekérdezni/vezérelni, majd az
 megmondja a funkció nevét, amit már az eszköz megért.
 
 Például a \texttt{translate(sensor0@clevo.local, 0)} hatására az adott
-driver válasza lehet az \texttt{sugar}, mely egy vérnyomás- és
+meghajtó válasza lehet a \texttt{sugar}, mely egy vérnyomás- és
 vércukormérõ esetén a vércukor lekérdezését teszi lehetõvé.
 
 \item Változók:
@@ -436,29 +437,29 @@ translate(Node, Number) -- Megad egy atomot, melyet metódusnévként
 használhatunk ha a szenzort explicit módon akarjuk lekérdezni.
 \end{itemize}
 
-\subsection{Statikus struktúra diagram}
+\subsection{Statikus struktúradiagram}
 
-%A statikus struktúra diagram \aref{fig:statikus-struktura-diagram}.
+%A statikus struktúradiagram \aref{fig:statikus-struktura-diagram}.
 %ábrán a rendszer elemeirõl tárolt adatokat, azok összefüggéseit és
 %kapcsolatait mutatja.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=150mm,keepaspectratio]{statikus-struktura-diagram.eps}
-\caption{A rendszer statikus struktúra diagramja}\label{fig:statikus-struktura-diagram}
+\caption{A rendszer statikus struktúradiagramja}\label{fig:statikus-struktura-diagram}
 \end{figure}
 
-A statikus struktúra diagram a rendszer elemeirõl tárolt adatokat, azok
+A statikus struktúradiagram a rendszer elemeirõl tárolt adatokat, azok
 összefüggéseit és kapcsolatait mutatja.
 
-\subsection{Szekvencia diagramok}
+\subsection{Szekvenciadiagramok}
 
 \subsubsection*{Központ indulása}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=50mm,keepaspectratio]{kozpont-indulasa.eps}
-\caption{Szekvencia diagram: központ indulása}\label{fig:kozpont-indulasa}
+\caption{Szekvenciadiagram: központ indulása}\label{fig:kozpont-indulasa}
 \end{figure}
 
 Az ábrán látható, hogy a központot mindig a felhasználó helyezi üzembe,
@@ -472,20 +473,20 @@ szenzorok és feliratkozó terminálok mozdíthatják ki.
 \begin{figure}[H]
 \centering
 \includegraphics[width=75mm,keepaspectratio]{szenzor-regisztracioja.eps}
-\caption{Szekvencia diagram: szenzor regisztrációja}\label{fig:szenzor-regisztracioja}
+\caption{Szekvenciadiagram: szenzor regisztrációja}\label{fig:szenzor-regisztracioja}
 \end{figure}
 
 Az ábra mutatja, hogy a szenzor bekapcsolásakor már legalább egy
 központnak bekapcsolt állapotban kell lenni a rendszerben. Ekkor a
 szenzor regisztrál, majd a központ elküldi a címét, melyre a szenzor
-jelezhet ha az szükséges.
+jelezhet, ha az szükséges.
 
 \subsubsection*{Terminál regisztrációja}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=75mm,keepaspectratio]{terminal-regisztracioja.eps}
-\caption{Szekvencia diagram: terminál regisztrációja}\label{fig:terminal-regisztracioja}
+\caption{Szekvenciadiagram: terminál regisztrációja}\label{fig:terminal-regisztracioja}
 \end{figure}
 
 A terminál regisztrációja esetén is elõkövetelmény legalább egy központ
@@ -498,7 +499,7 @@ eseményekrõl.
 \begin{figure}[H]
 \centering
 \includegraphics[width=100mm,keepaspectratio]{uzenetkuldes-szenzorrol.eps}
-\caption{Szekvencia diagram: üzenetküldés szenzorról}\label{fig:uzenetkuldes-szenzorrol}
+\caption{Szekvenciadiagram: üzenetküldés szenzorról}\label{fig:uzenetkuldes-szenzorrol}
 \end{figure}
 
 Az ábra azt mutatja, hogy az üzenetküldés akkor értelmes, ha egy központ
@@ -511,12 +512,12 @@ központot értesíti, a központ pedig a terminált.
 \begin{figure}[H]
 \centering
 \includegraphics[width=120mm,keepaspectratio]{uzenetkuldes-szenzorrol-redundans-eset.eps}
-\caption{Szekvencia diagram: üzenetküldés szenzorról redundáns esetben}\label{fig:uzenetkuldes-szenzorrol-redundans-eset}
+\caption{Szekvenciadiagram: üzenetküldés szenzorról redundáns esetben}\label{fig:uzenetkuldes-szenzorrol-redundans-eset}
 \end{figure}
 
-Az elõzõ eset általánosítása ha több szenzort, központot és terminált
+Az elõzõ eset általánosítása, ha több szenzort, központot és terminált
 helyezünk el a rendszerben. Az ábra két-két példány kommunikációját
-mutatja be abban az esetben ha olyan esemény következik be, melynek
+mutatja be abban az esetben, ha olyan esemény következik be, melynek
 hatására mindkét szenzor jelez.
 
 \subsubsection*{Explicit lekérdezés terminálról}
@@ -524,11 +525,11 @@ hatására mindkét szenzor jelez.
 \begin{figure}[H]
 \centering
 \includegraphics[width=100mm,keepaspectratio]{explicit-lekerdezes-terminalrol.eps}
-\caption{Szekvencia diagram: explicit lekérdezés terminálról}\label{fig:explicit-lekerdezes-terminalrol}
+\caption{Szekvenciadiagram: explicit lekérdezés terminálról}\label{fig:explicit-lekerdezes-terminalrol}
 \end{figure}
 
 Explicit lekérdezés esetén a terminál elõször a központhoz fordul a
-szenzor címéért, majd a címnek birtokában közvetlenül a szenzornak küld
+szenzor címéért, majd a cím birtokában közvetlenül a szenzornak küld
 üzenetet az adatok lekérdezése céljából.
 
 \subsubsection*{Eszköz engedélyezése}
@@ -536,9 +537,9 @@ szenzor címéért, majd a címnek birtokában közvetlenül a szenzornak küld
 \begin{figure}[H]
 \centering
 \includegraphics[width=100mm,keepaspectratio]{eszkoz-engedelyezese.eps}
-\caption{Szekvencia diagram: eszköz engedélyezése}\label{fig:eszkoz-engedelyezese}
+\caption{Szekvenciadiagram: eszköz engedélyezése}\label{fig:eszkoz-engedelyezese}
 \end{figure}
 
-Az eszközök engedélyezése esetén az ábrán látható módon elsõ alkalommal
+Az eszközök engedélyezése esetén az ábrán látható módon elsõ alkalommal,
 ha egy szenzor regisztrálni vagy egy terminál feliratkozni akar, akkor a
 felhasználónak azt egyszer engedélyeznie kell.

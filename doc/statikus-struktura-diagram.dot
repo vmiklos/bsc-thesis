@@ -16,7 +16,7 @@ digraph G {
 
 	s1 [label="",shape=none,width=2]
 
-	c5 [label="{Message\l|+ data\l+ description\l+ from\l+ to\l+ receiver\l|}"]
+	c5 [label="{Message\l|+ Data\l+ Description\l+ From\l+ To\l+ Receiver\l|}"]
 
 	c6 [label="{Driver\l||+ translate(Node, Number)\l}}"]
 }

@@ -7,7 +7,7 @@ cég életviteli rendszerét választottuk részletesebb ismertetés céljából.
 Ennek oka, hogy az általuk nyújtott szolgáltatásokról részletes
 információt tettek elérhetõvé, valamint számokkal, valós életbõl vett
 példákkal és esettanulmányokkal szolgálnak az érdeklõdõnek, így engedve
-betekintést bármely (akár nem is kompetens) érdeklõdõnek.
+betekintést bármely, (akár nem is kompetens) érdeklõdõnek.
 
 \begin{figure}[htp]
 \centering
@@ -32,11 +32,11 @@ szükséges óvintézkedéseket. A cég füst-, széndioxid- és
 földgáz-érzékelõket is forgalmaz, melyek egy központban riasztanak, ha
 segítségre van szükség.
 	\item Esések. Naponta 8000 idõsebb vagy gyenge ember esik el.
-\footnote{Ez, és a többi szám a Tunstall cég által, a jelen írás
+\footnote{Ez és a többi szám a Tunstall cég által a jelen írás
 pillanatában (2009 október) közölt adatokból való, és Angliára
 vonatkozik.}
 Ezek 70 százaléka éjszaka történik. Minden ötödik ember, aki eltöri a
-csípõjét 6 hónapon belül hal meg. Ebbõl következik, hogy ha egy embernek
+csípõjét, 6 hónapon belül hal meg. Ebbõl következik, hogy ha egy embernek
 félnie kell az eleséstõl, az magával vonja azt az érzést, hogy már nem
 képes függetlenül mozogni, valamint hogy már nem él teljes életet. A cég
 így két problémakört céloz meg: egyrészt minimálisra csökkenteni az
@@ -47,7 +47,7 @@ vélhetõleg arra utal, hogy az illetõ elesett. Az esés-érzékelõ egy
 derékszíjon viselt szenzor, mely egyrészt automatikusan érzékelni képes
 az esést, valamint egyszerû megoldást ad az elesett ember számára is az
 esés jelzésére, így a gyors segítség nyújtása könnyebbé válik. A
-harmadik mûszer pedig egy mozgás-érzékelõ, mely akkor riaszt, ha az
+harmadik mûszer pedig egy mozgásérzékelõ, mely akkor riaszt, ha az
 ember hosszabb ideje nem mozgott még lakáson belül, mely nagy
 valószínûséggel elesést jelent. Ezek az eszközök segítenek megelõzni
 olyan eseteket, mikor például egy idõs ember a fürdõszobából visszatérve
@@ -89,7 +89,7 @@ nem érhetõ el részletes információ az általuk kifejlesztett, és éles
 
 \subsection{Az OSGi keretrendszer}
 
-Az OSGI Szövetég (régebbi nevén Open Services Gateway initiative) egy
+Az OSGi (régebbi nevén Open Services Gateway initiative) egy
 nyílt szabványügyi szervezet. A szövetség tagjai egy Java-alapú
 szolgáltatás-platformot definiáltak, mely távolról kezelhetõ.
 
@@ -102,10 +102,11 @@ nyílt forrású implementációkat számolva is többesszámról beszélhetünk.
 \begin{figure}[htp]
 \centering
 \includegraphics[width=100mm,keepaspectratio]{extensions.eps}
-\caption{UML szekvenciadiagram, mely Eclipse kiterjesztések mûködését mutatja be, mely OSGi-t használ.}\label{fig:extensions}
+\caption{UML szekvenciadiagram, amely a kiterjesztések kezelését mutatja be az
+OSGi-t használó Eclipse-ben.}\label{fig:extensions}
 \end{figure}
 
-Elõször 2000-ben jelent meg, a jelenleg aktuális 4-es verzióját pedig
+Az OSGi elõször 2000-ben jelent meg, a jelenleg aktuális 4-es verzióját pedig
 2009 szeptemberében adták ki, így méltán tekinthetünk rá, mint aktívan
 fejlesztett és karbantartott megoldásra.
 
@@ -113,21 +114,21 @@ A keretrendszer legfontosabb elemei:
 
 \begin{itemize}
 	\item Alkalmazások életciklusának kezelési modellje: az
-alkalmazásokat csomagok (bundle) formájában lehet terjeszteni, majd a JVM
+alkalmazásokat batyuk (bundle) formájában lehet terjeszteni, majd a JVM
 leállítása nélkül telepíteni, elindítani, frissíteni vagy eltávolítani.
-	\item Szolgáltatás adatbázis: ez az adatbázis lehetõvé teszi az
-alkalmazások számára, hogy értesüljenek ha új szolgáltatások érhetõek el
+	\item Szolgáltatás-adatbázis: ez az adatbázis lehetõvé teszi az
+alkalmazások számára, hogy értesüljenek, ha új szolgáltatások érhetõek el,
 vagy egy szolgáltatás megszûnt, és így alkalmazkodhatnak az új
 környezethez.
 	\item Végrehajtási környezet: A végrehajtási környezet azt
 definiálja, hogy egy környezetben milyen osztályok és metódusok érhetõek
 el. A Java Platform, Standard Edition is egy elfogadott OSGi
 végrehajtási környezet, de a CDC keretrendszer (amit például a legtöbb
-mai mobiltelefon is támogat) is támogatott, valamint van saját, általuk
+mai mobiltelefon is használ) is támogatott, valamint van saját, általuk
 definiált környezet is. Minden egyes OSGi implementáció maga döntheti
 el, hogy milyen végrehajtási környezetet támogat, az elõbbieket a
 legtöbb támogatja.
-	\item Modulok: Azt is szabványosították, hogy az egyes csomagok
+	\item Modulok: Azt is szabványosították, hogy az egyes batyuk
 milyen módon tudják az egymás közt fennálló függõségeket, valamint a
 kívülrõl elérhetõ API-kat definiálni, lehetõvé téve ezáltal, hogy
 egységes módon lehessen az egyes egységekbõl és egységekbe
@@ -140,13 +141,13 @@ metódus-hívásokat végezni.
 \caption{Az OSGi rétegei}\label{fig:layering-osgi}
 \end{figure}
 
-Az egyes csomagok olyan Java könyvtárak (JAR file-ok), amik
+Az egyes batyuk olyan Java könyvtárak (JAR file-ok), amelyek
 OSGi-specifikus fejléccel rendelkeznek a JAR MANIFEST.MF file-jában.
 
 Az egyes alkalmazásoknak a következõ állapotai lehetnek:
 
 \begin{itemize}
-	\item Telepítve: Ekkor még elképzelhetõ, hogy egy csomag
+	\item Telepítve: Ekkor még elképzelhetõ, hogy egy batyu
 függõségei nem állnak rendelkezésre.
 	\item Feloldva: Minden függõség elérhetõ, az alkalmazást vagy
 leállították, vagy kész az indulásra.
@@ -161,7 +162,7 @@ el.
 \end{itemize}
 
 A szolgáltatások Java interfészeket jelentenek. Ezeket az API-kat
-implementálhatják a csomagok, majd ha a csomagot regisztrálták  a
+implementálhatják a batyuk, majd ha a batyut regisztrálták  a
 szolgáltatás-adatbázisban, akkor a kliensek itt megtalálhatják õket, és
 innentõl értesítést kérhetnek a szolgáltatás elérhetõsége és el nem
 érhetõsége esetén.

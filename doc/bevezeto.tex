@@ -20,7 +20,7 @@ otthonápolás támogatása\cite{evita}.
 
 Ahhoz, hogy infokommunikációs eszközeink valóban kiszolgáljanak - és ne
 kiszolgáltatottá tegyenek - bennünket, egymással együttmûködni képes és
-egyszerûen kezelhetõ eszközökre van szükség, melyhez elengedhetetlen egy
+egyszerûen kezelhetõ eszközökre van szükség, amihez elengedhetetlen egy
 megbízhatóan mûködõ keretrendszer. Ha a keretrendszer stabilitási
 problémákkal küzd, vagy funkcionalitásában korlátozza az egyes
 eszközöket, akkor hiába fejlesztenek a rendszerhez kiváló modulokat.
@@ -29,23 +29,23 @@ Az életviteli rendszerbe kapcsolt infokommunikációs eszközök tehát
 elsõsorban abban különböznek a hagyományos társaiktól, hogy az azokat
 használó ember felé minimális elvárásokat támasztanak. Egy vérnyomásmérõ
 esetén a legjobb, ha maga az eszköz tudja, hogy mikor kell a mérést
-elvégezni, és erre figyelmeztetni az illetõt. Nem szerencsés, ha a mérés
+elvégezni, és erre figyelmezteti is az illetõt. Nem szerencsés, ha a mérés
 elkészülte után a mérési eredményt a betegnek kell kézzel rögzítenie,
-jobb ha maga a mûszer rendelkezik saját memóriával, melyet azonnal vagy
-késõbb valamilyen adatbázisba küld. Ezen kívül fontos szempont, hogy a
+jobb, ha maga a mûszer rendelkezik saját memóriával, amelynek tartalmát azonnal vagy
+késõbb valamilyen adatbázisba küldi el. Ezen kívül fontos szempont, hogy a
 kezelés minél egyszerûbb legyen.
 
-Például egy mérleg esetén a legjobb, ha a ráhelyezett súly nyomóerejének
-stabilizálódása esetén automatikusan rögzíti a mérési eredményt, és nem
-kell erre kézzel utasítani.
+Például egy mérleg esetén jó lehet, ha súly ráhelyezése esetén
+automatikusan rögzíti a mérési eredményt, és nem kell erre kézzel
+utasítani.
 
-Az ezzel szemben álló technikai probléma viszont, hogy az eszközök
+Az összekapcsolást nehezítõ technikai probléma viszont, hogy az eszközök
 tipikusan kevés információt árulnak el magukról, így az automatikus
-beállítás abban az esetben, ha az eszköz még korábban nem volt a rendszer
+rendszerbe állítás abban az esetben, ha az eszköz még korábban nem volt a rendszer
 része, igencsak nehézkes. Ezen segíthetünk, ha megengedjük, hogy ne
 közvetlenül az eszközökkel kommunikáljon a rendszer, hanem az egyes
-mûszerekhez készítünk illesztõket, és azt a célt tûzzük ki, hogy csak
-olyan eszközökkel akarunk együttmûködni, melyek fel vannak készítve a mi
+eszközökhöz készített illesztõkön keresztül, és azt a célt tûzzük ki, hogy csak
+olyan eszközökkel mûködjön együtt, melyek fel vannak készítve a mi
 rendszerünkben való mûködésre.
 
 Ezzel elérhetõvé válhat az a használati eset, mikor a vásárló meglátja a
@@ -58,12 +58,12 @@ igenis igény lenne, ha lenne ilyen rendszer.
 Mielõtt azonban új rendszer tervezésébe kezdenénk, érdemes megvizsgálni,
 hogy jelenleg milyen megoldások, vagy megoldás-kezdemények érhetõek el a
 piacon. A problémát alapvetõen két részre lehet bontani. Egyrészt
-bármilyen életviteli rendszerhez készítésekor érdemes felhasználni
-valamilyen kommunikációs keretrendszert, tehát az ilyen irányú elérhetõ
+bármilyen életviteli rendszer készítésekor érdemes felhasználni
+valamilyen kommunikációs keretrendszert, tehát az
 alternatívákat érdemes mérlegelni, figyelembe véve, hogy milyen igényeink
-vannak, és milyen funkcionalitást nyújtanak az egyes jelenleg elérhetõ
+vannak, és milyen funkcionalitást nyújtanak a jelenleg elérhetõ
 implementációk. Másrészt érdemes azt is tanulmányozni, hogy ezekre a
-keretrendszerekre építkezve milyen jelenleg is mûködõ és elérhetõ
+keretrendszerekre alapozva milyen jelenleg is mûködõ és elérhetõ
 életviteli rendszerek készültek el.
 
 Arra sajnos már elõre fel kell készülni, hogy jelenleg még nem érhetõ el
@@ -74,14 +74,13 @@ következésképp kevés információt tudhatunk meg róluk. Ennek ellenére
 célunk felfedni ezen rendszerek elõnyeit és hátrányait, hogy egy új
 rendszer tervezésekor a korábbiak példájából tanulva tudjunk mérlegelni.
 
-A jelenleg használt életviteli rendszerekben használt keretrendszerek
-tanulmányozásával nem célunk tanulni azok hibáiból, hiszen a jelenlegi
-munka kezdetén már eldöntésre került, hogy az új rendszer alapja az
-Erlang nyelv és környezet lesz. Ennek ellenére hasznos összehasonlítani
+A jelenleg mûködõ életviteli rendszerekben használt keretrendszerek
+tanulmányozásával nem célunk tanulni azok hibáiból, hiszen a témakiírás elõirja, hogy az új rendszer alapja az
+Erlang nyelv és környezet legyen. Ennek ellenére hasznos összehasonlítani
 az Erlang által nyújtott funkcionalitást más keretrendszerekkel, ezáltal
-is könnyebben rátapinthatunk annak elõnyeire és gyengeségeire.
+is könnyebben rátapinthatunk az Erlang rendszer elõnyeire és gyengeségeire.
 
-A korábban már említett zárt beállítottság miatt az elkészült
+A korábban már említett zártság miatt az elkészült
 rendszerekben is inkább a felhasználó oldaláról érzékelhetõ
 különbségeket, a rendszer tapasztalható elõnyeit és hátrányait
 igyekszünk megmutatni, majd ezen elemzés figyelembevételével nekikezdeni
@@ -90,20 +89,20 @@ a saját, Erlang alapú rendszer tervezésének.
 Fontos leszögezni, hogy a jelen munka tárgya elsõsorban az életviteli
 rendszer megalkotásához szükséges köztes réteg (middleware) tervezése és
 elkészítése Erlang környezetben. Terjedelmi okokból egy teljes
-életviteli rendszer megvalósítására sajnos nem térhetünk ki, de
+életviteli rendszer megvalósítása nem lehet a célunk, de
 megvizsgálunk néhány jelenleg is elérhetõ megoldást, így reális képet
 kaphatunk arról, hogy a tervezett rendszer milyen is lenne teljesen
 megvalósított állapotában.
 
 A számunkra szükséges funkcionalitást nyújtó keretrendszerre jó példa az
-OSGi\cite{osgi}, mely Java nyelven készült és sok olyan problémára nyújt
-megoldást, amely a Java alatt dolgozó JVM esetén különös nehézséget
-jelent, míg ezek jelentõs hányadára Erlang Beam virtuális gépe nyelvi
+OSGi\cite{osgi}, mely Java nyelven készült, és sok olyan problémára nyújt
+megoldást, amely a Java alatt futó JVM esetén különös nehézséget
+jelent, míg ezek jelentõs hányadára az Erlang Beam virtuális gépe nyelvi
 szinten nyújt megoldást.
 
-Példaként említhetnénk itt a futási idõben betölthetõ, újratölthetõ és
-törölhetõ modulokat, automatikus felügyeletét az egyes monitorozandó
-csomópontoknak, vagy rendszerjavítási célból futási idõben kiértékelt
+Példaként említjük itt a futási idõben betölthetõ, újratölthetõ és
+törölhetõ modulokat, az egyes monitorozandó
+csomópontok automatikus felügyeletét, vagy a rendszerjavítási célból futási idõben kiértékelt
 parancsok végrehajtását\cite{pe}.
 
 A jelen bevezetõnek azonban nem célja részletesen specifikálni ezeket a
@@ -112,6 +111,8 @@ Erlang környezet által nyújtott szolgáltatások és az életviteli
 rendszerek által igényelt funkcionalitás között.
 
 \subsection{Életviteli rendszerek}
+
+\subsubsection*{Tunstall}
 
 A végfelhasználó számára tényleges segítséget nyújtó életviteli
 rendszert valósított meg az angol Tunstall\cite{tunstall} cég. Céljuk
@@ -132,21 +133,21 @@ termékeivel.
 Az Exrei cég megoldásai három területre bonthatók:
 
 \begin{itemize}
-	\item Személyi biztonság biztosítása. Egy modern vezeték-nélküli
-riasztó is monitorozó rendszert hoztak létre, mely lehetõséget ad
-korlátozott és idõsebb emberek számára, hogy továbbra is otthon
+	\item Személyi biztonság. Egy modern vezeték nélküli
+riasztó és monitorozó rendszert hoztak létre, mely lehetõséget ad
+mozgásukban korlátozott és idõsebb emberek számára, hogy továbbra is otthon
 élhessenek. A rendszernek része egy részletes öndiagnosztika, így az
-esetek többségében azt is érzékeli, ha maga a rendszer hibásodik.
+esetek többségében azt is érzékeli, ha maga a rendszer hibásodik meg.
 
-A rendszer gyakorlatilag egy alapállomásból (base station) épül fel,
-ehhez kapcsolódnak szenzorok, illetve vezeték-nélküli riasztható
+A rendszer egy alapállomásból (base station) épül fel,
+ehhez kapcsolódnak szenzorok, illetve vezeték nélküli riasztható
 eszközök. Értelemszerûen az alapállomások nem csak a hozzájuk kötõdõ
 eszközöket képesek riasztani, hanem megfelelõ biztonsági beállítások
 mellett egy másik helyen lévõ alapállomáshoz kötött eszközt is, például
-idõs emberek gyermekeinek otthonát. A rendszert kifejezetten úgy
+idõs emberek gyermekeinek otthonában. A rendszert kifejezetten úgy
 tervezték, hogy leállások ne, vagy nagyon ritkán legyenek csak
-szükségesek. A értesítendõ célállomások átirányíthatóak, valamint
-lehetõvé válik a rendszeren belül megállapítani egy-egy ember
+szükségesek. A értesítendõ célállomások átirányíthatóak.
+Lehetõvé válik a rendszeren belül megállapítani egy-egy ember
 tartózkodási helyét is. Ajtó-szenzorokkal az is beállítható, hogy az
 idõs ember otthonát csak bizonyos idõszakban hagyhassa el, például
 megzavarodott állapotban ne induljon neki az éjszakának egyedül.
@@ -168,26 +169,25 @@ a hagyományos kulcs helyett egy engedélyezõ kulcsot hordhatnak magukkal,
 melynek jelenlétét a rendszer automatikusan érzékeli, a
 beléptetõkártyákhoz hasonló módon.
 
-	\item Tulajdon és berendezés monitorozás. Az elõzõekhez
+	\item Tulajdon és berendezés monitorozása. Az elõzõekhez
 kapcsolódóan egyéb szenzorokat is fogalmaz a cég, melyek lehetõvé
-teszik, hogy házak, autók vagy hasonlóan értékes objektumok hollétét
+teszik, hogy autók vagy hasonlóan értékes objektumok hollétét
 akár a cég online weblapján keresztül ellenõrizzük, vagy bizonyos
-paramétereik megváltozásakor, ill. megadott értéket való felvételükkor
+paramétereik megváltozásakor, ill. megadott érték felvétele esetén
 szöveges értesítést kapjunk.
 \end{itemize}
 
 \subsubsection*{Vivago}
 
 Magyaroszágon a Sonaris Kft\cite{sonaris} mûködik együtt a finn IST
-International Security Technology Oy\cite{ist} céggel, mely a nívódíjas
+International Security Technology Oy\cite{ist} céggel, mely a
 Vivago\cite{vivago} aktív betegfelügyeleti rendszer megalkotója.
 
 A Vivago rendszernek a magukat csak részben ellátni képes idõsebb
 emberek, a krónikus betegségben szenvedõk, fogyatékkal élõk a
-célközönsége. A rendszer 24 órás felügyelettel segíti az embereket, mely
+célközönsége. A rendszer 24 órás felügyelettel segíti az embereket, és
 automatikusan is képes segítséget hívni, a sérült ember közremûködése
-nélkül. Ezen kívül preventív ápolást is biztosít, ez azonban e munka
-szempontjából érdektelen.
+nélkül.
 
 A korábbiakhoz képest újdonság, hogy a Vivago egy-egy felügyelt beteg
 esetén elõször tanuló módban mûködik, tehát méri a személy különbözõ
@@ -201,17 +201,17 @@ lakásban elhelyezendõ segélyállomásból áll, mely egyben kihangosított
 telefonként is használható szükség esetén.
 
 A magyarországi forgalmazó ezen kívül ügyeletes ápolót is biztosít, így
-megoldódik az a probléma is, ha az értesített családtag a felmerült
+megoldódik az is, hogy az értesített családtag a felmerült
 probléma megoldásához nem rendelkezik elegendõ kompetenciával.
-Természetesen egy rendszer tervezése szempontjából egy ugyanúgy csak egy
+Természetesen egy rendszer tervezése szempontjából ez ugyanúgy csak egy
 értesíthetõ végpontként jelenik meg -- azonban a rendszerek
-összehasonlítása szempontjából nem elhanyagolható különbség.
+összehasonlítása szempontjából e részlet nem elhanyagolható különbség.
 
 \subsubsection*{Telcomed}
 
 A Telcomed\cite{telcomed} egy ír kereskedelmi cég, pulzusmérõt,
 lázmérõt, vérnyomásmérõt, vércukormérõt és hasonló eszközöket forgalmaz.
-Egy teljes infrastruktúrát nyújtanak, a betegek otthonától a web-alapú
+Egy teljes infrastruktúrát nyújtanak, a betegek otthonában elhelyezett egységtõl a web-alapú
 Telcomed monitorozó központig. Zárt kommunikációs protokollt használnak,
 és a megoldásuk nem arra lett tervezve, hogy harmadik fél által gyártott
 megoldások integrálhatóak lehessenek a rendszerbe.
@@ -225,7 +225,7 @@ megoldások integrálhatóak lehessenek a rendszerbe.
 \subsection{Keretrendszerek}
 
 Egy életviteli rendszer számos csomópontból és végpontból áll. A
-végpontok információt fogadhatnak ha riasztás érkezik, valamint
+végpontok információt fogadhatnak, ha riasztás érkezik, valamint
 döntéshozatal vagy szenzorok esetén információt küldhetnek is. A
 rendszer létrehozásakor a legtöbb probléma már itt jelentkezik: a
 végpontokat valamilyen módon a csatlakozási pontokhoz kell kötni, erre
@@ -245,8 +245,8 @@ az Erlang környezet által nyújtott funkcionalitás megítéléséhez.
 Az egyik legelsõ\cite{rpc1} ilyen megoldást a Sun cég specifikálta
 1988-ban. A szabványt ma is aktívan használják, (e munka írásának
 pillanatában) legutolsó verzióját\cite{rpc2} 2009-ben adták ki. A
-megcélzott probléma a következõ: adott egy C függvény, és szeretnénk azt
-transzparens módon meghívni, de úgy, hogy az egy másik gépen fusson le.
+megcélzott probléma a következõ: adott egy C függvény, amelyet szeretnénk
+transzparens módon meghívni, de úgy, hogy egy másik gépen fusson le.
 Tehát a kliens oldalon kell egy csonk (stub), mely azonos interfésszel
 rendelkezik, mint az eredeti függvény, de az implementáció magában
 foglalja a távoli kiszolgálóhoz való csatlakozást, a távoli
@@ -268,7 +268,7 @@ A DCOM\cite{dcom} (Distributed Component Object Model) technológiát a
 Microsoft alkotta meg, a szintén általuk kidolgozott COM (Component
 Object Model) kiterjesztéseként. A DCOM nem titkolt szándéka
 versenytársként megjelenni a késõbb említésre kerülõ CORBA
-architektúrának.
+architektúrával szemben.
 
 A DCOM mögötti gondolat az volt, hogy a népszerû COM technológiát
 továbbfejlesszék, és lehetõvé tegyék az eljáráshívást távoli
@@ -297,11 +297,10 @@ még több nyelvhez elérhetõ a CORBA, de ott az implementáció már nem
 szabványosított.
 
 A tényleges távoli eljáráshívás két legfontosabb komponense itt a
-objektum kérés bróker (Object Request Broker, ORB -- az alkalmazás más
+objektumkérés-közvetítõ (Object Request Broker, ORB -- az alkalmazás más
 objektumokkal csak ezen keresztül léphet interakcióba), valamint az
-objektum adapter (Object Adapter), amelynek feladata kezelni az
-objektumok referencia-számlálóját, figyelni az élettartalmát, és ehhez
-hasonló feladatokat ellátni.
+objektumadapter (Object Adapter), amelynek feladata kezelni az
+objektumok referencia-számlálóját, figyelni az élettartalmát, s.í.t.
 
 \subsubsection*{XML-RPC}
 
@@ -310,3 +309,8 @@ protokoll felett, XML használatával oldja meg a távoli eljáráshívást. Ez
 a megközelítés rendkívül népszerû napjainkban webszolgáltatások esetén,
 valamint a Microsoft által a DCOM leváltására megalkotott WCF (Windows
 Communications Framework) is XML-RPC-t használ belül.
+
+\subsubsection*{OSGi}
+
+E Java alapú keretrendszerre a következõ fejezetben részletesen
+kitérünk.

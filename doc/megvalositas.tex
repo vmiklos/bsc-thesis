@@ -1,8 +1,8 @@
 \section{Megvalósítás}
 
-A megvalósítás során a tervezés folyamán felmerült használati eseteket
-fogjuk sorra implementálni. Terjedelmi okokból nem kerül megvalósításra
-a teljes funkcionalitás, így célszerû mindjárt az elején definiálni,
+A megvalósítás során a tervezés folyamán elemzett használati eseteket
+fogjuk sorra implementálni. Terjedelmi okokból nem valósítjuk meg
+a teljes funkcionalitást, így célszerû mindjárt az elején definiálni,
 hogy mely részletek esetén alkalmazunk egyszerûsítéseket, és hol cél a
 teljes megvalósítás.
 
@@ -11,7 +11,7 @@ elosztottság támogatása a program részét képezik. Az elkészítés során
 nyomon fogjuk követni, ahogy a tervezés szakaszában leírt használati
 esetek sorra mûködõképessé válnak.
 
-Ami nem kerül teljes megvalósításra:
+Amit nem vagy csak egyszerûsítve valósítunk meg:
 
 \begin{itemize}
 \item A szenzorok nem automatikusan fedezik fel a központokat, hanem egy
@@ -20,25 +20,25 @@ konfigurációs állomány elõre definiálja ezek listáját.
 feltételezzük, hogy a rendszer zárt, a rendszer elemei pedig
 megbízhatóak.
 \item Eltekintünk a grafikus felhasználói felület létrehozásától,
-egyszerû parancssoros interfészt biztosítva a felhasználó számára.
+egyszerû parancssoros interfészt adunk a felhasználónak.
 \end{itemize}
 
 \subsection{Elsõ, már mûködõ változat}
 
-A legkisebb már mûködõ változata a rendszernek az az eset, mikor a
+A legkisebb mûködõ változata a rendszernek az az eset, mikor a
 rendszerben egy szenzor, egy központ és egy terminál van. Mivel ez lesz
 minden késõbbi változat alapja, tekintsük át tüzetesen a mûködését. A
-késõbbiekben csak az ehhez a változathoz képest eszközölt módosítások
-kerülnek ismertetésre.
+késõbbiekben csak az ehhez a változathoz képest eszközölt módosításokat
+ismertetjük.
 
 E változat mûködése során a felhasználó egy központot indít, majd egy
 terminált, mely regisztrál a központba, végül egy szenzort, mely indulás
-után azonnal értesít. Ezt az értesítést kapja meg a központ, majd
+után azonnal értesítést küld. Ezt az értesítést kapja meg a központ, majd
 továbbítja a terminálnak.
 
 \subsubsection*{Központ}
 
-A központ három olyan függvényt definiál, mely a process életciklusát
+A központ három olyan függvényt definiál, mely a processz életciklusát
 érinti:
 
 \begin{lstlisting}
@@ -49,11 +49,11 @@ stop() -> center ! stop.
 ping() -> rpc({ping}).
 \end{lstlisting}
 
-A start/0 függvény egy új processt indít az aktuális node-on, mely
+A start/0 függvény egy új processzt indít az aktuális csomóponton, mely
 inicializálja a szenzorok és feliratkozások listáját, majd várakozó
 állapotba kerül, ld. késõbb.
 
-A stop/0 függvény ennek az új processnek küld egy üzenetet, melynek hatására az leáll.
+A stop/0 függvény ennek az új processznek küld egy üzenetet, melynek hatására az leáll.
 
 A ping/0 függvény kizárólag hibakeresési célokat szolgál a lejjebb
 ismertetésre kerülõ rpc/1 függvény felhasználásával, lehetõvé téve, hogy
@@ -86,16 +86,16 @@ rpc(Q) ->
 \end{lstlisting}
 
 A függvény a korábban center néven regisztrált
-\footnote{Regisztráció és regisztráció törlése alatt itt az Erlang
-rendszer register/2 és unregister/1 függvényeit értjük, mely lehetõséget
-biztosít arra, hogy az aktuális node-on Pid-ekhez atomokat rendeljünk.
-Ezek a regisztrációk más node-okról nem láthatóak, a teljes rendszer
+\footnote{Regisztráción és regisztráció törlésén itt az Erlang
+rendszer register/2 és unregister/1 függvényeit értjük, ami lehetõséget
+ad arra, hogy az aktuális csomóponton Pid-ekhez atomokat rendeljünk.
+Ezek a regisztrációk más csomópontokról nem láthatóak, a teljes rendszer
 szintjén nem egyediek, és ezt ki is fogjuk használni.}
-processnek küld egy két
+processznek küld egy két
 elemû ennest, megküldve a saját címét, valamint a tényleges adatokat,
 majd a válaszként kapott értékkel tér vissza.
 
-Végül a center néven regisztrált processünk fõ függvénye a következõ:
+Végül a center néven regisztrált processzünk fõ függvénye a következõ:
 
 \begin{lstlisting}
 loop() ->
@@ -138,17 +138,17 @@ Az egyes beérkezõ üzenetekre tehát a következõ válaszokat adja:
 \begin{itemize}
 \item A ping atomra mindig pong atommal válaszol.
 \item A reg atomra a paraméterként kapott szenzor címét és nevét
-regisztrálja a egy listába, melyet a process dictionary-ben tárol, így
-késõbb is lehetõvé válik annak módosítása.
+regisztrálja a egy listába, melyet a process dictionary-ben tárol (mely az Erlang futtatórendszer része), így
+késõbb is lehetõvé válik a módosítása.
 \item A lookup atomra a paraméterként kapott névhez tartozó szenzor
-címet adja vissza vissza a sensors listából.
+címet adja vissza a sensors listából.
 \item A subscribe atomra a paraméterként kapott névhez eltárolja a kapott címet.
 \item A notify atom esetén egy öt elemû ennest (melynek elemeit a
 tervezés során Message néven definiáltuk) vár paraméterként. Ebben
 szerepel az, hogy milyen névre szól az üzenet. A központ azoknak a
 termináloknak továbbítja az üzenetet, amelyek ilyen névvel iratkoztak
-fel, beleírva saját magát, mint továbbító.
-\item Végül a stop atomra leállítja az aktuális Erlang node-ot.
+fel, beleírva saját magát mint továbbítót.
+\item Végül a stop atomra leállítja az aktuális Erlang csomópontot.
 \end{itemize}
 
 A másik két elemmel ellentétben itt megfigyelhetõ, hogy a központnak
@@ -158,8 +158,8 @@ bekövetkezõ esemény.
 \subsubsection*{Terminál}
 
 A struktúra diagramban láthattuk, hogy a Center és a Terminal is egy
-Node, így itt is megtalálható a három, a process életciklusával
-kapcsolatos függvény:
+Node, így itt is megtalálható a processz életciklusával
+kapcsolatos három függvény:
 
 \begin{lstlisting}
 start(ConfigFile) ->
@@ -187,7 +187,7 @@ másik két paramétere a központ címét
 \footnote{
 A következõ, tesztelésrõl is szóló fejezetben látni fogjuk, hogy mi az
 oka annak, hogy a cím ebben a formátumban lett megadva. Általánosságban
-a cím egy node-ot és egy gépet azonosító atomból áll, a kukac
+a cím egy csomópontot és egy gépet azonosító atomból áll, a kukac
 karakterrel összekötve.
 }
 és annak az eseménynek a nevét
@@ -236,10 +236,10 @@ loop() ->
 \end{lstlisting}
 
 Az rpc/1 feladata tehát kommunikálni a terminal néven regisztrált
-process-szel: az üzenetküldés után válaszra várni, majd azzal
+processzel: az üzenetküldés után válaszra várni, majd azzal
 visszatérni. A center modulhoz hasonló módon itt is azért van erre
-szükség erre a csomagolásra, mivel terminal néven más node-on más
-processt érhetünk el.
+szükség erre a csomagolásra, mivel terminal néven más csomóponton más
+processzt érhetünk el.
 
 A loop/0 függvény pedig üzeneteket vár:
 
@@ -300,7 +300,7 @@ rpc(Q) ->
 Az elõzõekben megszokott módon ezek is az rpc/1 függvényt hívják,
 melynek mûködési elve nem változott a korábbi két modulhoz képest.
 
-A korábban hivatkozott loop/0 függvénye pedig a következõ:
+A korábban hivatkozott loop/0 függvény pedig a következõ:
 
 \begin{lstlisting}
 loop() ->
@@ -330,11 +330,11 @@ loop() ->
 \subsection{Redundáns mûködés}
 
 A redundáns mûködés két szempontból különbözik az elõzõ alfejezetben
-ismertetett változathoz képest:
+ismertetett változattól:
 
 \begin{itemize}
-\item A rendszer indításakor mindhárom elembõl két példányt kell indítani.
-\item A terminálok és szenzorok konfigurációs állományába két-két
+\item A rendszer indításakor mindhárom elembõl két-két példányt kell indítani.
+\item A terminálok és szenzorok konfigurációs állományában két-két
 központot kell definiálni.
 \end{itemize}
 
@@ -345,11 +345,11 @@ Ez utóbbit például a következõképpen tehetjük meg:
 {center, center1@clevo.local, event}.
 \end{lstlisting}
 
-\subsection{Meghajtóprogramok támogatása}
+\subsection{Eszközmeghajtók támogatása}
 
 Meghajtóprogramokra akkor van szükségünk, ha egy általános interfészen
 keresztül akarunk elérni egy-egy eszközt, melynek a speciális jellemzõit
-nem ismerjük. Tegyük fel, hogy egy szenzor több mérést is képes végezni,
+nem ismerjük. Tegyük fel, hogy egy szenzor többféle mérést is képes végezni,
 és ezeket számozzuk.  A megvalósított példa esetén a szenzor egy
 querydesc/0 függvénnyel rendelkezik, a terminál ezt szeretné explicit
 módon lekérdezni, de csak annyit tud, hogy ez a nulladik típusú mérési
@@ -370,9 +370,9 @@ translate(Node, Num) ->
        list_to_atom(Modulea:translate(Num)).
 \end{lstlisting}
 
-Az elsõ segédfüggvény node nevébõl a driver modul nevét állítja elõ, a
+Az elsõ segédfüggvény csomópont nevébõl a modul nevét állítja elõ,
 kukacokat és pontokat aláhúzásjellel helyettesítve. A második pedig az
-elõállított modulnév alapján lefordítja a drivert, meghívja annak
+elõállított modulnév alapján lefordítja az eszközmeghajtót, meghívja annak
 translate metódusát, és a kapott értékkel visszatér.
 
 A sensor0\_clevo\_local modul egyetlen translate/1 függvényt definiál:
@@ -404,17 +404,17 @@ Valamint a loop/0 függvényben egy új esetet kell felvenni:
 
 \subsection{Felhasználói felület}
 
-Idáig alapvetõen azzal foglalkoztunk, hogy hogyan tudunk adatokat küldeni Erlang node-ok között.
+Idáig alapvetõen azzal foglalkoztunk, hogy hogyan tudunk adatokat küldeni Erlang csomópontok között.
 
-A felhasználói felület feladata, hogy az idáig elkészült middleware-t
+A felhasználói felület feladata, hogy az idáig elkészült köztes réteget
 felhasználva a felhasználók számára is hasznos támogatást nyújtson,
-ezáltal tényleges életviteli rendszert megvalósítva.
+ezáltal tényleges életvitelt segítõ rendszert megvalósítva.
 
 Felhasználói felületünk kialakítását kezdjük a szenzorral. A start/1
-függvény idáig visszatért ha sikeres volt az üzeneteket kezelõ process
+függvény idáig visszatért, ha sikeres volt az üzeneteket kezelõ process
 regisztrációja terminal néven. Most ezt megváltoztatjuk, és
 interaktívan, a standard bemenetrõl fogunk beolvasni értékeket, majd
-azonnal jelzünk ha a felhasználó ENTER-t ütött.
+azonnal jelzünk, ha a felhasználó ENTER-t ütött.
 
 Ehhez a szenzor kódjában a start/1 függvényt változtatjuk meg:
 
@@ -447,9 +447,9 @@ read_stdin(Centers) ->
  read_stdin(Centers).
 \end{lstlisting}
 
-A feladat második fele pedig a terminál átalakítása, azt szeretnénk,
-hogyha a hõmérséklet értéke meghaladja 37.2 fokot, akkor csipogjon.
-Egyéb esetben pedig egyszerûen adjon barátságos kimenetet.
+A feladat második fele a terminál átalakítása; azt szeretnénk,
+hogyha a hõmérséklet értéke meghaladja a 37.2 fokot, akkor csipogjon,
+egyéb esetben pedig egyszerûen adjon barátságos kimenetet.
 
 Ehhez a terminal modul loop/0 függvényét a következõképpen módosítjuk:
 
@@ -490,9 +490,9 @@ mûködés.
 Két feladatunk van tehát:
 
 \begin{itemize}
-\item A hiba esetén biztosítani, hogy leálljon az adott process, mielõtt
+\item Hiba esetén biztosítani, hogy leálljon az adott processz, mielõtt
 az hibás mûködéshez vezetne.
-\item A leállt process helyébe újat indítani.
+\item A leállt processz helyébe újat indítani.
 \end{itemize}
 
 A leállás biztosításához a terminal:read\_stdin/0 függvényt a következõképpen
@@ -516,8 +516,8 @@ read_stdin(Centers) ->
  end.
 \end{lstlisting}
 
-Az új process indítása két lépéses folyamat. Elõször is definiálni kell
-egy függvényt, mely akkor hívódik meg, ha az aktuális process leáll:
+Az új processz indítása két lépéses folyamat. Elõször is definiálni kell
+egy függvényt, mely akkor hívódik meg, ha az aktuális processz leáll:
 
 \begin{lstlisting}
 on_exit(Pid, Fun) ->
